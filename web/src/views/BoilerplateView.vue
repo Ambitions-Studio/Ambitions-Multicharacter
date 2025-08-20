@@ -1,6 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import CharacterSelectionView from './CharacterSelectionView.vue'
+import {
+  mdiMenu,
+  mdiInformation,
+  mdiCheck,
+  mdiWrench,
+  mdiNodejs,
+  mdiVuejs,
+  mdiClose,
+  mdiAccountMultiple,
+  mdiCardAccountDetails,
+  mdiAccountPlus,
+  mdiArrowLeft,
+} from '../icons'
 
 const showSettingsCard = ref(false)
 const currentView = ref('menu') // 'menu', 'character-selection', 'identity-creator', 'character-creator'
@@ -57,7 +70,7 @@ const backToMenu = () => {
             elevation="0"
             class="bg-charcoal-elegant !border border-gray-400/30 hover:scale-105 transition-transform duration-300 2k:!w-20 2k:!h-20 2k:!min-w-0"
           >
-            <VIcon icon="mdi-menu" color="white" class="2k:!text-3xl" />
+            <VIcon :icon="mdiMenu" color="white" class="2k:!text-3xl" />
           </VBtn>
         </template>
 
@@ -69,7 +82,7 @@ const backToMenu = () => {
           <VCardTitle
             class="!text-white !text-sm !font-semibold !py-3 !px-4 flex items-center gap-2 !border-b border-gray-600/30"
           >
-            <VIcon icon="mdi-information" class="text-blue-400" size="small" />
+            <VIcon :icon="mdiInformation" class="text-blue-400" size="small" />
             Informations Dev
           </VCardTitle>
 
@@ -103,7 +116,7 @@ const backToMenu = () => {
                   size="x-small"
                   class="!bg-green-500/20 !text-green-400 !border border-green-500/30"
                   variant="outlined"
-                  prepend-icon="mdi-check"
+                  :prepend-icon="mdiCheck"
                 >
                   Activé
                 </VChip>
@@ -115,7 +128,7 @@ const backToMenu = () => {
                   size="x-small"
                   class="!bg-green-500/20 !text-green-400 !border border-green-500/30"
                   variant="outlined"
-                  prepend-icon="mdi-check"
+                  :prepend-icon="mdiCheck"
                 >
                   Activé
                 </VChip>
@@ -143,7 +156,7 @@ const backToMenu = () => {
         class="bg-charcoal-elegant !border border-gray-400/30 hover:scale-105 transition-transform duration-300 !shadow-2xl !rounded-full !w-16 !h-16 2k:!w-24 2k:!h-24 !min-w-0"
         @click="handleSettingsClick"
       >
-        <VIcon icon="mdi-wrench" color="white" size="large" class="2k:!text-4xl" />
+        <VIcon :icon="mdiWrench" color="white" size="large" class="2k:!text-4xl" />
       </VBtn>
     </div>
 
@@ -161,12 +174,12 @@ const backToMenu = () => {
           </div>
           <div class="w-px h-4 2k:h-12 bg-gray-600"></div>
           <div class="flex items-center justify-center gap-1 2k:gap-4">
-            <VIcon icon="mdi-nodejs" class="text-green-500 text-sm 2k:text-3xl" />
+            <VIcon :icon="mdiNodejs" class="text-green-500 text-sm 2k:text-3xl" />
             <span>Vite HMR</span>
           </div>
           <div class="w-px h-4 2k:h-12 bg-gray-600"></div>
           <div class="flex items-center justify-center gap-1 2k:gap-4">
-            <VIcon icon="mdi-vuejs" class="text-green-500 text-sm 2k:text-3xl" />
+            <VIcon :icon="mdiVuejs" class="text-green-500 text-sm 2k:text-3xl" />
             <span>Vue 3</span>
           </div>
         </div>
@@ -195,7 +208,7 @@ const backToMenu = () => {
                 @click="closeSettingsCard"
               >
                 <VIcon
-                  icon="mdi-close"
+                  :icon="mdiClose"
                   color="white"
                   size="small"
                   class="fhd:!text-lg 2k:!text-xl"
@@ -214,7 +227,7 @@ const backToMenu = () => {
                 @click="handleCharacterSelection"
               >
                 <VIcon
-                  icon="mdi-account-multiple"
+                  :icon="mdiAccountMultiple"
                   class="mr-2 !text-gray-200 !text-base lg:!text-lg xl:!text-xl 2k:!text-3xl"
                 />
                 Character Selection
@@ -228,7 +241,7 @@ const backToMenu = () => {
                 @click="handleIdentityCreator"
               >
                 <VIcon
-                  icon="mdi-card-account-details"
+                  :icon="mdiCardAccountDetails"
                   class="mr-2 !text-gray-200 !text-base lg:!text-lg xl:!text-xl 2k:!text-3xl"
                 />
                 Identity Creator
@@ -242,7 +255,7 @@ const backToMenu = () => {
                 @click="handleCharacterCreator"
               >
                 <VIcon
-                  icon="mdi-account-plus"
+                  :icon="mdiAccountPlus"
                   class="mr-2 !text-gray-200 !text-base lg:!text-lg xl:!text-xl 2k:!text-3xl"
                 />
                 Character Creator
@@ -281,7 +294,7 @@ const backToMenu = () => {
               class="bg-charcoal-elegant-gray"
               @click="backToMenu"
             >
-              <VIcon icon="mdi-arrow-left" color="white" />
+              <VIcon :icon="mdiArrowLeft" color="white" />
             </VBtn>
             <span>Identity Creator</span>
             <div></div>
@@ -315,7 +328,7 @@ const backToMenu = () => {
               class="bg-charcoal-elegant-gray"
               @click="backToMenu"
             >
-              <VIcon icon="mdi-arrow-left" color="white" />
+              <VIcon :icon="mdiArrowLeft" color="white" />
             </VBtn>
             <span>Character Creator</span>
             <div></div>

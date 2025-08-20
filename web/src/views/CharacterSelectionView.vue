@@ -1,5 +1,20 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import {
+  mdiArrowLeft,
+  mdiAccount,
+  mdiPlus,
+  mdiAccountOutline,
+  mdiBriefcaseOutline,
+  mdiAccountGroupOutline,
+  mdiCashMultiple,
+  mdiCardAccountDetailsOutline,
+  mdiCheckCircle,
+  mdiChartLineVariant,
+  mdiAccountPlus,
+  mdiPlay,
+  mdiTrashCan,
+} from '../icons'
 
 const props = defineProps<{
   forceVisible?: boolean
@@ -125,7 +140,7 @@ onMounted(() => {
             class="bg-charcoal-elegant-gray lg:!w-8 lg:!h-8 xl:!w-10 xl:!h-10 2xl:!w-8 2xl:!h-8 2k:!w-16 2k:!h-16 mr-2 lg:mr-4 2xl:mr-12"
             @click="emit('backToMenu')"
           >
-            <VIcon icon="mdi-arrow-left" color="white" class="2k:!text-4xl" />
+            <VIcon :icon="mdiArrowLeft" color="white" class="2k:!text-4xl" />
           </VBtn>
           <div v-else class="w-8 lg:w-10 mr-2 lg:mr-4"></div>
           <h1
@@ -154,7 +169,7 @@ onMounted(() => {
             <div
               class="w-12 h-12 2k:w-20 2k:h-20 bg-gray-600/30 rounded-full mx-auto mb-3 2k:mb-6 flex items-center justify-center border-2 border-dashed border-gray-500/50"
             >
-              <VIcon icon="mdi-account" class="text-gray-300 2k:!text-4xl" />
+              <VIcon :icon="mdiAccount" class="text-gray-300 2k:!text-4xl" />
             </div>
             <h3 class="text-lg 2k:text-3xl font-medium text-gray-100 mb-2 2k:mb-4 truncate w-full">
               John Doe
@@ -178,7 +193,7 @@ onMounted(() => {
             <div
               class="w-12 h-12 2k:w-20 2k:h-20 bg-gray-600/30 rounded-full mx-auto mb-3 2k:mb-6 flex items-center justify-center border-2 border-dashed border-gray-500/50"
             >
-              <VIcon icon="mdi-account" class="text-gray-300 2k:!text-4xl" />
+              <VIcon :icon="mdiAccount" class="text-gray-300 2k:!text-4xl" />
             </div>
             <h3 class="text-lg 2k:text-3xl font-medium text-gray-100 mb-2 2k:mb-4 truncate w-full">
               Jane Smith
@@ -204,7 +219,7 @@ onMounted(() => {
             <div
               class="w-12 h-12 2k:w-20 2k:h-20 bg-gray-600/30 rounded-full mx-auto mb-3 2k:mb-6 flex items-center justify-center border-2 border-dashed border-gray-500/50"
             >
-              <VIcon icon="mdi-plus" class="text-gray-400 2k:!text-4xl" />
+              <VIcon :icon="mdiPlus" class="text-gray-400 2k:!text-4xl" />
             </div>
             <h3 class="text-lg 2k:text-3xl font-medium text-gray-400 mb-1 2k:mb-2">Slot vide</h3>
             <p class="text-sm 2k:text-xl text-gray-500">Créer un personnage</p>
@@ -236,7 +251,7 @@ onMounted(() => {
           <h3
             class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
           >
-            <VIcon icon="mdi-account-outline" class="text-blue-400 2k:!text-4xl" />
+            <VIcon :icon="mdiAccountOutline" class="text-blue-400 2k:!text-4xl" />
             Identité
           </h3>
           <div class="space-y-2 2k:space-y-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
@@ -262,7 +277,7 @@ onMounted(() => {
           <h3
             class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
           >
-            <VIcon icon="mdi-briefcase-outline" class="text-green-400 2k:!text-4xl" />
+            <VIcon :icon="mdiBriefcaseOutline" class="text-green-400 2k:!text-4xl" />
             Emploi
           </h3>
           <div
@@ -290,7 +305,7 @@ onMounted(() => {
           <h3
             class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
           >
-            <VIcon icon="mdi-account-group-outline" class="text-red-400 2k:!text-4xl" />
+            <VIcon :icon="mdiAccountGroupOutline" class="text-red-400 2k:!text-4xl" />
             Crew
           </h3>
           <div
@@ -320,7 +335,7 @@ onMounted(() => {
           <h3
             class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
           >
-            <VIcon icon="mdi-cash-multiple" class="text-green-400 2k:!text-4xl" />
+            <VIcon :icon="mdiCashMultiple" class="text-green-400 2k:!text-4xl" />
             Finances
           </h3>
           <div class="space-y-2 2k:space-y-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
@@ -352,7 +367,7 @@ onMounted(() => {
           <h3
             class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
           >
-            <VIcon icon="mdi-card-account-details-outline" class="text-purple-400 2k:!text-4xl" />
+            <VIcon :icon="mdiCardAccountDetailsOutline" class="text-purple-400 2k:!text-4xl" />
             Licenses et Permis
           </h3>
           <div v-if="characterData[selectedSlot]?.licenses?.length" class="space-y-1 2k:space-y-3">
@@ -361,7 +376,7 @@ onMounted(() => {
               :key="license"
               class="flex items-center gap-2 2k:gap-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl"
             >
-              <VIcon icon="mdi-check-circle" class="text-green-400 text-xs 2k:!text-2xl" />
+              <VIcon :icon="mdiCheckCircle" class="text-green-400 text-xs 2k:!text-2xl" />
               <span class="text-gray-100">{{ license }}</span>
             </div>
           </div>
@@ -377,7 +392,7 @@ onMounted(() => {
           <h3
             class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
           >
-            <VIcon icon="mdi-chart-line-variant" class="text-yellow-400 2k:!text-4xl" />
+            <VIcon :icon="mdiChartLineVariant" class="text-yellow-400 2k:!text-4xl" />
             Statistiques
           </h3>
           <div class="space-y-2 2k:space-y-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
@@ -413,7 +428,7 @@ onMounted(() => {
         >
           <VIcon
             start
-            icon="mdi-account-plus"
+            :icon="mdiAccountPlus"
             class="text-lg lg:text-sm xl:text-lg 2xl:text-3xl fhd:text-4xl 2k:!text-4xl 4k:text-6xl"
           />
           Créer un personnage
@@ -431,7 +446,7 @@ onMounted(() => {
         >
           <VIcon
             start
-            icon="mdi-play"
+            :icon="mdiPlay"
             class="text-lg lg:text-sm xl:text-lg 2xl:text-3xl fhd:text-4xl 2k:!text-4xl 4k:text-6xl"
           />
           Jouer ce personnage
@@ -446,7 +461,7 @@ onMounted(() => {
         >
           <VIcon
             start
-            icon="mdi-trash-can"
+            :icon="mdiTrashCan"
             class="text-lg lg:text-sm xl:text-lg 2xl:text-3xl fhd:text-4xl 2k:!text-4xl 4k:text-6xl"
           />
           Supprimer ce personnage
