@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
+const props = defineProps<{
+  forceVisible?: boolean
+}>()
+
+const emit = defineEmits<{
+  backToMenu: []
+}>()
+
 const selectedSlot = ref<number | null>(null)
 const isSlotEmpty = ref<boolean>(false)
 const isVisible = ref<boolean>(false)
@@ -99,20 +107,37 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="isVisible" class="fixed inset-0 w-full h-full z-10">
-    <div class="absolute left-8 top-8 z-20">
+  <div v-if="isVisible || props.forceVisible" class="fixed inset-0 w-full h-full z-10">
+    <!-- Section gauche - Liste des personnages -->
+    <div
+      class="absolute left-4 sm:left-6 lg:left-8 top-4 sm:top-6 lg:top-8 w-80 sm:w-96 h-3/4 flex flex-col"
+    >
       <!-- Header -->
-      <div class="bg-charcoal-elegant border border-slate-400/30 rounded-xl p-4 mb-6 w-80">
-        <h1
-          class="text-3xl font-bold bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent text-center"
-        >
-          Character Selection
-        </h1>
+      <div class="bg-charcoal-elegant border border-slate-400/30 rounded-xl p-4 mb-4 sm:mb-6">
+        <div class="flex items-center justify-between">
+          <VBtn
+            v-if="props.forceVisible"
+            icon
+            size="small"
+            color="transparent"
+            class="bg-charcoal-elegant-gray"
+            @click="emit('backToMenu')"
+          >
+            <VIcon icon="mdi-arrow-left" color="white" />
+          </VBtn>
+          <div v-else class="w-10"></div>
+          <h1
+            class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent text-center flex-1"
+          >
+            Character Selection
+          </h1>
+          <div class="w-10"></div>
+        </div>
       </div>
 
-      <!-- Characters List -->
+      <!-- Characters List - prend l'espace restant -->
       <div
-        class="bg-charcoal-elegant border border-slate-400/30 shadow-2xl rounded-xl p-6 w-80 h-[40rem] overflow-y-auto scrollbar-hide"
+        class="bg-charcoal-elegant border border-slate-400/30 shadow-2xl rounded-xl p-4 sm:p-6 overflow-y-auto scrollbar-hide flex-1"
       >
         <div class="space-y-4">
           <!-- Character Slot 1 -->
@@ -178,10 +203,10 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Character Details Panel -->
+    <!-- Section droite - Détails du personnage -->
     <div
       v-if="selectedSlot && !isSlotEmpty"
-      class="fixed top-8 right-8 w-80 h-[46rem] bg-charcoal-elegant border border-slate-400/30 shadow-2xl rounded-xl p-6 overflow-y-auto z-30"
+      class="absolute right-4 sm:right-6 lg:right-8 top-4 sm:top-6 lg:top-8 w-80 sm:w-96 h-3/4 bg-charcoal-elegant border border-slate-400/30 shadow-2xl rounded-xl p-4 sm:p-6 overflow-y-auto scrollbar-hide"
     >
       <div class="text-center mb-6">
         <h2
@@ -252,7 +277,9 @@ onMounted(() => {
             </div>
             <div>
               <span class="text-gray-400">Grade :</span>
-              <p class="text-gray-100 font-medium">{{ characterData[selectedSlot]?.crewGrade }}</p>
+              <p class="text-gray-100 font-medium">
+                {{ characterData[selectedSlot]?.crewGrade }}
+              </p>
             </div>
           </div>
           <div v-else class="text-gray-500 text-sm">Aucun crew</div>
@@ -335,42 +362,46 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Action Buttons -->
-    <div v-if="selectedSlot && isSlotEmpty" class="fixed bottom-12 right-12 z-50">
-      <VBtn
-        size="x-large"
-        color="transparent"
-        class="bg-charcoal-elegant-forest hover:bg-green-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 !px-4 !py-7 text-sm font-medium !flex !items-center !justify-center text-white"
-        elevation="0"
-        @click="createCharacter"
-      >
-        <VIcon start icon="mdi-account-plus" />
-        Créer un personnage
-      </VBtn>
-    </div>
+    <!-- Action Buttons - Positionnés en bas du container de droite -->
+    <div class="absolute bottom-4 sm:bottom-6 lg:bottom-8 right-4 sm:right-6 lg:right-8 z-50">
+      <!-- Bouton pour slot vide -->
+      <div v-if="selectedSlot && isSlotEmpty">
+        <VBtn
+          :size="'large'"
+          color="transparent"
+          class="bg-charcoal-elegant-forest hover:bg-green-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 !px-4 sm:!px-6 lg:!px-8 xl:!px-10 !py-3 sm:!py-4 lg:!py-6 xl:!py-8 text-sm sm:text-base lg:text-lg xl:text-xl font-medium !flex !items-center !justify-center text-white w-64 sm:w-72 lg:w-80 xl:w-96 h-12 sm:h-14 lg:h-16 xl:h-20"
+          elevation="0"
+          @click="createCharacter"
+        >
+          <VIcon start icon="mdi-account-plus" class="text-lg sm:text-xl lg:text-2xl xl:text-3xl" />
+          Créer un personnage
+        </VBtn>
+      </div>
 
-    <div v-if="selectedSlot && !isSlotEmpty" class="fixed bottom-12 right-12 space-y-3 z-50">
-      <VBtn
-        size="x-large"
-        color="transparent"
-        class="w-full bg-charcoal-elegant-forest hover:bg-green-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 !px-4 !py-7 text-sm font-medium !flex !items-center !justify-center text-white"
-        elevation="0"
-        @click="playCharacter"
-      >
-        <VIcon start icon="mdi-play" />
-        Jouer ce personnage
-      </VBtn>
+      <!-- Boutons pour personnage existant -->
+      <div v-if="selectedSlot && !isSlotEmpty" class="space-y-3 flex flex-col">
+        <VBtn
+          :size="'large'"
+          color="transparent"
+          class="bg-charcoal-elegant-forest hover:bg-green-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 !px-4 sm:!px-6 lg:!px-8 xl:!px-10 !py-3 sm:!py-4 lg:!py-6 xl:!py-8 text-sm sm:text-base lg:text-lg xl:text-xl font-medium !flex !items-center !justify-center text-white w-64 sm:w-72 lg:w-80 xl:w-96 h-12 sm:h-14 lg:h-16 xl:h-20"
+          elevation="0"
+          @click="playCharacter"
+        >
+          <VIcon start icon="mdi-play" class="text-lg sm:text-xl lg:text-2xl xl:text-3xl" />
+          Jouer ce personnage
+        </VBtn>
 
-      <VBtn
-        size="x-large"
-        color="transparent"
-        class="w-full bg-charcoal-elegant-blood hover:bg-red-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-red-500/30 !px-4 !py-7 text-sm font-medium !flex !items-center !justify-center text-white"
-        elevation="0"
-        @click="deleteCharacter"
-      >
-        <VIcon start icon="mdi-trash-can" />
-        Supprimer ce personnage
-      </VBtn>
+        <VBtn
+          :size="'large'"
+          color="transparent"
+          class="bg-charcoal-elegant-blood hover:bg-red-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-red-500/30 !px-4 sm:!px-6 lg:!px-8 xl:!px-10 !py-3 sm:!py-4 lg:!py-6 xl:!py-8 text-sm sm:text-base lg:text-lg xl:text-xl font-medium !flex !items-center !justify-center text-white w-64 sm:w-72 lg:w-80 xl:w-96 h-12 sm:h-14 lg:h-16 xl:h-20"
+          elevation="0"
+          @click="deleteCharacter"
+        >
+          <VIcon start icon="mdi-trash-can" class="text-lg sm:text-xl lg:text-2xl xl:text-3xl" />
+          Supprimer ce personnage
+        </VBtn>
+      </div>
     </div>
   </div>
 </template>

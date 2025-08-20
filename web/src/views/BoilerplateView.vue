@@ -240,6 +240,7 @@ const backToMenu = () => {
     <!-- Character Selection View -->
     <CharacterSelectionView
       v-if="currentView === 'character-selection'"
+      :force-visible="true"
       @back-to-menu="backToMenu"
     />
 
