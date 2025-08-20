@@ -5,12 +5,20 @@ export default {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+      'fhd': '1920px',
+      '2k': '2560px',
+      '4k': '3840px',
+    },
     extend: {
       colors: {
         'ambitions': {
-          'primary': '#1e293b',     // slate-800
-          'secondary': '#374151',   // gray-700
-          'accent': '#60a5fa',      // blue-400
+          'primary': '#1e293b',
+          'secondary': '#374151',
+          'accent': '#60a5fa',
         }
       }
     },

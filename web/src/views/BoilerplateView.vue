@@ -55,16 +55,16 @@ const backToMenu = () => {
             size="small"
             color="transparent"
             elevation="0"
-            class="!bg-gradient-to-br from-gray-900/90 via-gray-800/85 to-gray-900/90 !border border-gray-400/30 hover:scale-105 transition-transform duration-300"
+            class="bg-charcoal-elegant !border border-gray-400/30 hover:scale-105 transition-transform duration-300 2k:!w-20 2k:!h-20 2k:!min-w-0"
           >
-            <VIcon icon="mdi-menu" color="white" />
+            <VIcon icon="mdi-menu" color="white" class="2k:!text-3xl" />
           </VBtn>
         </template>
 
         <VCard
           width="280"
           elevation="0"
-          class="!bg-gradient-to-br from-gray-900/90 via-gray-800/85 to-gray-900/90 !border border-gray-400/30 !shadow-2xl"
+          class="bg-charcoal-elegant !border border-gray-400/30 !shadow-2xl"
         >
           <VCardTitle
             class="!text-white !text-sm !font-semibold !py-3 !px-4 flex items-center gap-2 !border-b border-gray-600/30"
@@ -140,31 +140,33 @@ const backToMenu = () => {
       <VBtn
         icon
         elevation="0"
-        class="!bg-gradient-to-br from-gray-900/90 via-gray-800/85 to-gray-900/90 !border border-gray-400/30 hover:scale-105 transition-transform duration-300 !shadow-2xl !rounded-full !w-16 !h-16 !min-w-0"
+        class="bg-charcoal-elegant !border border-gray-400/30 hover:scale-105 transition-transform duration-300 !shadow-2xl !rounded-full !w-16 !h-16 2k:!w-24 2k:!h-24 !min-w-0"
         @click="handleSettingsClick"
       >
-        <VIcon icon="mdi-wrench" color="white" size="large" />
+        <VIcon icon="mdi-wrench" color="white" size="large" class="2k:!text-4xl" />
       </VBtn>
     </div>
 
     <!-- Development Status Bar -->
     <div class="absolute top-4 left-1/2 transform -translate-x-1/2 z-50">
       <div
-        class="bg-gradient-to-r from-gray-900/90 to-gray-800/85 border border-gray-400/30 rounded-full px-6 py-2"
+        class="bg-charcoal-elegant border border-gray-400/30 rounded-full px-6 py-2 2k:px-32 2k:py-10"
       >
-        <div class="flex items-center gap-4 text-xs text-gray-300">
-          <div class="flex items-center gap-1">
-            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+        <div
+          class="flex items-center justify-center gap-4 2k:gap-16 text-xs 2k:text-2xl text-gray-300"
+        >
+          <div class="flex items-center justify-center gap-1 2k:gap-4">
+            <div class="w-2 h-2 2k:w-8 2k:h-8 bg-green-400 rounded-full animate-pulse"></div>
             <span>Dev Mode Active</span>
           </div>
-          <div class="w-px h-4 bg-gray-600"></div>
-          <div class="flex items-center gap-1">
-            <VIcon icon="mdi-nodejs" class="text-green-500 text-sm" />
+          <div class="w-px h-4 2k:h-12 bg-gray-600"></div>
+          <div class="flex items-center justify-center gap-1 2k:gap-4">
+            <VIcon icon="mdi-nodejs" class="text-green-500 text-sm 2k:text-3xl" />
             <span>Vite HMR</span>
           </div>
-          <div class="w-px h-4 bg-gray-600"></div>
-          <div class="flex items-center gap-1">
-            <VIcon icon="mdi-vuejs" class="text-green-500 text-sm" />
+          <div class="w-px h-4 2k:h-12 bg-gray-600"></div>
+          <div class="flex items-center justify-center gap-1 2k:gap-4">
+            <VIcon icon="mdi-vuejs" class="text-green-500 text-sm 2k:text-3xl" />
             <span>Vue 3</span>
           </div>
         </div>
@@ -172,63 +174,77 @@ const backToMenu = () => {
     </div>
 
     <!-- Settings Card Modal -->
-    <VDialog v-if="currentView === 'menu'" v-model="showSettingsCard" max-width="400" persistent>
+    <VDialog v-if="currentView === 'menu'" v-model="showSettingsCard" persistent>
       <div class="flex justify-center">
         <VCard
           elevation="0"
           color="transparent"
-          class="bg-charcoal-elegant !border border-slate-400/30 !rounded-xl !p-6 !w-full !shadow-2xl"
+          class="bg-charcoal-elegant !border border-slate-400/30 !rounded-xl !p-4 lg:!p-5 xl:!p-6 fhd:!p-10 2k:!p-12 w-80 xl:w-80 2xl:w-80 fhd:w-[32rem] 2k:w-[45rem] !shadow-2xl"
         >
           <VCardTitle
-            class="!text-white !text-xl !font-semibold !py-4 !px-6 text-center !border-b border-slate-600/30"
+            class="!text-white !text-lg lg:!text-xl xl:!text-2xl fhd:!text-3xl 2k:!text-4xl !font-semibold !py-3 lg:!py-4 fhd:!py-6 2k:!py-6 !px-4 lg:!px-5 xl:!px-6 fhd:!px-10 2k:!px-12 text-center !border-b border-slate-600/30"
           >
             <div class="flex items-center justify-between w-full">
               <div></div>
               <span>Interface Selection</span>
               <VBtn
                 icon
-                size="small"
+                size="x-small"
                 color="transparent"
-                class="bg-charcoal-elegant-gray"
+                class="bg-charcoal-elegant-gray xl:ml-4 fhd:!w-10 fhd:!h-10 2k:!w-14 2k:!h-14"
                 @click="closeSettingsCard"
               >
-                <VIcon icon="mdi-close" color="white" />
+                <VIcon
+                  icon="mdi-close"
+                  color="white"
+                  size="small"
+                  class="fhd:!text-lg 2k:!text-xl"
+                />
               </VBtn>
             </div>
           </VCardTitle>
 
-          <VCardText class="!p-6">
-            <div class="space-y-4">
+          <VCardText class="!p-4 lg:!p-5 xl:!p-6 fhd:!p-10 2k:!p-12">
+            <div class="space-y-3 lg:space-y-4 fhd:space-y-6 2k:space-y-8">
               <VBtn
                 block
-                size="large"
+                :size="'default'"
                 variant="outlined"
-                class="bg-charcoal-elegant-gray !text-gray-200 hover:!bg-gray-500/50"
+                class="bg-charcoal-elegant-gray !text-gray-200 hover:!bg-gray-500/50 !text-xs lg:!text-sm xl:!text-sm fhd:!text-xl 2k:!text-2xl !py-2 lg:!py-3 xl:!py-4 fhd:!py-8 2k:!py-10"
                 @click="handleCharacterSelection"
               >
-                <VIcon icon="mdi-account-multiple" class="mr-2 !text-gray-200" />
+                <VIcon
+                  icon="mdi-account-multiple"
+                  class="mr-2 !text-gray-200 !text-base lg:!text-lg xl:!text-xl 2k:!text-3xl"
+                />
                 Character Selection
               </VBtn>
 
               <VBtn
                 block
-                size="large"
+                :size="'default'"
                 variant="outlined"
-                class="bg-charcoal-elegant-gray !text-gray-200 hover:!bg-gray-500/50"
+                class="bg-charcoal-elegant-gray !text-gray-200 hover:!bg-gray-500/50 !text-xs lg:!text-sm xl:!text-sm fhd:!text-xl 2k:!text-2xl !py-2 lg:!py-3 xl:!py-4 fhd:!py-8 2k:!py-10"
                 @click="handleIdentityCreator"
               >
-                <VIcon icon="mdi-card-account-details" class="mr-2 !text-gray-200" />
+                <VIcon
+                  icon="mdi-card-account-details"
+                  class="mr-2 !text-gray-200 !text-base lg:!text-lg xl:!text-xl 2k:!text-3xl"
+                />
                 Identity Creator
               </VBtn>
 
               <VBtn
                 block
-                size="large"
+                :size="'default'"
                 variant="outlined"
-                class="bg-charcoal-elegant-gray !text-gray-200 hover:!bg-gray-500/50"
+                class="bg-charcoal-elegant-gray !text-gray-200 hover:!bg-gray-500/50 !text-xs lg:!text-sm xl:!text-sm fhd:!text-xl 2k:!text-2xl !py-2 lg:!py-3 xl:!py-4 fhd:!py-8 2k:!py-10"
                 @click="handleCharacterCreator"
               >
-                <VIcon icon="mdi-account-plus" class="mr-2 !text-gray-200" />
+                <VIcon
+                  icon="mdi-account-plus"
+                  class="mr-2 !text-gray-200 !text-base lg:!text-lg xl:!text-xl 2k:!text-3xl"
+                />
                 Character Creator
               </VBtn>
             </div>
