@@ -8,7 +8,7 @@ author 'Ambitions Studio'
 
 description 'Ambitions Multicharacter — A complete character management system with identity creation, appearance setup, and full integration into the Ambitions framework.'
 
-version '0.0.0'
+version '0.2.0'
 
 name 'Ambitions Multicharacter'
 
@@ -24,7 +24,7 @@ server_scripts {
 }
 
 client_scripts {
-  'client/modules/ui.lua'
+  'client/modules/spawn/spawnPlayer.lua'
 }
 
 ui_page 'web/dist/index.html'
