@@ -31,9 +31,8 @@ ui_page 'web/dist/index.html'
 
 files {
   'web/dist/index.html',
-  'web/dist/assets/css/*.css',
-  'web/dist/assets/js/*.js',
-  'web/dist/assets/*.ttf',
+  'web/dist/assets/*.css',
+  'web/dist/assets/*.js',
 }
 
 dependencies {
