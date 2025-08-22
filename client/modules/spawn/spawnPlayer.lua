@@ -1,4 +1,4 @@
-local spawnConfig = require('Ambitions-Multicharacter.config.spawn')
+local spawnConfig = require('config.spawn')
 
 --- Prepare the character for the selection screen
 local function PrepareCharacter()
