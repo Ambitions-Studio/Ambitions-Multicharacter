@@ -30,6 +30,8 @@ client_scripts {
 ui_page 'web/dist/index.html'
 
 files {
+  'client/**/*.lua',
+  'config/*.lua',
   'web/dist/index.html',
   'web/dist/assets/*.css',
   'web/dist/assets/*.js',
