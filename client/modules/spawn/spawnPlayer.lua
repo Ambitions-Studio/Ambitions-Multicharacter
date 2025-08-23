@@ -17,12 +17,12 @@ local function PrepareCharacter()
   local spawnCoords = spawnConfig.characterSelectionSpawn
   local spawnModel = "mp_m_freemode_01"
 
-  RequestModel(pedModel)
-  while not HasModelLoaded(pedModel) do
+  RequestModel(spawnModel)
+  while not HasModelLoaded(spawnModel) do
       Wait(500)
   end
 
-  SetPlayerModel(playerId(), spawnModel)
+  SetPlayerModel(PlayerId(), spawnModel)
   local playerPed = PlayerPedId()
   SetDefaultClothes(playerPed)
 
@@ -30,7 +30,7 @@ local function PrepareCharacter()
   SetEntityCoords(playerPed, spawnCoords.x,spawnCoords.y, spawnCoords.z, true, false, false, false)
   SetEntityHeading(playerPed, spawnCoords.w)
 
-  SetPlayerControl(playerId(), false, 0)
+  SetPlayerControl(PlayerId(), false, 0)
 
   ShutdownLoadingScreen()
   ShutdownLoadingScreenNui()
