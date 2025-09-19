@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { mdiArrowLeft } from '../icons'
 import { countries } from '../utils/countries'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   forceVisible?: boolean
@@ -54,39 +57,39 @@ const validateForm = () => {
   let isValid = true
 
   if (!lastName.value) {
-    lastNameError.value = 'Le nom est obligatoire'
+    lastNameError.value = t('identityCreation.validation.lastNameRequired')
     isValid = false
   } else if (lastName.value.length < 3) {
-    lastNameError.value = 'Le nom doit contenir au minimum 3 caractères'
+    lastNameError.value = t('identityCreation.validation.lastNameMinLength')
     isValid = false
   } else if (lastName.value[0] !== lastName.value[0].toUpperCase()) {
-    lastNameError.value = 'Le nom doit commencer par une majuscule'
+    lastNameError.value = t('identityCreation.validation.lastNameCapitalized')
     isValid = false
   }
 
   if (!firstName.value) {
-    firstNameError.value = 'Le prénom est obligatoire'
+    firstNameError.value = t('identityCreation.validation.firstNameRequired')
     isValid = false
   } else if (firstName.value.length < 3) {
-    firstNameError.value = 'Le prénom doit contenir au minimum 3 caractères'
+    firstNameError.value = t('identityCreation.validation.firstNameMinLength')
     isValid = false
   } else if (firstName.value[0] !== firstName.value[0].toUpperCase()) {
-    firstNameError.value = 'Le prénom doit commencer par une majuscule'
+    firstNameError.value = t('identityCreation.validation.firstNameCapitalized')
     isValid = false
   }
 
   if (!dateOfBirth.value) {
-    dateOfBirthError.value = 'La date de naissance est obligatoire'
+    dateOfBirthError.value = t('identityCreation.validation.dateOfBirthRequired')
     isValid = false
   }
 
   if (!gender.value) {
-    genderError.value = 'Le genre est obligatoire'
+    genderError.value = t('identityCreation.validation.genderRequired')
     isValid = false
   }
 
   if (!nationality.value) {
-    nationalityError.value = 'La nationalité est obligatoire'
+    nationalityError.value = t('identityCreation.validation.nationalityRequired')
     isValid = false
   }
 
@@ -96,29 +99,29 @@ const validateForm = () => {
 const validateLastName = () => {
   lastNameError.value = ''
   if (!lastName.value) {
-    lastNameError.value = 'Le nom est obligatoire'
+    lastNameError.value = t('identityCreation.validation.lastNameRequired')
   } else if (lastName.value.length < 3) {
-    lastNameError.value = 'Le nom doit contenir au minimum 3 caractères'
+    lastNameError.value = t('identityCreation.validation.lastNameMinLength')
   } else if (lastName.value[0] !== lastName.value[0].toUpperCase()) {
-    lastNameError.value = 'Le nom doit commencer par une majuscule'
+    lastNameError.value = t('identityCreation.validation.lastNameCapitalized')
   }
 }
 
 const validateFirstName = () => {
   firstNameError.value = ''
   if (!firstName.value) {
-    firstNameError.value = 'Le prénom est obligatoire'
+    firstNameError.value = t('identityCreation.validation.firstNameRequired')
   } else if (firstName.value.length < 3) {
-    firstNameError.value = 'Le prénom doit contenir au minimum 3 caractères'
+    firstNameError.value = t('identityCreation.validation.firstNameMinLength')
   } else if (firstName.value[0] !== firstName.value[0].toUpperCase()) {
-    firstNameError.value = 'Le prénom doit commencer par une majuscule'
+    firstNameError.value = t('identityCreation.validation.firstNameCapitalized')
   }
 }
 
 const validateDateOfBirth = () => {
   dateOfBirthError.value = ''
   if (!dateOfBirth.value) {
-    dateOfBirthError.value = 'La date de naissance est obligatoire'
+    dateOfBirthError.value = t('identityCreation.validation.dateOfBirthRequired')
   }
 }
 
@@ -151,15 +154,15 @@ const submitForm = () => {
     height: height.value
   }
 
-  console.log('=== DONNÉES D\'IDENTITÉ CRÉÉES ===')
-  console.log(`Nom: ${identityData.lastName}`)
-  console.log(`Prénom: ${identityData.firstName}`)
-  console.log(`Date de naissance: ${identityData.dateOfBirth}`)
-  console.log(`Genre: ${identityData.gender === 'M' ? 'Masculin' : 'Féminin'}`)
-  console.log(`Nationalité: ${identityData.nationality}`)
-  console.log(`Taille: ${identityData.height} cm`)
+  console.log('=== ' + t('identityCreation.debug.identityDataCreated') + ' ===')
+  console.log(`${t('identityCreation.debug.lastName')}: ${identityData.lastName}`)
+  console.log(`${t('identityCreation.debug.firstName')}: ${identityData.firstName}`)
+  console.log(`${t('identityCreation.debug.dateOfBirth')}: ${identityData.dateOfBirth}`)
+  console.log(`${t('identityCreation.debug.gender')}: ${identityData.gender === 'M' ? t('identityCreation.debug.genderMale') : t('identityCreation.debug.genderFemale')}`)
+  console.log(`${t('identityCreation.debug.nationality')}: ${identityData.nationality}`)
+  console.log(`${t('identityCreation.debug.height')}: ${identityData.height} cm`)
   console.log('===================================')
-  console.log('Objet complet:', identityData)
+  console.log(t('identityCreation.debug.completeObject') + ':', identityData)
 
   fetch('https://Ambitions-Multicharacter/createIdentity', {
     method: 'POST',
@@ -192,7 +195,11 @@ onMounted(() => {
 <template>
   <div v-if="isVisible || props.forceVisible" class="fixed inset-0 w-full h-full z-10" style="background: linear-gradient(to right, rgba(15, 23, 42, 1) 0%, rgba(15, 23, 42, 0.7) 15%, rgba(15, 23, 42, 0.4) 33%, transparent 100%)">
 
-    <div class="absolute left-16 top-[45%] transform -translate-y-1/2 w-[32rem] fhd:w-[28rem] 2k:w-[40rem] max-h-[85vh] overflow-hidden">
+    <Transition
+      name="fade-in"
+      appear
+    >
+      <div class="absolute left-16 top-[45%] transform -translate-y-1/2 w-[32rem] fhd:w-[28rem] 2k:w-[40rem] max-h-[85vh] overflow-hidden">
 
       <div class="mb-8">
         <VBtn
@@ -209,7 +216,7 @@ onMounted(() => {
         <div class="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 mb-4"></div>
 
         <h1 class="text-4xl fhd:text-3xl 2k:text-6xl font-black text-white leading-tight tracking-wide">
-          CRÉATION <span class="text-3xl fhd:text-2xl 2k:text-5xl font-light text-blue-200/80">D'IDENTITÉ</span>
+          {{ t('identityCreation.title') }} <span class="text-3xl fhd:text-2xl 2k:text-5xl font-light text-blue-200/80">{{ t('identityCreation.subtitle') }}</span>
         </h1>
       </div>
 
@@ -220,14 +227,14 @@ onMounted(() => {
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-blue-500/40 flex items-center justify-center">
               <span class="text-blue-300 text-sm font-bold">01</span>
             </div>
-            <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">Identité</span>
+            <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">{{ t('identityCreation.sections.identity') }}</span>
           </div>
 
           <div class="grid grid-cols-2 gap-4 fhd:gap-3 2k:gap-6">
             <div class="space-y-2">
               <VTextField
                 v-model="lastName"
-                label="Nom"
+                :label="t('identityCreation.fields.lastName')"
                 variant="outlined"
                 :density="$vuetify.display.fhd ? 'compact' : 'comfortable'"
                 class="text-white 2k:text-xl"
@@ -242,7 +249,7 @@ onMounted(() => {
             <div class="space-y-2">
               <VTextField
                 v-model="firstName"
-                label="Prénom"
+                :label="t('identityCreation.fields.firstName')"
                 variant="outlined"
                 :density="$vuetify.display.fhd ? 'compact' : 'comfortable'"
                 class="text-white 2k:text-xl"
@@ -262,13 +269,13 @@ onMounted(() => {
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-cyan-500/40 flex items-center justify-center">
               <span class="text-cyan-300 text-sm font-bold">02</span>
             </div>
-            <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">Naissance</span>
+            <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">{{ t('identityCreation.sections.birth') }}</span>
           </div>
 
           <div class="space-y-2">
             <VTextField
               v-model="dateOfBirth"
-              label="Date de Naissance"
+              :label="t('identityCreation.fields.dateOfBirth')"
               variant="outlined"
               density="comfortable"
               type="date"
@@ -288,17 +295,17 @@ onMounted(() => {
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-blue-400/40 flex items-center justify-center">
               <span class="text-blue-400 text-sm font-bold">03</span>
             </div>
-            <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">Profil</span>
+            <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">{{ t('identityCreation.sections.profile') }}</span>
           </div>
 
           <div class="grid grid-cols-2 gap-4 fhd:gap-3 2k:gap-6">
             <div class="space-y-2">
               <VSelect
                 v-model="gender"
-                label="Genre"
+                :label="t('identityCreation.fields.gender')"
                 :items="[
-                  { title: 'Masculin', value: 'M' },
-                  { title: 'Féminin', value: 'F' }
+                  { title: t('identityCreation.genderOptions.male'), value: 'M' },
+                  { title: t('identityCreation.genderOptions.female'), value: 'F' }
                 ]"
                 variant="outlined"
                 :density="$vuetify.display.fhd ? 'compact' : 'comfortable'"
@@ -314,7 +321,7 @@ onMounted(() => {
             <div class="space-y-2">
               <VSelect
                 v-model="nationality"
-                label="Nationalité"
+                :label="t('identityCreation.fields.nationality')"
                 :items="countries.map(country => ({ title: country.name, value: country.name }))"
                 variant="outlined"
                 :density="$vuetify.display.fhd ? 'compact' : 'comfortable'"
@@ -335,12 +342,12 @@ onMounted(() => {
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-500/40 flex items-center justify-center">
               <span class="text-slate-300 text-sm font-bold">04</span>
             </div>
-            <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">Physique</span>
+            <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">{{ t('identityCreation.sections.physical') }}</span>
           </div>
 
           <div class="space-y-4 fhd:space-y-3 2k:space-y-6">
             <div class="flex items-center justify-between px-2">
-              <span class="text-slate-200 text-sm font-medium">Taille</span>
+              <span class="text-slate-200 text-sm font-medium">{{ t('identityCreation.fields.height') }}</span>
               <span class="text-blue-300 text-lg font-bold">{{ height }} cm</span>
             </div>
             <VSlider
@@ -365,11 +372,12 @@ onMounted(() => {
             height="64"
             @click="submitForm"
           >
-            <span class="text-lg fhd:text-base 2k:text-2xl tracking-wider uppercase">Créer l'Identité</span>
+            <span class="text-lg fhd:text-base 2k:text-2xl tracking-wider uppercase">{{ t('identityCreation.actions.createIdentity') }}</span>
           </VBtn>
         </div>
       </div>
-    </div>
+      </div>
+    </Transition>
 
     <div class="absolute right-0 top-0 w-3/5 h-full pointer-events-none">
     </div>
@@ -388,5 +396,19 @@ onMounted(() => {
 
 :deep(.v-field--focused .v-field__outline) {
   color: rgba(59, 130, 246, 0.8) !important;
+}
+
+.fade-in-enter-active {
+  transition: all 0.6s ease-out;
+}
+
+.fade-in-enter-from {
+  opacity: 0;
+  transform: translate(-30px, -50%);
+}
+
+.fade-in-enter-to {
+  opacity: 1;
+  transform: translate(0, -50%);
 }
 </style>

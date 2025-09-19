@@ -1,0 +1,115 @@
+{
+  "characterSelection": {
+    "title": "CHARACTER",
+    "subtitle": "SELECTION",
+    "slots": "Character Slots",
+    "slot": "Slot {id}",
+    "createNew": "Create a new character",
+    "details": {
+      "title": "CHARACTER",
+      "subtitle": "DETAILS"
+    },
+    "categories": {
+      "characters": "Characters",
+      "identity": "Identity",
+      "job": "Job",
+      "crew": "Crew",
+      "finances": "Finances",
+      "licenses": "Licenses",
+      "stats": "Statistics"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "profession": "Profession",
+      "grade": "Grade",
+      "crewName": "Organization",
+      "bankAccount": "Bank Account",
+      "cash": "Cash",
+      "dirtyMoney": "Dirty Money",
+      "totalPlaytime": "Total Playtime",
+      "lastConnection": "Last Connection"
+    },
+    "values": {
+      "noJob": "No job",
+      "noCrew": "No crew",
+      "noLicenses": "No licenses",
+      "never": "Never"
+    },
+    "actions": {
+      "create": "Create Character",
+      "play": "Play this character",
+      "delete": "Delete this character"
+    },
+    "licenseTypes": {
+      "driving": "Driving License",
+      "motorcycle": "Motorcycle License",
+      "truck": "Truck License",
+      "weapon": "Weapon License"
+    },
+    "jobs": {
+      "doctor": "Doctor"
+    },
+    "jobGrades": {
+      "practitioner": "Practitioner"
+    },
+    "timeAgo": {
+      "hours": "{count} hour ago | {count} hours ago",
+      "days": "{count} day ago | {count} days ago"
+    }
+  },
+  "identityCreation": {
+    "title": "IDENTITY",
+    "subtitle": "CREATION",
+    "sections": {
+      "identity": "Identity",
+      "birth": "Birth",
+      "profile": "Profile",
+      "physical": "Physical"
+    },
+    "fields": {
+      "lastName": "Last Name",
+      "firstName": "First Name",
+      "dateOfBirth": "Date of Birth",
+      "gender": "Gender",
+      "nationality": "Nationality",
+      "height": "Height"
+    },
+    "genderOptions": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "validation": {
+      "lastNameRequired": "Last name is required",
+      "lastNameMinLength": "Last name must contain at least 3 characters",
+      "lastNameCapitalized": "Last name must start with a capital letter",
+      "firstNameRequired": "First name is required",
+      "firstNameMinLength": "First name must contain at least 3 characters",
+      "firstNameCapitalized": "First name must start with a capital letter",
+      "dateOfBirthRequired": "Date of birth is required",
+      "genderRequired": "Gender is required",
+      "nationalityRequired": "Nationality is required"
+    },
+    "actions": {
+      "createIdentity": "Create Identity"
+    },
+    "debug": {
+      "identityDataCreated": "IDENTITY DATA CREATED",
+      "lastName": "Last Name",
+      "firstName": "First Name",
+      "dateOfBirth": "Date of birth",
+      "gender": "Gender",
+      "nationality": "Nationality",
+      "height": "Height",
+      "genderMale": "Male",
+      "genderFemale": "Female",
+      "completeObject": "Complete object"
+    }
+  },
+  "characterCreation": {
+
+  },
+  "common": {
+    "unknown": "Unknown"
+  }
+}

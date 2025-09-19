@@ -1,0 +1,115 @@
+{
+  "characterSelection": {
+    "title": "SÉLECTION",
+    "subtitle": "DE PERSONNAGE",
+    "slots": "Slots de Personnages",
+    "slot": "Slot {id}",
+    "createNew": "Créer un nouveau personnage",
+    "details": {
+      "title": "DÉTAILS",
+      "subtitle": "DU PERSONNAGE"
+    },
+    "categories": {
+      "characters": "Personnages",
+      "identity": "Identité",
+      "job": "Emploi",
+      "crew": "Équipe",
+      "finances": "Finances",
+      "licenses": "Licences",
+      "stats": "Statistiques"
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "profession": "Métier",
+      "grade": "Grade",
+      "crewName": "Organisation",
+      "bankAccount": "Compte bancaire",
+      "cash": "Argent liquide",
+      "dirtyMoney": "Argent sale",
+      "totalPlaytime": "Temps de jeu total",
+      "lastConnection": "Dernière connexion"
+    },
+    "values": {
+      "noJob": "Aucun emploi",
+      "noCrew": "Aucune équipe",
+      "noLicenses": "Aucune licence",
+      "never": "Jamais"
+    },
+    "actions": {
+      "create": "Créer un personnage",
+      "play": "Jouer ce personnage",
+      "delete": "Supprimer ce personnage"
+    },
+    "licenseTypes": {
+      "driving": "Permis voiture",
+      "motorcycle": "Permis moto",
+      "truck": "Permis camion",
+      "weapon": "PPA"
+    },
+    "jobs": {
+      "doctor": "Médecin"
+    },
+    "jobGrades": {
+      "practitioner": "Praticien"
+    },
+    "timeAgo": {
+      "hours": "Il y a {count} heure | Il y a {count} heures",
+      "days": "Il y a {count} jour | Il y a {count} jours"
+    }
+  },
+  "identityCreation": {
+    "title": "CRÉATION",
+    "subtitle": "D'IDENTITÉ",
+    "sections": {
+      "identity": "Identité",
+      "birth": "Naissance",
+      "profile": "Profil",
+      "physical": "Physique"
+    },
+    "fields": {
+      "lastName": "Nom",
+      "firstName": "Prénom",
+      "dateOfBirth": "Date de Naissance",
+      "gender": "Genre",
+      "nationality": "Nationalité",
+      "height": "Taille"
+    },
+    "genderOptions": {
+      "male": "Masculin",
+      "female": "Féminin"
+    },
+    "validation": {
+      "lastNameRequired": "Le nom est obligatoire",
+      "lastNameMinLength": "Le nom doit contenir au minimum 3 caractères",
+      "lastNameCapitalized": "Le nom doit commencer par une majuscule",
+      "firstNameRequired": "Le prénom est obligatoire",
+      "firstNameMinLength": "Le prénom doit contenir au minimum 3 caractères",
+      "firstNameCapitalized": "Le prénom doit commencer par une majuscule",
+      "dateOfBirthRequired": "La date de naissance est obligatoire",
+      "genderRequired": "Le genre est obligatoire",
+      "nationalityRequired": "La nationalité est obligatoire"
+    },
+    "actions": {
+      "createIdentity": "Créer l'Identité"
+    },
+    "debug": {
+      "identityDataCreated": "DONNÉES D'IDENTITÉ CRÉÉES",
+      "lastName": "Nom",
+      "firstName": "Prénom",
+      "dateOfBirth": "Date de naissance",
+      "gender": "Genre",
+      "nationality": "Nationalité",
+      "height": "Taille",
+      "genderMale": "Masculin",
+      "genderFemale": "Féminin",
+      "completeObject": "Objet complet"
+    }
+  },
+  "characterCreation": {
+
+  },
+  "common": {
+    "unknown": "Inconnu"
+  }
+}
