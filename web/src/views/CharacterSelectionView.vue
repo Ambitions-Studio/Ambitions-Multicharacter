@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
   mdiArrowLeft,
   mdiAccount,
@@ -16,6 +17,8 @@ import {
   mdiTrashCan,
 } from '../icons'
 
+const { t } = useI18n()
+
 const props = defineProps<{
   forceVisible?: boolean
 }>()
@@ -27,6 +30,8 @@ const emit = defineEmits<{
 const selectedSlot = ref<number | null>(null)
 const isSlotEmpty = ref<boolean>(false)
 const isVisible = ref<boolean>(false)
+const characterSlots = ref<number>(5)
+const playerCanDeleteCharacter = ref<boolean>(true)
 
 type Character = {
   firstName: string
@@ -54,15 +59,15 @@ const characterData: Record<number, Character> = {
     cash: 2500,
     bank: 15000,
     dirtyMoney: 8500,
-    licenses: ['Permis voiture', 'Permis moto', 'Permis camion', 'PPA'],
+    licenses: [t('characterSelection.licenseTypes.driving'), t('characterSelection.licenseTypes.motorcycle'), t('characterSelection.licenseTypes.truck'), t('characterSelection.licenseTypes.weapon')],
     totalPlaytime: '156h 32m',
-    lastPlayed: 'Il y a 2 heures',
+    lastPlayed: t('characterSelection.timeAgo.hours', { count: 2 }),
   },
   2: {
     firstName: 'Jane',
     lastName: 'Smith',
-    job: 'Médecin',
-    jobGrade: 'Praticien',
+    job: t('characterSelection.jobs.doctor'),
+    jobGrade: t('characterSelection.jobGrades.practitioner'),
     crew: null,
     crewGrade: null,
     cash: 850,
@@ -70,9 +75,22 @@ const characterData: Record<number, Character> = {
     dirtyMoney: 0,
     licenses: [],
     totalPlaytime: '89h 14m',
-    lastPlayed: 'Il y a 1 jour',
+    lastPlayed: t('characterSelection.timeAgo.days', { count: 1 }),
   },
 }
+
+const allSlots = computed(() => {
+  const slots = []
+  for (let i = 1; i <= characterSlots.value; i++) {
+    const hasCharacter = characterData[i] !== undefined
+    slots.push({
+      id: i,
+      isEmpty: !hasCharacter,
+      character: hasCharacter ? characterData[i] : null
+    })
+  }
+  return slots
+})
 
 const selectSlot = (slotId: number, isEmpty: boolean) => {
   selectedSlot.value = slotId
@@ -99,15 +117,17 @@ const closeInterface = () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({}),
-  }).catch(() => {
-    // Ignore fetch errors in dev mode
-  })
+  }).catch(() => {})
 }
 
 onMounted(() => {
   window.addEventListener('message', (event) => {
     if (event.data.action === 'showCharacterSelection') {
       isVisible.value = true
+      if (event.data.config) {
+        characterSlots.value = event.data.config.characterSlots
+        playerCanDeleteCharacter.value = event.data.config.playerCanDeleteCharacter
+      }
     } else if (event.data.action === 'hideCharacterSelection') {
       isVisible.value = false
     }
@@ -122,349 +142,343 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="isVisible || props.forceVisible" class="fixed inset-0 w-full h-full z-10">
-    <!-- Section gauche - Liste des personnages -->
-    <div
-      class="absolute left-8 lg:left-4 xl:left-8 2xl:left-12 fhd:left-12 2k:left-16 4k:left-48 top-8 lg:top-12 xl:top-16 2xl:top-16 fhd:top-16 2k:top-16 4k:top-48 w-80 lg:w-72 xl:w-80 2xl:w-80 fhd:w-96 2k:w-[35rem] 4k:w-[60rem] h-3/4 xl:h-2/3 2xl:h-2/3 fhd:h-[70%] flex flex-col"
+  <div v-if="isVisible || props.forceVisible" class="fixed inset-0 w-full h-full z-10" style="background: linear-gradient(to right, rgba(15, 23, 42, 1) 0%, rgba(15, 23, 42, 0.7) 15%, rgba(15, 23, 42, 0.4) 33%, transparent 100%)">
+    <div v-if="selectedSlot && !isSlotEmpty" class="absolute inset-0 w-full h-full pointer-events-none" style="background: linear-gradient(to left, rgba(15, 23, 42, 1) 0%, rgba(15, 23, 42, 0.7) 15%, rgba(15, 23, 42, 0.4) 33%, transparent 100%)"></div>
+    <Transition
+      name="fade-in"
+      appear
     >
-      <!-- Header -->
-      <div
-        class="bg-charcoal-elegant border border-slate-400/30 rounded-xl p-4 lg:p-6 xl:p-4 2xl:p-6 fhd:p-6 2k:p-8 4k:p-24 mb-4 lg:mb-6 xl:mb-4 2xl:mb-6 fhd:mb-6 2k:mb-16 4k:mb-24"
-      >
-        <div class="flex items-center justify-between 2xl:justify-center">
-          <VBtn
-            v-if="props.forceVisible"
-            icon
-            :size="'x-small'"
-            color="transparent"
-            class="bg-charcoal-elegant-gray lg:!w-8 lg:!h-8 xl:!w-10 xl:!h-10 2xl:!w-8 2xl:!h-8 2k:!w-16 2k:!h-16 mr-2 lg:mr-4 2xl:mr-12"
-            @click="emit('backToMenu')"
-          >
-            <VIcon :icon="mdiArrowLeft" color="white" class="2k:!text-4xl" />
-          </VBtn>
-          <div v-else class="w-8 lg:w-10 mr-2 lg:mr-4"></div>
-          <h1
-            class="text-2xl lg:text-lg xl:text-2xl 2xl:text-2xl fhd:text-3xl 2k:text-5xl 4k:text-8xl font-bold bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent text-center flex-1 whitespace-nowrap"
-          >
-            Character Selection
-          </h1>
-          <div class="w-10"></div>
-        </div>
+      <div class="absolute left-16 top-16 w-[30rem] fhd:w-[26rem] 2k:w-[40rem] max-h-[85vh] fhd:max-h-[80vh] 2k:max-h-[90vh] overflow-hidden">
+
+      <div class="mb-8">
+        <VBtn
+          v-if="props.forceVisible"
+          icon
+          size="small"
+          color="transparent"
+          class="bg-slate-800/60 border border-blue-500/30 mb-6 hover:bg-slate-700/80 hover:border-blue-400/50 transition-all"
+          @click="emit('backToMenu')"
+        >
+          <VIcon :icon="mdiArrowLeft" color="white" />
+        </VBtn>
+
+        <div class="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 mb-4"></div>
+
+        <h1 class="text-4xl fhd:text-3xl 2k:text-5xl font-black text-white leading-tight tracking-wide">
+          {{ t('characterSelection.title') }} <span class="text-3xl fhd:text-2xl 2k:text-4xl font-light text-blue-200/80">{{ t('characterSelection.subtitle') }}</span>
+        </h1>
       </div>
 
-      <!-- Characters List - prend l'espace restant -->
-      <div
-        class="bg-charcoal-elegant border border-slate-400/30 shadow-2xl rounded-xl p-4 lg:p-6 xl:p-8 2xl:p-10 fhd:p-12 2k:p-16 4k:p-24 overflow-y-auto scrollbar-hide flex-1"
-      >
-        <div class="space-y-4">
-          <!-- Character Slot 1 -->
-          <div
-            class="character-slot bg-charcoal-elegant-gray rounded-lg p-4 cursor-pointer hover:scale-102 hover:shadow-lg hover:shadow-gray-400/30 hover:bg-gray-600/60 transition-all duration-200 ease-out hover:border-gray-400/70 flex flex-col justify-center items-center text-center"
-            :class="{
-              'border-gray-300/80 bg-gradient-to-br from-gray-600/90 via-gray-500/80 to-gray-600/90':
-                selectedSlot === 1,
-            }"
-            @click="selectSlot(1, false)"
-          >
-            <div
-              class="w-12 h-12 2k:w-20 2k:h-20 bg-gray-600/30 rounded-full mx-auto mb-3 2k:mb-6 flex items-center justify-center border-2 border-dashed border-gray-500/50"
-            >
-              <VIcon :icon="mdiAccount" class="text-gray-300 2k:!text-4xl" />
+      <div class="space-y-8 overflow-y-auto max-h-[calc(85vh-180px)] fhd:max-h-[calc(80vh-160px)] 2k:max-h-[calc(90vh-200px)] pr-3 scrollbar-thin scrollbar-track-slate-800/50 scrollbar-thumb-blue-600/40 hover:scrollbar-thumb-blue-500/60">
+        <div class="space-y-4 ">
+          <div class="flex items-center space-x-3 mb-6 ">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-blue-500/40 flex items-center justify-center">
+              <span class="text-blue-300 text-sm font-bold">01</span>
             </div>
-            <h3 class="text-lg 2k:text-3xl font-medium text-gray-100 mb-2 2k:mb-4 truncate w-full">
-              John Doe
-            </h3>
-            <p class="text-sm 2k:text-xl text-gray-500 mb-1 2k:mb-2 truncate w-full">Sans emploi</p>
-            <p class="text-sm 2k:text-xl text-gray-400 mb-1 2k:mb-2 truncate w-full">
-              Los Santos Cartel - Lieutenant
-            </p>
-            <p class="text-xs 2k:text-lg text-gray-500 truncate w-full">Il y a 2 heures</p>
+            <span class="text-slate-300 text-sm 2k:text-xl font-medium uppercase tracking-widest">{{ t('characterSelection.categories.characters') }}</span>
           </div>
 
-          <!-- Character Slot 2 -->
-          <div
-            class="character-slot bg-charcoal-elegant-gray rounded-lg p-4 cursor-pointer hover:scale-102 hover:shadow-lg hover:shadow-gray-400/30 hover:bg-gray-600/60 transition-all duration-200 ease-out hover:border-gray-400/70 flex flex-col justify-center items-center text-center"
-            :class="{
-              'border-gray-300/80 bg-gradient-to-br from-gray-600/90 via-gray-500/80 to-gray-600/90':
-                selectedSlot === 2,
-            }"
-            @click="selectSlot(2, false)"
-          >
+          <div class="space-y-6 2k:space-y-8">
             <div
-              class="w-12 h-12 2k:w-20 2k:h-20 bg-gray-600/30 rounded-full mx-auto mb-3 2k:mb-6 flex items-center justify-center border-2 border-dashed border-gray-500/50"
+              v-for="slot in allSlots"
+              :key="slot.id"
+              class="character-slot cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/20 p-5 fhd:p-4 2k:p-8 rounded-xl"
+              :class="{
+                'bg-gradient-to-br from-blue-600/20 via-blue-500/15 to-blue-600/20':
+                  selectedSlot === slot.id,
+                'bg-gradient-to-br from-slate-800/50 via-slate-700/40 to-slate-800/50':
+                  selectedSlot !== slot.id,
+              }"
+              @click="selectSlot(slot.id, slot.isEmpty)"
             >
-              <VIcon :icon="mdiAccount" class="text-gray-300 2k:!text-4xl" />
-            </div>
-            <h3 class="text-lg 2k:text-3xl font-medium text-gray-100 mb-2 2k:mb-4 truncate w-full">
-              Jane Smith
-            </h3>
-            <p class="text-sm 2k:text-xl text-gray-400 mb-1 2k:mb-2 truncate w-full">
-              Médecin - Praticien
-            </p>
-            <p class="text-sm 2k:text-xl text-gray-500 mb-1 2k:mb-2 truncate w-full">Aucun crew</p>
-            <p class="text-xs 2k:text-lg text-gray-500 truncate w-full">Il y a 1 jour</p>
-          </div>
+              <div class="flex items-center space-x-4">
+                <div
+                  class="w-12 h-12  rounded-full flex items-center justify-center border-2"
+                  :class="{
+                    'bg-blue-500/20 border-blue-400/50': selectedSlot === slot.id,
+                    'bg-slate-600/30 border-slate-500/50': selectedSlot !== slot.id,
+                  }"
+                >
+                  <VIcon
+                    :icon="slot.isEmpty ? mdiPlus : mdiAccount"
+                    :class="slot.isEmpty ? 'text-slate-400' : selectedSlot === slot.id ? 'text-blue-300' : 'text-slate-300'"
+                    class=""
+                  />
+                </div>
 
-          <!-- Empty Slots -->
-          <div
-            v-for="slotId in [3, 4, 5]"
-            :key="slotId"
-            class="character-slot bg-charcoal-elegant-gray rounded-lg p-4 cursor-pointer hover:scale-102 hover:shadow-lg hover:shadow-gray-400/30 hover:bg-gray-600/60 transition-all duration-200 ease-out hover:border-gray-400/70 flex flex-col justify-center items-center text-center"
-            :class="{
-              'border-gray-300/80 bg-gradient-to-br from-gray-600/90 via-gray-500/80 to-gray-600/90':
-                selectedSlot === slotId,
-            }"
-            @click="selectSlot(slotId, true)"
-          >
-            <div
-              class="w-12 h-12 2k:w-20 2k:h-20 bg-gray-600/30 rounded-full mx-auto mb-3 2k:mb-6 flex items-center justify-center border-2 border-dashed border-gray-500/50"
-            >
-              <VIcon :icon="mdiPlus" class="text-gray-400 2k:!text-4xl" />
+                <div class="flex-1">
+                  <template v-if="!slot.isEmpty && slot.character">
+                    <h3 class="text-lg  font-semibold text-white mb-1">
+                      {{ slot.character.firstName }} {{ slot.character.lastName }}
+                    </h3>
+                    <p class="text-sm  text-slate-300 mb-1">
+                      {{ slot.character.job || t('characterSelection.values.noJob') }}
+                      <template v-if="slot.character.jobGrade"> - {{ slot.character.jobGrade }}</template>
+                    </p>
+                    <p class="text-sm  text-slate-300 mb-1">
+                      <template v-if="slot.character.crew">
+                        {{ slot.character.crew }}
+                        <template v-if="slot.character.crewGrade">
+                          - {{ slot.character.crewGrade }}
+                        </template>
+                      </template>
+                      <template v-else>{{ t('characterSelection.values.noCrew') }}</template>
+                    </p>
+                    <p class="text-xs  text-slate-400">{{ slot.character.lastPlayed }}</p>
+                  </template>
+                  <template v-else>
+                    <h3 class="text-lg  font-semibold text-slate-400 mb-1">{{ t('characterSelection.slot', { id: slot.id }) }}</h3>
+                    <p class="text-sm  text-slate-500">{{ t('characterSelection.createNew') }}</p>
+                  </template>
+                </div>
+
+                <div class="text-right">
+                  <div class="w-6 h-6 rounded-full flex items-center justify-center"
+                    :class="{
+                      'bg-blue-500/30': selectedSlot === slot.id,
+                      'bg-slate-600/30': selectedSlot !== slot.id,
+                    }"
+                  >
+                    <span class="text-xs font-bold"
+                      :class="{
+                        'text-blue-300': selectedSlot === slot.id,
+                        'text-slate-400': selectedSlot !== slot.id,
+                      }"
+                    >{{ slot.id }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 class="text-lg 2k:text-3xl font-medium text-gray-400 mb-1 2k:mb-2">Slot vide</h3>
-            <p class="text-sm 2k:text-xl text-gray-500">Créer un personnage</p>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </Transition>
 
-    <!-- Section droite - Détails du personnage -->
-    <div
-      v-if="selectedSlot && !isSlotEmpty"
-      class="absolute right-8 lg:right-12 xl:right-8 2xl:right-12 fhd:right-16 2k:right-16 4k:right-48 top-8 lg:top-12 xl:top-16 2xl:top-16 fhd:top-16 2k:top-16 4k:top-48 w-80 lg:w-72 xl:w-80 2xl:w-80 fhd:w-96 2k:w-[36rem] 4k:w-[60rem] h-3/4 lg:h-[70%] xl:h-2/3 2xl:h-2/3 2k:h-[73%] bg-charcoal-elegant border border-slate-400/30 shadow-2xl rounded-xl p-4 lg:p-6 xl:p-8 2xl:p-10 fhd:p-12 2k:p-16 4k:p-24 flex flex-col"
+    <Transition
+      name="fade-in-right"
+      appear
     >
-      <div
-        class="text-center mb-6 2k:mb-8 2k:p-0 2k:m-0 2k:h-20 2k:flex 2k:items-start 2k:justify-center 2k:pt-0"
-      >
-        <h2
-          class="text-2xl lg:text-lg xl:text-2xl 2xl:text-xl fhd:text-2xl 2k:text-5xl font-bold bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent whitespace-nowrap 2k:p-0 2k:m-0 2k:leading-normal 2k:h-auto 2k:-mt-2"
-        >
-          Détails du personnage
-        </h2>
+      <div v-if="selectedSlot && !isSlotEmpty" class="absolute right-16 top-16 w-[38rem] fhd:w-[32rem] 2k:w-[45rem] max-h-[76vh] fhd:max-h-[70vh] 2k:max-h-[80vh] overflow-hidden space-y-8">
+
+      <div class="mb-8">
+        <div class="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 mb-4 ml-auto"></div>
+
+        <h1 class="text-4xl fhd:text-3xl 2k:text-5xl font-black text-white leading-tight tracking-wide text-right">
+          {{ t('characterSelection.details.title') }} <span class="text-3xl fhd:text-2xl 2k:text-4xl font-light text-blue-200/80">{{ t('characterSelection.details.subtitle') }}</span>
+        </h1>
       </div>
 
-      <div class="space-y-4 2k:space-y-8 overflow-y-auto scrollbar-hide flex-1">
-        <!-- Identity -->
-        <div
-          class="bg-gradient-to-br from-gray-800/60 via-gray-700/50 to-gray-800/60 border border-gray-600/30 rounded-lg p-4 2k:p-8"
-        >
-          <h3
-            class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
-          >
-            <VIcon :icon="mdiAccountOutline" class="text-blue-400 2k:!text-4xl" />
-            Identité
-          </h3>
-          <div class="space-y-2 2k:space-y-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
-            <div>
-              <span class="text-gray-400">Prénom :</span>
-              <p class="text-gray-100 font-medium">
-                {{ characterData[selectedSlot]?.firstName || 'Inconnu' }}
-              </p>
+      <div class="space-y-10 fhd:space-y-5 2k:space-y-8 overflow-y-auto max-h-[calc(76vh-180px)] fhd:max-h-[calc(70vh-150px)] 2k:max-h-[calc(80vh-180px)] pl-3 scrollbar-thin scrollbar-track-slate-800/50 scrollbar-thumb-blue-600/40 hover:scrollbar-thumb-blue-500/60">
+        <div class="space-y-4 ">
+          <div class="flex items-center space-x-3 mb-6  justify-end">
+            <span class="text-slate-300 text-sm 2k:text-xl font-medium uppercase tracking-widest">{{ t('characterSelection.categories.identity') }}</span>
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-blue-500/40 flex items-center justify-center">
+              <VIcon :icon="mdiAccountOutline" class="text-blue-400 text-sm" />
             </div>
-            <div>
-              <span class="text-gray-400">Nom :</span>
-              <p class="text-gray-100 font-medium">
-                {{ characterData[selectedSlot]?.lastName || 'Inconnu' }}
-              </p>
+          </div>
+
+          <div class="bg-slate-800/50 rounded-lg p-4 2k:p-6 max-w-sm 2k:max-w-md ml-auto" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.firstName') }}</span>
+                <span class="text-white 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.firstName || t('common.unknown') }}</span>
+              </div>
+              <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-400/70 to-transparent"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.lastName') }}</span>
+                <span class="text-white 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.lastName || t('common.unknown') }}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Job -->
-        <div
-          class="bg-gradient-to-br from-gray-800/60 via-gray-700/50 to-gray-800/60 border border-gray-600/30 rounded-lg p-4 2k:p-8"
-        >
-          <h3
-            class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
-          >
-            <VIcon :icon="mdiBriefcaseOutline" class="text-green-400 2k:!text-4xl" />
-            Emploi
-          </h3>
-          <div
-            v-if="characterData[selectedSlot]?.job"
-            class="space-y-2 2k:space-y-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl"
-          >
-            <div>
-              <span class="text-gray-400">Métier :</span>
-              <p class="text-gray-100 font-medium">{{ characterData[selectedSlot]?.job }}</p>
-            </div>
-            <div>
-              <span class="text-gray-400">Grade :</span>
-              <p class="text-gray-100 font-medium">{{ characterData[selectedSlot]?.jobGrade }}</p>
+        <div class="space-y-4 ">
+          <div class="flex items-center space-x-3 mb-6  justify-end">
+            <span class="text-slate-300 text-sm 2k:text-xl font-medium uppercase tracking-widest">{{ t('characterSelection.categories.job') }}</span>
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-green-500/40 flex items-center justify-center">
+              <VIcon :icon="mdiBriefcaseOutline" class="text-green-400 text-sm" />
             </div>
           </div>
-          <div v-else class="text-gray-500 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
-            Aucun emploi
-          </div>
-        </div>
 
-        <!-- Crew -->
-        <div
-          class="bg-gradient-to-br from-gray-800/60 via-gray-700/50 to-gray-800/60 border border-gray-600/30 rounded-lg p-4 2k:p-8"
-        >
-          <h3
-            class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
-          >
-            <VIcon :icon="mdiAccountGroupOutline" class="text-red-400 2k:!text-4xl" />
-            Crew
-          </h3>
-          <div
-            v-if="characterData[selectedSlot]?.crew"
-            class="space-y-2 2k:space-y-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl"
-          >
-            <div>
-              <span class="text-gray-400">Organisation :</span>
-              <p class="text-gray-100 font-medium">{{ characterData[selectedSlot]?.crew }}</p>
+          <div class="bg-slate-800/50 rounded-lg p-4 2k:p-6 max-w-sm 2k:max-w-md ml-auto" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div v-if="characterData[selectedSlot]?.job" class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.profession') }}</span>
+                <span class="text-white 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.job }}</span>
+              </div>
+              <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-400/70 to-transparent"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.grade') }}</span>
+                <span class="text-white 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.jobGrade }}</span>
+              </div>
             </div>
-            <div>
-              <span class="text-gray-400">Grade :</span>
-              <p class="text-gray-100 font-medium">
-                {{ characterData[selectedSlot]?.crewGrade }}
-              </p>
-            </div>
-          </div>
-          <div v-else class="text-gray-500 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
-            Aucun crew
-          </div>
-        </div>
-
-        <!-- Finances -->
-        <div
-          class="bg-gradient-to-br from-gray-800/60 via-gray-700/50 to-gray-800/60 border border-gray-600/30 rounded-lg p-4 2k:p-8"
-        >
-          <h3
-            class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
-          >
-            <VIcon :icon="mdiCashMultiple" class="text-green-400 2k:!text-4xl" />
-            Finances
-          </h3>
-          <div class="space-y-2 2k:space-y-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
-            <div>
-              <span class="text-gray-400">Argent liquide :</span>
-              <p class="text-green-400 font-medium">
-                {{ characterData[selectedSlot]?.cash?.toLocaleString() || '0' }}$
-              </p>
-            </div>
-            <div>
-              <span class="text-gray-400">Compte bancaire :</span>
-              <p class="text-blue-400 font-medium">
-                {{ characterData[selectedSlot]?.bank?.toLocaleString() || '0' }}$
-              </p>
-            </div>
-            <div>
-              <span class="text-gray-400">Argent sale :</span>
-              <p class="text-red-400 font-medium">
-                {{ characterData[selectedSlot]?.dirtyMoney?.toLocaleString() || '0' }}$
-              </p>
+            <div v-else class="text-slate-500 text-center py-2 italic">
+              {{ t('characterSelection.values.noJob') }}
             </div>
           </div>
         </div>
 
-        <!-- Licenses -->
-        <div
-          class="bg-gradient-to-br from-gray-800/60 via-gray-700/50 to-gray-800/60 border border-gray-600/30 rounded-lg p-4 2k:p-8"
-        >
-          <h3
-            class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
-          >
-            <VIcon :icon="mdiCardAccountDetailsOutline" class="text-purple-400 2k:!text-4xl" />
-            Licenses et Permis
-          </h3>
-          <div v-if="characterData[selectedSlot]?.licenses?.length" class="space-y-1 2k:space-y-3">
-            <div
-              v-for="license in characterData[selectedSlot]?.licenses"
-              :key="license"
-              class="flex items-center gap-2 2k:gap-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl"
-            >
-              <VIcon :icon="mdiCheckCircle" class="text-green-400 text-xs 2k:!text-2xl" />
-              <span class="text-gray-100">{{ license }}</span>
+        <div class="space-y-4 ">
+          <div class="flex items-center space-x-3 mb-6  justify-end">
+            <span class="text-slate-300 text-sm 2k:text-xl font-medium uppercase tracking-widest">{{ t('characterSelection.categories.crew') }}</span>
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-red-500/40 flex items-center justify-center">
+              <VIcon :icon="mdiAccountGroupOutline" class="text-red-400 text-sm" />
             </div>
           </div>
-          <div v-else class="text-gray-500 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
-            Aucune license
+
+          <div class="bg-slate-800/50 rounded-lg p-4 2k:p-6 max-w-sm 2k:max-w-md ml-auto" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div v-if="characterData[selectedSlot]?.crew" class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.crewName') }}</span>
+                <span class="text-white 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.crew }}</span>
+              </div>
+              <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-400/70 to-transparent"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.grade') }}</span>
+                <span class="text-white 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.crewGrade }}</span>
+              </div>
+            </div>
+            <div v-else class="text-slate-500 text-center py-2 italic">
+              {{ t('characterSelection.values.noCrew') }}
+            </div>
           </div>
         </div>
 
-        <!-- Stats -->
-        <div
-          class="bg-gradient-to-br from-gray-800/60 via-gray-700/50 to-gray-800/60 border border-gray-600/30 rounded-lg p-4 2k:p-8"
-        >
-          <h3
-            class="text-lg lg:text-base xl:text-lg 2xl:text-base 2k:text-4xl font-semibold text-gray-100 mb-3 2k:mb-6 flex items-center gap-2 2k:gap-4"
-          >
-            <VIcon :icon="mdiChartLineVariant" class="text-yellow-400 2k:!text-4xl" />
-            Statistiques
-          </h3>
-          <div class="space-y-2 2k:space-y-4 text-sm lg:text-xs xl:text-sm 2xl:text-xs 2k:text-2xl">
-            <div>
-              <span class="text-gray-400">Temps de jeu total :</span>
-              <p class="text-gray-100 font-medium">
-                {{ characterData[selectedSlot]?.totalPlaytime || '0h 0m' }}
-              </p>
+        <div class="space-y-4 ">
+          <div class="flex items-center space-x-3 mb-6  justify-end">
+            <span class="text-slate-300 text-sm 2k:text-xl font-medium uppercase tracking-widest">{{ t('characterSelection.categories.finances') }}</span>
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-green-500/40 flex items-center justify-center">
+              <VIcon :icon="mdiCashMultiple" class="text-green-400 text-sm" />
             </div>
-            <div>
-              <span class="text-gray-400">Dernière connexion :</span>
-              <p class="text-gray-100 font-medium">
-                {{ characterData[selectedSlot]?.lastPlayed || 'Jamais' }}
-              </p>
+          </div>
+
+          <div class="bg-slate-800/50 rounded-lg p-4 2k:p-6 max-w-sm 2k:max-w-md ml-auto" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.cash') }}</span>
+                <span class="text-green-400 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.cash?.toLocaleString() || '0' }}$</span>
+              </div>
+              <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-400/70 to-transparent"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.bankAccount') }}</span>
+                <span class="text-blue-400 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.bank?.toLocaleString() || '0' }}$</span>
+              </div>
+              <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-400/70 to-transparent"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.dirtyMoney') }}</span>
+                <span class="text-red-400 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.dirtyMoney?.toLocaleString() || '0' }}$</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4 ">
+          <div class="flex items-center space-x-3 mb-6  justify-end">
+            <span class="text-slate-300 text-sm 2k:text-xl font-medium uppercase tracking-widest">{{ t('characterSelection.categories.licenses') }}</span>
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-purple-500/40 flex items-center justify-center">
+              <VIcon :icon="mdiCardAccountDetailsOutline" class="text-purple-400 text-sm" />
+            </div>
+          </div>
+
+          <div class="bg-slate-800/50 rounded-lg p-4 2k:p-6 max-w-sm 2k:max-w-md ml-auto" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div v-if="characterData[selectedSlot]?.licenses?.length" class="space-y-2">
+              <div
+                v-for="(license, index) in characterData[selectedSlot]?.licenses"
+                :key="license"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-white text-sm 2k:text-base font-medium">{{ license }}</span>
+                  <VIcon :icon="mdiCheckCircle" class="text-green-400 text-sm" />
+                </div>
+                <div
+                  v-if="index < characterData[selectedSlot]?.licenses?.length - 1"
+                  class="w-full h-px bg-gradient-to-r from-transparent via-slate-400/70 to-transparent mt-2"
+                ></div>
+              </div>
+            </div>
+            <div v-else class="text-slate-500 text-center py-2 italic">
+              {{ t('characterSelection.values.noLicenses') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4 ">
+          <div class="flex items-center space-x-3 mb-6  justify-end">
+            <span class="text-slate-300 text-sm 2k:text-xl font-medium uppercase tracking-widest">{{ t('characterSelection.categories.stats') }}</span>
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-yellow-500/40 flex items-center justify-center">
+              <VIcon :icon="mdiChartLineVariant" class="text-yellow-400 text-sm" />
+            </div>
+          </div>
+
+          <div class="bg-slate-800/50 rounded-lg p-4 2k:p-6 max-w-sm 2k:max-w-md ml-auto" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.totalPlaytime') }}</span>
+                <span class="text-white 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.totalPlaytime || '0h 0m' }}</span>
+              </div>
+              <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-400/70 to-transparent"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-sm 2k:text-base font-medium">{{ t('characterSelection.fields.lastConnection') }}</span>
+                <span class="text-white 2k:text-lg font-semibold">{{ characterData[selectedSlot]?.lastPlayed || t('characterSelection.values.never') }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </Transition>
 
-    <!-- Action Buttons - Positionnés en bas du container de droite -->
     <div
-      class="absolute bottom-8 lg:bottom-12 xl:bottom-24 2xl:bottom-20 fhd:bottom-24 2k:bottom-24 4k:bottom-48 right-8 lg:right-12 xl:right-16 2xl:right-20 fhd:right-24 2k:right-32 4k:right-48 z-50"
+      class="absolute bottom-24 right-24 z-50"
     >
-      <!-- Bouton pour slot vide -->
       <div v-if="selectedSlot && isSlotEmpty">
         <VBtn
           :size="'large'"
           color="transparent"
-          class="bg-charcoal-elegant-forest hover:bg-green-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 !px-4 lg:!px-3 xl:!px-6 2xl:!px-10 fhd:!px-8 2k:!px-10 4k:!px-24 !py-3 lg:!py-2 xl:!py-4 2xl:!py-8 fhd:!py-6 2k:!py-6 4k:!py-16 text-sm lg:!text-[10px] xl:text-lg 2xl:text-xl fhd:!text-lg 2k:!text-2xl 4k:text-4xl font-medium !flex !items-center !justify-center text-white w-64 lg:w-48 xl:w-64 2xl:w-64 fhd:w-80 2k:w-[28rem] 4k:w-[54rem] h-12 lg:h-8 xl:h-12 2xl:h-20 fhd:h-18 2k:!h-24 4k:h-48"
+          class="bg-charcoal-elegant-forest hover:bg-green-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 !px-6 !py-8 !text-xl font-semibold !flex !items-center !justify-center text-white w-80 2k:w-96 h-24"
           elevation="0"
           @click="createCharacter"
         >
           <VIcon
             start
             :icon="mdiAccountPlus"
-            class="text-lg lg:text-sm xl:text-lg 2xl:text-3xl fhd:text-4xl 2k:!text-4xl 4k:text-6xl"
+            class="text-lg"
           />
-          Créer un personnage
+          {{ t('characterSelection.actions.create') }}
         </VBtn>
       </div>
 
-      <!-- Boutons pour personnage existant -->
       <div v-if="selectedSlot && !isSlotEmpty" class="space-y-3 flex flex-col">
         <VBtn
           :size="'large'"
           color="transparent"
-          class="bg-charcoal-elegant-forest hover:bg-green-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 !px-4 lg:!px-3 xl:!px-6 2xl:!px-10 fhd:!px-8 2k:!px-10 4k:!px-24 !py-3 lg:!py-2 xl:!py-4 2xl:!py-8 fhd:!py-6 2k:!py-6 4k:!py-16 text-sm lg:!text-[10px] xl:text-lg 2xl:text-xl fhd:!text-lg 2k:!text-2xl 4k:text-4xl font-medium !flex !items-center !justify-center text-white w-64 lg:w-48 xl:w-64 2xl:w-64 fhd:w-80 2k:w-[28rem] 4k:w-[54rem] h-12 lg:h-8 xl:h-12 2xl:h-20 fhd:h-18 2k:!h-24 4k:h-48"
+          class="bg-charcoal-elegant-forest hover:bg-green-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 !px-6 !py-8 !text-xl font-semibold !flex !items-center !justify-center text-white w-80 2k:w-96 h-24"
           elevation="0"
           @click="playCharacter"
         >
           <VIcon
             start
             :icon="mdiPlay"
-            class="text-lg lg:text-sm xl:text-lg 2xl:text-3xl fhd:text-4xl 2k:!text-4xl 4k:text-6xl"
+            class="text-lg"
           />
-          Jouer ce personnage
+          {{ t('characterSelection.actions.play') }}
         </VBtn>
 
         <VBtn
+          v-if="playerCanDeleteCharacter"
           :size="'large'"
           color="transparent"
-          class="bg-charcoal-elegant-blood hover:bg-red-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-red-500/30 !px-4 lg:!px-3 xl:!px-6 2xl:!px-10 fhd:!px-8 2k:!px-10 4k:!px-24 !py-3 lg:!py-2 xl:!py-4 2xl:!py-8 fhd:!py-6 2k:!py-6 4k:!py-16 text-sm lg:!text-[9px] xl:text-lg 2xl:text-xl fhd:!text-base 2k:!text-2xl 4k:text-4xl font-medium !flex !items-center !justify-center text-white w-64 lg:w-48 xl:w-64 2xl:w-64 fhd:w-80 2k:w-[28rem] 4k:w-[54rem] h-12 lg:h-8 xl:h-12 2xl:h-20 fhd:h-18 2k:!h-24 4k:h-48"
+          class="bg-charcoal-elegant-blood hover:bg-red-600/95 transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-red-500/30 !px-6 !py-8 !text-lg font-semibold !flex !items-center !justify-center text-white w-80 2k:w-96 h-24"
           elevation="0"
           @click="deleteCharacter"
         >
           <VIcon
             start
             :icon="mdiTrashCan"
-            class="text-lg lg:text-sm xl:text-lg 2xl:text-3xl fhd:text-4xl 2k:!text-4xl 4k:text-6xl"
+            class="text-lg lg:text-sm xl:text-lg 2xl:text-3xl fhd:text-4xl  4k:text-6xl"
           />
-          Supprimer ce personnage
+          {{ t('characterSelection.actions.delete') }}
         </VBtn>
       </div>
     </div>
@@ -479,5 +493,47 @@ onMounted(() => {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+.fade-in-enter-active {
+  transition: all 0.6s ease-out;
+}
+
+.fade-in-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-in-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-in-right-enter-active {
+  transition: all 0.6s ease-out;
+}
+
+.fade-in-right-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.fade-in-right-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-in-right-leave-active {
+  transition: all 0.4s ease-in;
+}
+
+.fade-in-right-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-in-right-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>
