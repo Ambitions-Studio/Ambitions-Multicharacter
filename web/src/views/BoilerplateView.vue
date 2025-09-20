@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import CharacterSelectionView from './CharacterSelectionView.vue'
 import IdentityCreatorView from './IdentityCreatorView.vue'
+import CharacterCreatorView from './CharacterCreatorView.vue'
 import {
   mdiMenu,
   mdiInformation,
@@ -282,38 +283,11 @@ const backToMenu = () => {
     />
 
     <!-- Character Creator View -->
-    <div
+    <CharacterCreatorView
       v-if="currentView === 'character-creator'"
-      class="fixed inset-0 z-50 flex items-center justify-center"
-    >
-      <VCard
-        elevation="0"
-        color="transparent"
-        class="bg-charcoal-elegant !border border-slate-400/30 !rounded-xl !p-6 !w-96 !shadow-2xl"
-      >
-        <VCardTitle
-          class="!text-white !text-xl !font-semibold !py-4 !px-6 text-center !border-b border-slate-600/30"
-        >
-          <div class="flex items-center justify-between w-full">
-            <VBtn
-              icon
-              size="small"
-              color="transparent"
-              class="bg-charcoal-elegant-gray"
-              @click="backToMenu"
-            >
-              <VIcon :icon="mdiArrowLeft" color="white" />
-            </VBtn>
-            <span>Character Creator</span>
-            <div></div>
-          </div>
-        </VCardTitle>
-
-        <VCardText class="!p-6">
-          <p class="text-gray-300 text-center">Interface de création de personnage à implémenter</p>
-        </VCardText>
-      </VCard>
-    </div>
+      :force-visible="true"
+      @back-to-menu="backToMenu"
+    />
   </div>
 </template>
 

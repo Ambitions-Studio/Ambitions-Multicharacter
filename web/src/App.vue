@@ -2,6 +2,7 @@
 import BoilerplateView from './views/BoilerplateView.vue'
 import CharacterSelectionView from './views/CharacterSelectionView.vue'
 import IdentityCreatorView from './views/IdentityCreatorView.vue'
+import CharacterCreatorView from './views/CharacterCreatorView.vue'
 
 const isDevelopment = import.meta.env.DEV
 </script>
@@ -11,5 +12,6 @@ const isDevelopment = import.meta.env.DEV
     <BoilerplateView v-if="isDevelopment" />
     <CharacterSelectionView />
     <IdentityCreatorView />
+    <CharacterCreatorView />
   </VApp>
 </template>
