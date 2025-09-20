@@ -1,5 +1,5 @@
-local pedConfig = require('@ambitions.config.peds')
-local heritageConfig = require('@ambitions.config.heritage')
+local pedConfig = require('config.peds')
+local heritageConfig = require('config.heritage')
 
 local function ShowCharacterCreator()
     SetNuiFocus(true, true)
