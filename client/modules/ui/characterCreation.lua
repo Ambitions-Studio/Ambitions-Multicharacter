@@ -1,4 +1,5 @@
 local pedConfig = require('@ambitions.config.peds')
+local heritageConfig = require('@ambitions.config.heritage')
 
 local function ShowCharacterCreator()
     SetNuiFocus(true, true)
@@ -27,7 +28,9 @@ local function ShowCharacterCreator()
         action = "showCharacterCreator",
         config = {
             authorizePedwhileInCreator = pedConfig.authorizePedwhileInCreator,
-            pedModels = pedsToSend
+            pedModels = pedsToSend,
+            fatherOptions = heritageConfig.fathers,
+            motherOptions = heritageConfig.mothers
         }
     })
 end
