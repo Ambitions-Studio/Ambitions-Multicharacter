@@ -4,7 +4,7 @@ import fr from '../locales/fr.json'
 
 const messages = {
   en,
-  fr
+  fr,
 }
 
 export const i18n = createI18n({
@@ -12,7 +12,7 @@ export const i18n = createI18n({
   locale: 'en',
   fallbackLocale: 'en',
   messages,
-  globalInjection: true
+  globalInjection: true,
 })
 
 export default i18n

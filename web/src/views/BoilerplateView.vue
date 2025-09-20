@@ -14,7 +14,6 @@ import {
   mdiAccountMultiple,
   mdiCardAccountDetails,
   mdiAccountPlus,
-  mdiArrowLeft,
 } from '../icons'
 
 const showSettingsCard = ref(false)

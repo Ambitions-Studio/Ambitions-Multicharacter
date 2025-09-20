@@ -1,6 +1,6 @@
 export interface Country {
-  code: string;
-  name: string;
+  code: string
+  name: string
 }
 
 export const countries: Country[] = [
@@ -44,7 +44,7 @@ export const countries: Country[] = [
   { code: 'CG', name: 'Congo' },
   { code: 'CD', name: 'Congo (Democratic Republic)' },
   { code: 'CR', name: 'Costa Rica' },
-  { code: 'CI', name: 'Côte d\'Ivoire' },
+  { code: 'CI', name: "Côte d'Ivoire" },
   { code: 'HR', name: 'Croatia' },
   { code: 'CU', name: 'Cuba' },
   { code: 'CY', name: 'Cyprus' },
@@ -193,5 +193,5 @@ export const countries: Country[] = [
   { code: 'VN', name: 'Vietnam' },
   { code: 'YE', name: 'Yemen' },
   { code: 'ZM', name: 'Zambia' },
-  { code: 'ZW', name: 'Zimbabwe' }
-];
+  { code: 'ZW', name: 'Zimbabwe' },
+]
