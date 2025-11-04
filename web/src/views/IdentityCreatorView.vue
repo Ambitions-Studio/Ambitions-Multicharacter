@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { mdiArrowLeft } from '../icons'
-import { countries } from '../utils/countries'
+import { storeToRefs } from 'pinia'
+import { mdiArrowLeft } from '@/icons'
+import CustomButton from '@/components/CustomButton.vue'
+import IdentitySection from '@/components/identityCreation/IdentitySection.vue'
+import BirthSection from '@/components/identityCreation/BirthSection.vue'
+import ProfileSection from '@/components/identityCreation/ProfileSection.vue'
+import PhysicalSection from '@/components/identityCreation/PhysicalSection.vue'
+import { useIdentityCreationStore } from '@/stores/useIdentityCreationStore'
+import { useCharacterStore } from '@/stores/useCharacterStore'
 
 const { t } = useI18n()
 
@@ -14,24 +21,17 @@ const emit = defineEmits<{
   backToMenu: []
 }>()
 
+const identityStore = useIdentityCreationStore()
+const characterStore = useCharacterStore()
+
+const { firstName, lastName, dateOfBirth, gender, nationality, height } = storeToRefs(identityStore)
+
 const isVisible = ref<boolean>(false)
 
-const firstName = ref('')
-const lastName = ref('')
-const dateOfBirth = ref('')
-const gender = ref('')
-const nationality = ref('')
-const height = ref(170)
-
-const firstNameError = ref('')
-const lastNameError = ref('')
-const dateOfBirthError = ref('')
-const genderError = ref('')
-const nationalityError = ref('')
-
-let firstNameTimer: ReturnType<typeof setTimeout> | null = null
-let lastNameTimer: ReturnType<typeof setTimeout> | null = null
-let dateOfBirthTimer: ReturnType<typeof setTimeout> | null = null
+const identitySection = ref<InstanceType<typeof IdentitySection> | null>(null)
+const birthSection = ref<InstanceType<typeof BirthSection> | null>(null)
+const profileSection = ref<InstanceType<typeof ProfileSection> | null>(null)
+const physicalSection = ref<InstanceType<typeof PhysicalSection> | null>(null)
 
 const closeInterface = () => {
   isVisible.value = false
@@ -44,100 +44,26 @@ const closeInterface = () => {
   }).catch(() => {})
 }
 
-const clearErrors = () => {
-  firstNameError.value = ''
-  lastNameError.value = ''
-  dateOfBirthError.value = ''
-  genderError.value = ''
-  nationalityError.value = ''
-}
-
 const validateForm = () => {
-  clearErrors()
   let isValid = true
 
-  if (!lastName.value) {
-    lastNameError.value = t('identityCreation.validation.lastNameRequired')
-    isValid = false
-  } else if (lastName.value.length < 3) {
-    lastNameError.value = t('identityCreation.validation.lastNameMinLength')
-    isValid = false
-  } else if (lastName.value[0] !== lastName.value[0].toUpperCase()) {
-    lastNameError.value = t('identityCreation.validation.lastNameCapitalized')
+  if (identitySection.value && !identitySection.value.validate()) {
     isValid = false
   }
 
-  if (!firstName.value) {
-    firstNameError.value = t('identityCreation.validation.firstNameRequired')
-    isValid = false
-  } else if (firstName.value.length < 3) {
-    firstNameError.value = t('identityCreation.validation.firstNameMinLength')
-    isValid = false
-  } else if (firstName.value[0] !== firstName.value[0].toUpperCase()) {
-    firstNameError.value = t('identityCreation.validation.firstNameCapitalized')
+  if (birthSection.value && !birthSection.value.validate()) {
     isValid = false
   }
 
-  if (!dateOfBirth.value) {
-    dateOfBirthError.value = t('identityCreation.validation.dateOfBirthRequired')
+  if (profileSection.value && !profileSection.value.validate()) {
     isValid = false
   }
 
-  if (!gender.value) {
-    genderError.value = t('identityCreation.validation.genderRequired')
-    isValid = false
-  }
-
-  if (!nationality.value) {
-    nationalityError.value = t('identityCreation.validation.nationalityRequired')
+  if (physicalSection.value && !physicalSection.value.validate()) {
     isValid = false
   }
 
   return isValid
-}
-
-const validateLastName = () => {
-  lastNameError.value = ''
-  if (!lastName.value) {
-    lastNameError.value = t('identityCreation.validation.lastNameRequired')
-  } else if (lastName.value.length < 3) {
-    lastNameError.value = t('identityCreation.validation.lastNameMinLength')
-  } else if (lastName.value[0] !== lastName.value[0].toUpperCase()) {
-    lastNameError.value = t('identityCreation.validation.lastNameCapitalized')
-  }
-}
-
-const validateFirstName = () => {
-  firstNameError.value = ''
-  if (!firstName.value) {
-    firstNameError.value = t('identityCreation.validation.firstNameRequired')
-  } else if (firstName.value.length < 3) {
-    firstNameError.value = t('identityCreation.validation.firstNameMinLength')
-  } else if (firstName.value[0] !== firstName.value[0].toUpperCase()) {
-    firstNameError.value = t('identityCreation.validation.firstNameCapitalized')
-  }
-}
-
-const validateDateOfBirth = () => {
-  dateOfBirthError.value = ''
-  if (!dateOfBirth.value) {
-    dateOfBirthError.value = t('identityCreation.validation.dateOfBirthRequired')
-  }
-}
-
-const debouncedValidateLastName = () => {
-  if (lastNameTimer) clearTimeout(lastNameTimer)
-  lastNameTimer = setTimeout(validateLastName, 500)
-}
-
-const debouncedValidateFirstName = () => {
-  if (firstNameTimer) clearTimeout(firstNameTimer)
-  firstNameTimer = setTimeout(validateFirstName, 500)
-}
-
-const debouncedValidateDateOfBirth = () => {
-  if (dateOfBirthTimer) clearTimeout(dateOfBirthTimer)
-  dateOfBirthTimer = setTimeout(validateDateOfBirth, 500)
 }
 
 const submitForm = () => {
@@ -145,14 +71,9 @@ const submitForm = () => {
     return
   }
 
-  const identityData = {
-    firstName: firstName.value,
-    lastName: lastName.value,
-    dateOfBirth: dateOfBirth.value,
-    gender: gender.value,
-    nationality: nationality.value,
-    height: height.value,
-  }
+  const identityData = identityStore.submitIdentity()
+
+  characterStore.setIdentity(identityData)
 
   console.log('=== ' + t('identityCreation.debug.identityDataCreated') + ' ===')
   console.log(`${t('identityCreation.debug.lastName')}: ${identityData.lastName}`)
@@ -165,6 +86,8 @@ const submitForm = () => {
   console.log(`${t('identityCreation.debug.height')}: ${identityData.height} cm`)
   console.log('===================================')
   console.log(t('identityCreation.debug.completeObject') + ':', identityData)
+  console.log('✅ Character Store Identity:', characterStore.identity)
+  console.log('✅ Identity Store (backup):', identityStore.getIdentityData())
 
   fetch('https://Ambitions-Multicharacter/createIdentity', {
     method: 'POST',
@@ -239,192 +162,38 @@ onMounted(() => {
         <div
           class="space-y-8 fhd:space-y-6 2k:space-y-12 overflow-y-auto max-h-[calc(85vh-180px)] pr-3 scrollbar-thin scrollbar-track-slate-800/50 scrollbar-thumb-blue-600/40 hover:scrollbar-thumb-blue-500/60"
         >
-          <div class="space-y-4 fhd:space-y-3 2k:space-y-6">
-            <div class="flex items-center space-x-3 mb-6 fhd:mb-4">
-              <div
-                class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-blue-500/40 flex items-center justify-center"
-              >
-                <span class="text-blue-300 text-sm font-bold">01</span>
-              </div>
-              <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">{{
-                t('identityCreation.sections.identity')
-              }}</span>
-            </div>
+          <IdentitySection
+            ref="identitySection"
+            v-model:last-name="lastName"
+            v-model:first-name="firstName"
+          />
 
-            <div class="grid grid-cols-2 gap-4 fhd:gap-3 2k:gap-6">
-              <div class="space-y-2">
-                <VTextField
-                  v-model="lastName"
-                  :label="t('identityCreation.fields.lastName')"
-                  variant="outlined"
-                  density="compact"
-                  class="text-white 2k:text-xl"
-                  color="blue"
-                  base-color="blue-300"
-                  bg-color="rgba(30, 41, 59, 0.4)"
-                  required
-                  @input="debouncedValidateLastName"
-                />
-                <p v-if="lastNameError" class="text-xs text-red-400 ml-2">{{ lastNameError }}</p>
-              </div>
-              <div class="space-y-2">
-                <VTextField
-                  v-model="firstName"
-                  :label="t('identityCreation.fields.firstName')"
-                  variant="outlined"
-                  density="compact"
-                  class="text-white 2k:text-xl"
-                  color="blue"
-                  base-color="blue-300"
-                  bg-color="rgba(30, 41, 59, 0.4)"
-                  required
-                  @input="debouncedValidateFirstName"
-                />
-                <p v-if="firstNameError" class="text-xs text-red-400 ml-2">{{ firstNameError }}</p>
-              </div>
-            </div>
-          </div>
+          <BirthSection ref="birthSection" v-model:date-of-birth="dateOfBirth" />
 
-          <div class="space-y-4 fhd:space-y-3 2k:space-y-6">
-            <div class="flex items-center space-x-3 mb-6 fhd:mb-4">
-              <div
-                class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-cyan-500/40 flex items-center justify-center"
-              >
-                <span class="text-cyan-300 text-sm font-bold">02</span>
-              </div>
-              <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">{{
-                t('identityCreation.sections.birth')
-              }}</span>
-            </div>
+          <ProfileSection
+            ref="profileSection"
+            v-model:gender="gender"
+            v-model:nationality="nationality"
+          />
 
-            <div class="space-y-2">
-              <VTextField
-                v-model="dateOfBirth"
-                :label="t('identityCreation.fields.dateOfBirth')"
-                variant="outlined"
-                density="comfortable"
-                type="date"
-                class="text-white"
-                color="cyan"
-                base-color="cyan-300"
-                bg-color="rgba(30, 41, 59, 0.4)"
-                required
-                @input="debouncedValidateDateOfBirth"
-              />
-              <p v-if="dateOfBirthError" class="text-xs text-red-400 ml-2">
-                {{ dateOfBirthError }}
-              </p>
-            </div>
-          </div>
-
-          <div class="space-y-4 fhd:space-y-3 2k:space-y-6">
-            <div class="flex items-center space-x-3 mb-6 fhd:mb-4">
-              <div
-                class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-blue-400/40 flex items-center justify-center"
-              >
-                <span class="text-blue-400 text-sm font-bold">03</span>
-              </div>
-              <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">{{
-                t('identityCreation.sections.profile')
-              }}</span>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 fhd:gap-3 2k:gap-6">
-              <div class="space-y-2">
-                <VSelect
-                  v-model="gender"
-                  :label="t('identityCreation.fields.gender')"
-                  :items="[
-                    { title: t('identityCreation.genderOptions.male'), value: 'M' },
-                    { title: t('identityCreation.genderOptions.female'), value: 'F' },
-                  ]"
-                  variant="outlined"
-                  density="compact"
-                  class="text-white 2k:text-xl"
-                  color="blue"
-                  base-color="blue-300"
-                  bg-color="rgba(30, 41, 59, 0.4)"
-                  required
-                  @update:modelValue="
-                    () => {
-                      genderError = ''
-                    }
-                  "
-                />
-                <p v-if="genderError" class="text-xs text-red-400 ml-2">{{ genderError }}</p>
-              </div>
-              <div class="space-y-2">
-                <VSelect
-                  v-model="nationality"
-                  :label="t('identityCreation.fields.nationality')"
-                  :items="
-                    countries.map((country) => ({ title: country.name, value: country.name }))
-                  "
-                  variant="outlined"
-                  density="compact"
-                  class="text-white 2k:text-xl"
-                  color="blue"
-                  base-color="blue-300"
-                  bg-color="rgba(30, 41, 59, 0.4)"
-                  required
-                  @update:modelValue="
-                    () => {
-                      nationalityError = ''
-                    }
-                  "
-                />
-                <p v-if="nationalityError" class="text-xs text-red-400 ml-2">
-                  {{ nationalityError }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="space-y-4 fhd:space-y-3 2k:space-y-6">
-            <div class="flex items-center space-x-3 mb-6 fhd:mb-4">
-              <div
-                class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-500/40 flex items-center justify-center"
-              >
-                <span class="text-slate-300 text-sm font-bold">04</span>
-              </div>
-              <span class="text-slate-300 text-sm font-medium uppercase tracking-widest">{{
-                t('identityCreation.sections.physical')
-              }}</span>
-            </div>
-
-            <div class="space-y-4 fhd:space-y-3 2k:space-y-6">
-              <div class="flex items-center justify-between px-2">
-                <span class="text-slate-200 text-sm font-medium">{{
-                  t('identityCreation.fields.height')
-                }}</span>
-                <span class="text-blue-300 text-lg font-bold">{{ height }} cm</span>
-              </div>
-              <VSlider
-                v-model="height"
-                :min="120"
-                :max="220"
-                :step="1"
-                thumb-label="always"
-                track-color="rgba(71, 85, 105, 0.6)"
-                color="blue"
-                class="w-full"
-              />
-            </div>
-          </div>
+          <PhysicalSection ref="physicalSection" v-model:height="height" />
 
           <div class="pt-6 pb-4 flex justify-center">
-            <VBtn
-              variant="outlined"
-              size="x-large"
-              class="w-5/6 bg-charcoal-elegant text-white font-bold border-2 border-blue-500 hover:border-blue-400 rounded-2xl hover:scale-[1.01] hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 !flex !items-center !justify-center fhd:!h-14 2k:!h-20"
-              elevation="0"
-              height="64"
+            <CustomButton
+              variant="outlined-primary"
+              size="large"
+              width="w-5/6"
+              height="h-16 fhd:!h-14 2k:!h-20"
+              rounded="rounded-2xl"
+              scale-hover="1.01"
+              :outline="true"
+              outline-color="rgba(255, 255, 255, 0.3)"
               @click="submitForm"
             >
               <span class="text-lg fhd:text-base 2k:text-2xl tracking-wider uppercase">{{
                 t('identityCreation.actions.createIdentity')
               }}</span>
-            </VBtn>
+            </CustomButton>
           </div>
         </div>
       </div>

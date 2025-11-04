@@ -87,6 +87,9 @@
       "firstNameMinLength": "First name must contain at least 3 characters",
       "firstNameCapitalized": "First name must start with a capital letter",
       "dateOfBirthRequired": "Date of birth is required",
+      "dateOfBirthMinAge": "You must be at least {age} years old",
+      "dateOfBirthMaxAge": "Age cannot exceed {age} years",
+      "dateOfBirthInvalid": "Invalid date of birth",
       "genderRequired": "Gender is required",
       "nationalityRequired": "Nationality is required"
     },
@@ -106,7 +109,932 @@
       "completeObject": "Complete object"
     }
   },
-  "characterCreation": {},
+  "characterCreation": {
+    "title": {
+      "main": "Character",
+      "sub": "Creator"
+    },
+    "steps": {
+      "pedSelection": "Ped Selection",
+      "heritage": "Heritage",
+      "physicalCustomization": "Physical Customization",
+      "clothing": "Clothing",
+      "accessories": "Accessories",
+      "tattoos": "Tattoos",
+      "confirmation": "Confirmation"
+    },
+    "pedSelection": {
+      "title": "Ped Model Selection",
+      "selectPed": "Select a ped model",
+      "selectedPed": "Selected Ped",
+      "selectedModel": "Selected Model",
+      "category": "Category",
+      "continue": "Continue",
+      "errorRequired": "Please select a ped model to continue"
+    },
+    "heritage": {
+      "title": "Heritage Selection",
+      "parentSelection": "Parent Selection",
+      "parentSelectionDescription": "Choose the facial features base for your character",
+      "father": "Father",
+      "mother": "Mother",
+      "geneticResemblance": "Genetic Resemblance",
+      "geneticResemblanceDescription": "Fine-tune the genetic influence from each parent",
+      "continue": "Continue",
+      "resemblance": {
+        "face": "Face Features",
+        "fatherDominant": "Father Dominant",
+        "motherDominant": "Mother Dominant",
+        "balanced": "Balanced Mix",
+        "skin": "Skin Tone",
+        "fatherTone": "Father Tone",
+        "motherTone": "Mother Tone",
+        "blended": "Blended Tone",
+        "percentageFather": "{father}% Father",
+        "percentageMother": "{mother}% Mother",
+        "percentageSeparator": "•"
+      }
+    },
+    "physicalCustomization": {
+      "continue": "Continue",
+      "validateButton": "Validate Physical Customization",
+      "categories": {
+        "hair": "Hair",
+        "eyes": "Eyes",
+        "eyebrows": "Eyebrows",
+        "nose": "Nose",
+        "cheeks": "Cheeks",
+        "beard": "Beard",
+        "jaw": "Jaw",
+        "lips": "Lips",
+        "chin": "Chin",
+        "neck": "Neck",
+        "ageing": "Ageing",
+        "makeup": "Makeup",
+        "blush": "Blush",
+        "complexion": "Complexion",
+        "sunDamage": "Sun Damage",
+        "molesFreckles": "Moles & Freckles",
+        "chestHair": "Chest Hair",
+        "bodyBlemishes": "Body Blemishes"
+      },
+      "hair": {
+        "category": "Hair Customization",
+        "style": {
+          "title": "Hair Style",
+          "description": "Choose your haircut from available styles"
+        },
+        "color": {
+          "title": "Hair Color",
+          "description": "Select your primary hair color"
+        },
+        "highlight": {
+          "title": "Hair Highlights",
+          "description": "Add highlights or a secondary color to your hair"
+        }
+      },
+      "eyes": {
+        "category": "Eye Customization",
+        "opening": {
+          "title": "Eye Opening",
+          "description": "Adjust the shape and opening of your eyes",
+          "min": "Narrow",
+          "max": "Wide"
+        },
+        "color": {
+          "title": "Eye Color",
+          "description": "Choose your eye color from available options"
+        }
+      },
+      "beard": {
+        "category": "Beard Customization",
+        "style": {
+          "title": "Beard Style",
+          "description": "Select the beard style that suits you",
+          "label": "Style",
+          "none": "None"
+        },
+        "color": {
+          "title": "Beard Color",
+          "description": "Choose the color of your beard",
+          "label": "Color"
+        },
+        "secondaryColor": {
+          "title": "Secondary Beard Color",
+          "description": "Add a secondary color for a gradient effect",
+          "label": "Secondary Color"
+        },
+        "opacity": {
+          "title": "Beard Opacity",
+          "description": "Adjust the thickness and intensity of your beard",
+          "min": "Light",
+          "max": "Dense"
+        }
+      },
+      "eyebrows": {
+        "category": "Eyebrow Customization",
+        "height": {
+          "title": "Eyebrow Height",
+          "description": "Adjust the vertical distance between your eyebrows and eyes",
+          "min": "Close",
+          "max": "Far"
+        },
+        "depth": {
+          "title": "Brow Bone Depth",
+          "description": "Control how much your brow bone protrudes or recedes",
+          "min": "Recessed",
+          "max": "Prominent"
+        },
+        "style": {
+          "title": "Eyebrow Style",
+          "description": "Select the shape of your eyebrows",
+          "label": "Style"
+        },
+        "color": {
+          "title": "Eyebrow Color",
+          "description": "Choose the color of your eyebrows",
+          "label": "Color"
+        },
+        "opacity": {
+          "title": "Eyebrow Opacity",
+          "description": "Adjust the thickness of your eyebrows",
+          "min": "Thin",
+          "max": "Thick"
+        }
+      },
+      "nose": {
+        "category": "Nose Customization",
+        "width": {
+          "title": "Nose Width",
+          "description": "Adjust the horizontal width of your nose from narrow to wide",
+          "min": "Narrow",
+          "max": "Wide"
+        },
+        "height": {
+          "title": "Nose Height",
+          "description": "Control the vertical position where your nose sits on your face",
+          "min": "Short",
+          "max": "Tall"
+        },
+        "length": {
+          "title": "Nose Length",
+          "description": "Modify how far your nose extends forward from your face",
+          "min": "Short",
+          "max": "Long"
+        },
+        "bridge": {
+          "title": "Bridge Height",
+          "description": "Define the prominence of the bridge bump for a flat or pronounced profile",
+          "min": "Flat",
+          "max": "Prominent"
+        },
+        "bridgeTwist": {
+          "title": "Bridge Twist",
+          "description": "Create a crooked or broken nose effect, perfect for rough characters",
+          "min": "Left",
+          "max": "Right"
+        },
+        "tipHeight": {
+          "title": "Tip Height",
+          "description": "Adjust the angle of your nose tip from pointing down to upturned",
+          "min": "Down",
+          "max": "Up"
+        }
+      },
+      "cheeks": {
+        "category": "Cheek Customization",
+        "boneHeight": {
+          "title": "Cheekbone Height",
+          "description": "Adjust how high or low your cheekbones sit on your face",
+          "min": "Low",
+          "max": "High"
+        },
+        "boneWidth": {
+          "title": "Cheekbone Width",
+          "description": "Control the horizontal width of your cheekbones",
+          "min": "Narrow",
+          "max": "Wide"
+        },
+        "width": {
+          "title": "Cheek Width",
+          "description": "Adjust your cheek fullness from slim to chubby",
+          "min": "Slim",
+          "max": "Chubby"
+        }
+      },
+      "jaw": {
+        "category": "Jaw Customization",
+        "width": {
+          "title": "Jaw Width",
+          "description": "Adjust the horizontal width of your jawbone from narrow to wide",
+          "min": "Narrow",
+          "max": "Wide"
+        },
+        "height": {
+          "title": "Jaw Height",
+          "description": "Control the vertical length of your jaw from short to long",
+          "min": "Short",
+          "max": "Long"
+        }
+      },
+      "lips": {
+        "category": "Lips Customization",
+        "thickness": {
+          "title": "Lip Thickness",
+          "description": "Adjust the fullness of your lips from thin to thick",
+          "min": "Thin",
+          "max": "Thick"
+        },
+        "lipstickStyle": {
+          "title": "Lipstick Style",
+          "description": "Choose a lipstick style",
+          "label": "Style",
+          "none": "None"
+        },
+        "lipstickColor": {
+          "title": "Lipstick Color",
+          "description": "Select the shade of your lipstick",
+          "label": "Color"
+        },
+        "lipstickOpacity": {
+          "title": "Lipstick Intensity",
+          "description": "Adjust the opacity of lipstick",
+          "min": "Subtle",
+          "max": "Bold"
+        }
+      },
+      "chin": {
+        "category": "Chin Customization",
+        "lowering": {
+          "title": "Chin Position",
+          "description": "Adjust the vertical position of your chin from lowered to raised",
+          "min": "Lowered",
+          "max": "Raised"
+        },
+        "length": {
+          "title": "Chin Length",
+          "description": "Control how far your chin extends forward from your face",
+          "min": "Short",
+          "max": "Long"
+        },
+        "width": {
+          "title": "Chin Width",
+          "description": "Adjust the horizontal width of your chin from narrow to wide",
+          "min": "Narrow",
+          "max": "Wide"
+        },
+        "cleft": {
+          "title": "Chin Cleft",
+          "description": "Add or remove a cleft (dimple) in the center of your chin",
+          "min": "Smooth",
+          "max": "Cleft"
+        }
+      },
+      "neck": {
+        "category": "Neck Customization",
+        "thickness": {
+          "title": "Neck Thickness",
+          "description": "Adjust the thickness of your neck from thin to thick",
+          "min": "Thin",
+          "max": "Thick"
+        }
+      },
+      "beard": {
+        "category": "Beard Customization",
+        "style": {
+          "title": "Beard Style",
+          "description": "Select the beard style that suits you",
+          "label": "Style",
+          "none": "None"
+        },
+        "color": {
+          "title": "Beard Color",
+          "description": "Choose the color of your beard",
+          "label": "Color"
+        },
+        "secondaryColor": {
+          "title": "Secondary Beard Color",
+          "description": "Add a secondary color for a gradient effect",
+          "label": "Secondary Color"
+        },
+        "opacity": {
+          "title": "Beard Opacity",
+          "description": "Adjust the thickness and intensity of your beard",
+          "min": "Light",
+          "max": "Dense"
+        }
+      },
+      "ageing": {
+        "category": "Ageing Customization",
+        "style": {
+          "title": "Ageing Type",
+          "description": "Add signs of ageing to your face",
+          "label": "Type",
+          "none": "None"
+        },
+        "opacity": {
+          "title": "Ageing Intensity",
+          "description": "Control the intensity of wrinkles and ageing signs",
+          "min": "Subtle",
+          "max": "Pronounced"
+        }
+      },
+      "makeup": {
+        "category": "Makeup Customization",
+        "style": {
+          "title": "Makeup Style",
+          "description": "Choose a makeup style for your character",
+          "label": "Style",
+          "none": "None"
+        },
+        "primaryColor": {
+          "title": "Primary Color",
+          "description": "Set the main color of the makeup",
+          "label": "Primary Color"
+        },
+        "secondaryColor": {
+          "title": "Secondary Color",
+          "description": "Add a secondary color for more detail",
+          "label": "Secondary Color"
+        },
+        "opacity": {
+          "title": "Makeup Intensity",
+          "description": "Adjust the intensity of applied makeup",
+          "min": "Light",
+          "max": "Intense"
+        }
+      },
+      "blush": {
+        "category": "Blush Customization",
+        "style": {
+          "title": "Blush Style",
+          "description": "Add blush for more color",
+          "label": "Style",
+          "none": "None"
+        },
+        "color": {
+          "title": "Blush Color",
+          "description": "Select the shade of your blush",
+          "label": "Color"
+        },
+        "opacity": {
+          "title": "Blush Intensity",
+          "description": "Control the intensity of blush",
+          "min": "Subtle",
+          "max": "Vibrant"
+        }
+      },
+      "complexion": {
+        "category": "Complexion Customization",
+        "style": {
+          "title": "Complexion Type",
+          "description": "Modify the texture and appearance of your skin",
+          "label": "Type",
+          "none": "None"
+        },
+        "opacity": {
+          "title": "Complexion Intensity",
+          "description": "Adjust the intensity of skin texture",
+          "min": "Light",
+          "max": "Marked"
+        }
+      },
+      "sunDamage": {
+        "category": "Sun Damage Customization",
+        "style": {
+          "title": "Damage Type",
+          "description": "Add tan marks or sunburn effects",
+          "label": "Type",
+          "none": "None"
+        },
+        "opacity": {
+          "title": "Damage Intensity",
+          "description": "Control the intensity of sun damage",
+          "min": "Light",
+          "max": "Severe"
+        }
+      },
+      "molesFreckles": {
+        "category": "Moles & Freckles Customization",
+        "style": {
+          "title": "Mark Type",
+          "description": "Add moles or freckles",
+          "label": "Type",
+          "none": "None"
+        },
+        "opacity": {
+          "title": "Mark Visibility",
+          "description": "Control the visibility of moles",
+          "min": "Subtle",
+          "max": "Visible"
+        }
+      },
+      "chestHair": {
+        "category": "Chest Hair Customization",
+        "style": {
+          "title": "Hair Style",
+          "description": "Choose the chest hair style",
+          "label": "Style",
+          "none": "None"
+        },
+        "color": {
+          "title": "Hair Color",
+          "description": "Set the color of your chest hair",
+          "label": "Color"
+        },
+        "opacity": {
+          "title": "Hair Density",
+          "description": "Adjust hair density",
+          "min": "Sparse",
+          "max": "Dense"
+        }
+      },
+      "bodyBlemishes": {
+        "category": "Body Blemishes Customization",
+        "style": {
+          "title": "Blemish Type",
+          "description": "Add imperfections like scars or marks",
+          "label": "Type",
+          "none": "None"
+        },
+        "opacity": {
+          "title": "Blemish Visibility",
+          "description": "Control the visibility of blemishes",
+          "min": "Subtle",
+          "max": "Marked"
+        }
+      }
+    },
+    "clothing": {
+      "continue": "Continue",
+      "validateButton": "Validate Clothing",
+      "categories": {
+        "mask": "Mask",
+        "torso": "Torso",
+        "undershirt": "Undershirt",
+        "arms": "Arms",
+        "jacket": "Jacket",
+        "bodyArmor": "Body Armor",
+        "decals": "Decals",
+        "pants": "Pants",
+        "shoes": "Shoes",
+        "backpack": "Backpack",
+        "accessories": "Accessories",
+        "watches": "Watches",
+        "bracelets": "Bracelets"
+      },
+      "mask": {
+        "category": "Mask",
+        "drawable": {
+          "title": "Mask Style",
+          "description": "Choose your mask style",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Mask Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "torso": {
+        "category": "Torso",
+        "drawable": {
+          "title": "Torso Style",
+          "description": "Choose your torso clothing type",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Torso Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "undershirt": {
+        "category": "Undershirt",
+        "drawable": {
+          "title": "Undershirt Style",
+          "description": "Choose your undershirt",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Undershirt Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "arms": {
+        "category": "Arms",
+        "drawable": {
+          "title": "Arms Style",
+          "description": "Choose the sleeve style",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Arms Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "jacket": {
+        "category": "Jacket",
+        "drawable": {
+          "title": "Jacket Style",
+          "description": "Choose your jacket or coat",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Jacket Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "bodyArmor": {
+        "category": "Body Armor",
+        "drawable": {
+          "title": "Armor Style",
+          "description": "Choose your body armor",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Armor Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "decals": {
+        "category": "Decals",
+        "drawable": {
+          "title": "Decal Style",
+          "description": "Add decals on your torso",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Decal Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "pants": {
+        "category": "Pants",
+        "drawable": {
+          "title": "Pants Style",
+          "description": "Choose your pants",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Pants Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "shoes": {
+        "category": "Shoes",
+        "drawable": {
+          "title": "Shoes Style",
+          "description": "Choose your shoes",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Shoes Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "backpack": {
+        "category": "Backpack",
+        "drawable": {
+          "title": "Backpack Style",
+          "description": "Choose your backpack",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Backpack Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "accessories": {
+        "category": "Accessories",
+        "drawable": {
+          "title": "Accessory Style",
+          "description": "Add accessories like glasses or hat",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Accessory Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "watches": {
+        "category": "Watches",
+        "drawable": {
+          "title": "Watch Style",
+          "description": "Choose your watch",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Watch Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "bracelets": {
+        "category": "Bracelets",
+        "drawable": {
+          "title": "Bracelet Style",
+          "description": "Choose your bracelets",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Bracelet Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      }
+    },
+    "accessories": {
+      "continue": "Continue",
+      "validateButton": "Validate Accessories",
+      "categories": {
+        "hat": "Hat",
+        "glasses": "Glasses",
+        "earrings": "Earrings",
+        "watch": "Watch",
+        "bracelet": "Bracelet",
+        "neckAccessory": "Neck Accessory"
+      },
+      "hat": {
+        "category": "Hat",
+        "drawable": {
+          "title": "Hat Style",
+          "description": "Choose your hat or headwear",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Hat Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "glasses": {
+        "category": "Glasses",
+        "drawable": {
+          "title": "Glasses Style",
+          "description": "Choose your glasses",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Glasses Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "earrings": {
+        "category": "Earrings",
+        "drawable": {
+          "title": "Earrings Style",
+          "description": "Choose your earrings",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Earrings Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "watch": {
+        "category": "Watch",
+        "drawable": {
+          "title": "Watch Style",
+          "description": "Choose your watch",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Watch Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "bracelet": {
+        "category": "Bracelet",
+        "drawable": {
+          "title": "Bracelet Style",
+          "description": "Choose your bracelet",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Bracelet Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      },
+      "neckAccessory": {
+        "category": "Neck Accessory",
+        "drawable": {
+          "title": "Accessory Style",
+          "description": "Choose necklace, tie, scarf, etc.",
+          "label": "Style",
+          "none": "None"
+        },
+        "texture": {
+          "title": "Accessory Variant",
+          "description": "Select the color/texture variant",
+          "label": "Variant"
+        }
+      }
+    }
+  },
+  "tattoos": {
+    "validateButton": "Validate Tattoos",
+    "goToRecap": "Go to Summary",
+    "categories": {
+      "head": "Head",
+      "neck": "Neck",
+      "torso": "Torso",
+      "back": "Back",
+      "leftArm": "Left Arm",
+      "rightArm": "Right Arm",
+      "leftLeg": "Left Leg",
+      "rightLeg": "Right Leg"
+    },
+    "head": {
+      "category": "Head Tattoos",
+      "collection": {
+        "title": "Tattoo Collection",
+        "description": "Choose the tattoo collection for the head",
+        "label": "Collection"
+      },
+      "hash": {
+        "title": "Specific Tattoo",
+        "description": "Select the exact tattoo",
+        "label": "Tattoo"
+      }
+    },
+    "neck": {
+      "category": "Neck Tattoos",
+      "collection": {
+        "title": "Tattoo Collection",
+        "description": "Choose the tattoo collection for the neck",
+        "label": "Collection"
+      },
+      "hash": {
+        "title": "Specific Tattoo",
+        "description": "Select the exact tattoo",
+        "label": "Tattoo"
+      }
+    },
+    "torso": {
+      "category": "Torso Tattoos",
+      "collection": {
+        "title": "Tattoo Collection",
+        "description": "Choose the tattoo collection for the torso",
+        "label": "Collection"
+      },
+      "hash": {
+        "title": "Specific Tattoo",
+        "description": "Select the exact tattoo",
+        "label": "Tattoo"
+      }
+    },
+    "back": {
+      "category": "Back Tattoos",
+      "collection": {
+        "title": "Tattoo Collection",
+        "description": "Choose the tattoo collection for the back",
+        "label": "Collection"
+      },
+      "hash": {
+        "title": "Specific Tattoo",
+        "description": "Select the exact tattoo",
+        "label": "Tattoo"
+      }
+    },
+    "leftArm": {
+      "category": "Left Arm Tattoos",
+      "collection": {
+        "title": "Tattoo Collection",
+        "description": "Choose the tattoo collection for the left arm",
+        "label": "Collection"
+      },
+      "hash": {
+        "title": "Specific Tattoo",
+        "description": "Select the exact tattoo",
+        "label": "Tattoo"
+      }
+    },
+    "rightArm": {
+      "category": "Right Arm Tattoos",
+      "collection": {
+        "title": "Tattoo Collection",
+        "description": "Choose the tattoo collection for the right arm",
+        "label": "Collection"
+      },
+      "hash": {
+        "title": "Specific Tattoo",
+        "description": "Select the exact tattoo",
+        "label": "Tattoo"
+      }
+    },
+    "leftLeg": {
+      "category": "Left Leg Tattoos",
+      "collection": {
+        "title": "Tattoo Collection",
+        "description": "Choose the tattoo collection for the left leg",
+        "label": "Collection"
+      },
+      "hash": {
+        "title": "Specific Tattoo",
+        "description": "Select the exact tattoo",
+        "label": "Tattoo"
+      }
+    },
+    "rightLeg": {
+      "category": "Right Leg Tattoos",
+      "collection": {
+        "title": "Tattoo Collection",
+        "description": "Choose the tattoo collection for the right leg",
+        "label": "Collection"
+      },
+      "hash": {
+        "title": "Specific Tattoo",
+        "description": "Select the exact tattoo",
+        "label": "Tattoo"
+      }
+    },
+    "recap": {
+      "title": "Summary",
+      "subtitle": "Review all your information before finalizing",
+      "sections": {
+        "identity": "Identity",
+        "ped": "Character",
+        "heritage": "Heritage",
+        "physical": "Physical Customization",
+        "clothing": "Clothing",
+        "accessories": "Accessories",
+        "tattoos": "Tattoos"
+      },
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "dateOfBirth": "Date of Birth",
+        "gender": "Gender",
+        "male": "Male",
+        "female": "Female",
+        "selectedPed": "Selected Ped",
+        "father": "Father",
+        "mother": "Mother",
+        "resemblance": "Resemblance",
+        "skinTone": "Skin Tone",
+        "noseWidth": "Nose Width",
+        "noseHeight": "Nose Height",
+        "noseLength": "Nose Length",
+        "noseBridge": "Nose Bridge",
+        "noseTip": "Nose Tip",
+        "eyebrowHeight": "Eyebrow Height",
+        "eyebrowDepth": "Eyebrow Depth",
+        "cheekboneHeight": "Cheekbone Height",
+        "cheekboneWidth": "Cheekbone Width",
+        "cheeksWidth": "Cheeks Width",
+        "eyesOpening": "Eye Opening",
+        "lipsThickness": "Lip Thickness",
+        "jawWidth": "Jaw Width",
+        "jawHeight": "Jaw Height",
+        "chinLength": "Chin Length",
+        "chinPosition": "Chin Position",
+        "chinWidth": "Chin Width",
+        "chinShape": "Chin Shape",
+        "neckThickness": "Neck Thickness",
+        "eyeColor": "Eye Color",
+        "eyebrowStyle": "Eyebrow Style",
+        "facialHair": "Facial Hair",
+        "chestHair": "Chest Hair",
+        "blemishes": "Blemishes",
+        "ageing": "Ageing",
+        "complexion": "Complexion",
+        "sunDamage": "Sun Damage",
+        "moles": "Moles",
+        "bodyBlemishes": "Body Blemishes"
+      },
+      "buttons": {
+        "edit": "Edit",
+        "validate": "Validate and Create Character"
+      }
+    }
+  },
   "common": {
     "unknown": "Unknown"
   }

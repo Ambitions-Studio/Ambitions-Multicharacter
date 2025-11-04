@@ -87,6 +87,9 @@
       "firstNameMinLength": "Le prénom doit contenir au minimum 3 caractères",
       "firstNameCapitalized": "Le prénom doit commencer par une majuscule",
       "dateOfBirthRequired": "La date de naissance est obligatoire",
+      "dateOfBirthMinAge": "Vous devez avoir au minimum {age} ans",
+      "dateOfBirthMaxAge": "L'âge ne peut pas dépasser {age} ans",
+      "dateOfBirthInvalid": "Date de naissance invalide",
       "genderRequired": "Le genre est obligatoire",
       "nationalityRequired": "La nationalité est obligatoire"
     },
@@ -106,7 +109,941 @@
       "completeObject": "Objet complet"
     }
   },
-  "characterCreation": {},
+  "characterCreation": {
+    "title": {
+      "main": "Créateur",
+      "sub": "de Personnage"
+    },
+    "steps": {
+      "pedSelection": "Sélection du Ped",
+      "heritage": "Héritage",
+      "physicalCustomization": "Customisation Physique",
+      "clothing": "Vêtements",
+      "accessories": "Accessoires",
+      "tattoos": "Tatouages",
+      "confirmation": "Confirmation"
+    },
+    "pedSelection": {
+      "title": "Sélection du Modèle de Ped",
+      "selectPed": "Sélectionnez un modèle de ped",
+      "selectedPed": "Ped Sélectionné",
+      "selectedModel": "Modèle Sélectionné",
+      "category": "Catégorie",
+      "continue": "Continuer",
+      "errorRequired": "Veuillez sélectionner un modèle de ped pour continuer"
+    },
+    "heritage": {
+      "title": "Sélection de l'Héritage",
+      "parentSelection": "Sélection des Parents",
+      "parentSelectionDescription": "Choisissez la base des traits du visage de votre personnage",
+      "father": "Père",
+      "mother": "Mère",
+      "geneticResemblance": "Ressemblance Génétique",
+      "geneticResemblanceDescription": "Affinez l'influence génétique de chaque parent",
+      "continue": "Continuer",
+      "resemblance": {
+        "face": "Traits du Visage",
+        "fatherDominant": "Père Dominant",
+        "motherDominant": "Mère Dominante",
+        "balanced": "Mélange Équilibré",
+        "skin": "Teint de Peau",
+        "fatherTone": "Teint du Père",
+        "motherTone": "Teint de la Mère",
+        "blended": "Teint Mélangé",
+        "percentageFather": "{father}% Père",
+        "percentageMother": "{mother}% Mère",
+        "percentageSeparator": "•"
+      }
+    },
+    "physicalCustomization": {
+      "continue": "Continuer",
+      "validateButton": "Valider la Customisation Physique",
+      "categories": {
+        "hair": "Cheveux",
+        "eyes": "Yeux",
+        "eyebrows": "Sourcils",
+        "nose": "Nez",
+        "cheeks": "Joues",
+        "beard": "Barbe",
+        "jaw": "Mâchoire",
+        "lips": "Lèvres",
+        "chin": "Menton",
+        "neck": "Cou",
+        "ageing": "Vieillissement",
+        "makeup": "Maquillage",
+        "blush": "Fard à Joues",
+        "complexion": "Teint",
+        "sunDamage": "Dommages du Soleil",
+        "molesFreckles": "Grains de Beauté",
+        "chestHair": "Poils du Torse",
+        "bodyBlemishes": "Imperfections"
+      },
+      "hair": {
+        "category": "Personnalisation des Cheveux",
+        "style": {
+          "title": "Coiffure",
+          "description": "Choisissez votre coupe de cheveux parmi les styles disponibles"
+        },
+        "color": {
+          "title": "Couleur des Cheveux",
+          "description": "Sélectionnez la couleur principale de vos cheveux"
+        },
+        "highlight": {
+          "title": "Mèches",
+          "description": "Ajoutez des mèches ou une couleur secondaire à vos cheveux"
+        }
+      },
+      "eyes": {
+        "category": "Personnalisation des Yeux",
+        "opening": {
+          "title": "Ouverture des Yeux",
+          "description": "Ajustez la forme et l'ouverture de vos yeux",
+          "min": "Étroits",
+          "max": "Larges"
+        },
+        "color": {
+          "title": "Couleur des Yeux",
+          "description": "Choisissez la couleur de vos yeux parmi les options disponibles"
+        }
+      },
+      "beard": {
+        "category": "Personnalisation de la Barbe",
+        "style": {
+          "title": "Style de Barbe",
+          "description": "Sélectionnez le style de barbe qui vous convient",
+          "label": "Style",
+          "none": "Aucune"
+        },
+        "color": {
+          "title": "Couleur de la Barbe",
+          "description": "Choisissez la couleur de votre barbe",
+          "label": "Couleur"
+        },
+        "secondaryColor": {
+          "title": "Deuxième Couleur de la Barbe",
+          "description": "Ajoutez une deuxième couleur pour un effet dégradé",
+          "label": "Deuxième Couleur"
+        },
+        "opacity": {
+          "title": "Opacité de la Barbe",
+          "description": "Ajustez l'épaisseur et l'intensité de votre barbe",
+          "min": "Légère",
+          "max": "Dense"
+        }
+      },
+      "eyebrows": {
+        "category": "Personnalisation des Sourcils",
+        "height": {
+          "title": "Hauteur des Sourcils",
+          "description": "Ajustez la distance verticale entre vos sourcils et vos yeux",
+          "min": "Proche",
+          "max": "Éloigné"
+        },
+        "depth": {
+          "title": "Profondeur de l'Os des Sourcils",
+          "description": "Contrôlez à quel point l'os de vos sourcils ressort ou s'enfonce",
+          "min": "Enfoncé",
+          "max": "Prononcé"
+        },
+        "style": {
+          "title": "Style des Sourcils",
+          "description": "Sélectionnez la forme de vos sourcils",
+          "label": "Style"
+        },
+        "color": {
+          "title": "Couleur des Sourcils",
+          "description": "Choisissez la couleur de vos sourcils",
+          "label": "Couleur"
+        },
+        "opacity": {
+          "title": "Opacité des Sourcils",
+          "description": "Ajustez l'épaisseur de vos sourcils",
+          "min": "Fins",
+          "max": "Épais"
+        }
+      },
+      "nose": {
+        "category": "Personnalisation du Nez",
+        "width": {
+          "title": "Largeur du Nez",
+          "description": "Ajustez la largeur horizontale de votre nez, d'étroit à large",
+          "min": "Étroit",
+          "max": "Large"
+        },
+        "height": {
+          "title": "Hauteur du Nez",
+          "description": "Contrôlez la position verticale où votre nez se situe sur votre visage",
+          "min": "Court",
+          "max": "Long"
+        },
+        "length": {
+          "title": "Longueur du Nez",
+          "description": "Modifiez à quel point votre nez s'étend vers l'avant depuis votre visage",
+          "min": "Court",
+          "max": "Long"
+        },
+        "bridge": {
+          "title": "Hauteur de l'Arête",
+          "description": "Définissez la proéminence de la bosse de l'arête pour un profil plat ou prononcé",
+          "min": "Plat",
+          "max": "Prononcé"
+        },
+        "bridgeTwist": {
+          "title": "Torsion de l'Arête",
+          "description": "Créez un effet de nez cassé ou tordu, parfait pour les personnages durs",
+          "min": "Gauche",
+          "max": "Droite"
+        },
+        "tipHeight": {
+          "title": "Hauteur de la Pointe",
+          "description": "Ajustez l'angle de la pointe de votre nez, pointant vers le bas ou retroussé",
+          "min": "Bas",
+          "max": "Haut"
+        }
+      },
+      "cheeks": {
+        "category": "Personnalisation des Joues",
+        "boneHeight": {
+          "title": "Hauteur de l'Os des Joues",
+          "description": "Ajustez la position verticale de vos pommettes sur votre visage",
+          "min": "Basse",
+          "max": "Haute"
+        },
+        "boneWidth": {
+          "title": "Largeur Osseuse des Joues",
+          "description": "Contrôlez la largeur horizontale de l'os de vos pommettes",
+          "min": "Étroite",
+          "max": "Large"
+        },
+        "width": {
+          "title": "Largeur des Joues",
+          "description": "Ajustez la rondeur de vos joues, de fines à joufflues",
+          "min": "Fines",
+          "max": "Joufflues"
+        }
+      },
+      "beard": {
+        "category": "Personnalisation de la Barbe",
+        "style": {
+          "title": "Style de Barbe",
+          "description": "Sélectionnez le style de barbe qui vous convient",
+          "label": "Style",
+          "none": "Aucune"
+        },
+        "color": {
+          "title": "Couleur de la Barbe",
+          "description": "Choisissez la couleur de votre barbe",
+          "label": "Couleur"
+        },
+        "secondaryColor": {
+          "title": "Deuxième Couleur de la Barbe",
+          "description": "Ajoutez une deuxième couleur pour un effet dégradé",
+          "label": "Deuxième Couleur"
+        },
+        "opacity": {
+          "title": "Opacité de la Barbe",
+          "description": "Ajustez l'épaisseur et l'intensité de votre barbe",
+          "min": "Légère",
+          "max": "Dense"
+        }
+      },
+      "jaw": {
+        "category": "Personnalisation de la Mâchoire",
+        "width": {
+          "title": "Largeur de la Mâchoire",
+          "description": "Ajustez la largeur horizontale de votre mâchoire, d'étroite à large",
+          "min": "Étroite",
+          "max": "Large"
+        },
+        "height": {
+          "title": "Taille de la Mâchoire",
+          "description": "Contrôlez la longueur verticale de votre mâchoire, de courte à longue",
+          "min": "Courte",
+          "max": "Longue"
+        }
+      },
+      "lips": {
+        "category": "Personnalisation des Lèvres",
+        "thickness": {
+          "title": "Épaisseur des Lèvres",
+          "description": "Ajustez le volume de vos lèvres, de fines à épaisses",
+          "min": "Fines",
+          "max": "Épaisses"
+        },
+        "lipstickStyle": {
+          "title": "Style de Rouge à Lèvres",
+          "description": "Choisissez un style de rouge à lèvres",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "lipstickColor": {
+          "title": "Couleur du Rouge à Lèvres",
+          "description": "Sélectionnez la teinte de votre rouge à lèvres",
+          "label": "Couleur"
+        },
+        "lipstickOpacity": {
+          "title": "Intensité du Rouge à Lèvres",
+          "description": "Ajustez l'opacité du rouge à lèvres",
+          "min": "Subtil",
+          "max": "Intense"
+        }
+      },
+      "chin": {
+        "category": "Personnalisation du Menton",
+        "lowering": {
+          "title": "Position du Menton",
+          "description": "Ajustez la position verticale de votre menton, abaissé ou relevé",
+          "min": "Abaissé",
+          "max": "Relevé"
+        },
+        "length": {
+          "title": "Longueur du Menton",
+          "description": "Contrôlez à quel point votre menton s'étend vers l'avant",
+          "min": "Court",
+          "max": "Long"
+        },
+        "width": {
+          "title": "Largeur du Menton",
+          "description": "Ajustez la largeur horizontale de votre menton, d'étroit à large",
+          "min": "Étroit",
+          "max": "Large"
+        },
+        "cleft": {
+          "title": "Creux du Menton",
+          "description": "Ajoutez ou retirez un creux (fossette) au centre de votre menton",
+          "min": "Lisse",
+          "max": "Creusé"
+        }
+      },
+      "neck": {
+        "category": "Personnalisation du Cou",
+        "thickness": {
+          "title": "Épaisseur du Cou",
+          "description": "Ajustez l'épaisseur de votre cou, de fin à épais",
+          "min": "Fin",
+          "max": "Épais"
+        }
+      },
+      "ageing": {
+        "category": "Personnalisation du Vieillissement",
+        "style": {
+          "title": "Type de Vieillissement",
+          "description": "Ajoutez des signes de l'âge à votre visage",
+          "label": "Type",
+          "none": "Aucun"
+        },
+        "opacity": {
+          "title": "Intensité du Vieillissement",
+          "description": "Contrôlez l'intensité des rides et signes de l'âge",
+          "min": "Subtil",
+          "max": "Prononcé"
+        }
+      },
+      "makeup": {
+        "category": "Personnalisation du Maquillage",
+        "style": {
+          "title": "Style de Maquillage",
+          "description": "Choisissez un style de maquillage pour votre personnage",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "primaryColor": {
+          "title": "Couleur Primaire",
+          "description": "Définissez la couleur principale du maquillage",
+          "label": "Couleur Primaire"
+        },
+        "secondaryColor": {
+          "title": "Couleur Secondaire",
+          "description": "Ajoutez une couleur secondaire pour plus de détails",
+          "label": "Couleur Secondaire"
+        },
+        "opacity": {
+          "title": "Intensité du Maquillage",
+          "description": "Ajustez l'intensité du maquillage appliqué",
+          "min": "Léger",
+          "max": "Intense"
+        }
+      },
+      "blush": {
+        "category": "Personnalisation du Fard à Joues",
+        "style": {
+          "title": "Style de Fard",
+          "description": "Ajoutez du fard à joues pour plus de couleur",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "color": {
+          "title": "Couleur du Fard",
+          "description": "Sélectionnez la teinte de votre fard à joues",
+          "label": "Couleur"
+        },
+        "opacity": {
+          "title": "Intensité du Fard",
+          "description": "Contrôlez l'intensité du fard à joues",
+          "min": "Subtil",
+          "max": "Vif"
+        }
+      },
+      "complexion": {
+        "category": "Personnalisation du Teint",
+        "style": {
+          "title": "Type de Teint",
+          "description": "Modifiez la texture et l'apparence de votre peau",
+          "label": "Type",
+          "none": "Aucun"
+        },
+        "opacity": {
+          "title": "Intensité du Teint",
+          "description": "Ajustez l'intensité de la texture de peau",
+          "min": "Léger",
+          "max": "Marqué"
+        }
+      },
+      "sunDamage": {
+        "category": "Dommages du Soleil",
+        "style": {
+          "title": "Type de Dommages",
+          "description": "Ajoutez des marques de bronzage ou de coups de soleil",
+          "label": "Type",
+          "none": "Aucun"
+        },
+        "opacity": {
+          "title": "Intensité des Dommages",
+          "description": "Contrôlez l'intensité des dommages solaires",
+          "min": "Léger",
+          "max": "Sévère"
+        }
+      },
+      "molesFreckles": {
+        "category": "Grains de Beauté & Taches",
+        "style": {
+          "title": "Type de Marques",
+          "description": "Ajoutez des grains de beauté ou des taches de rousseur",
+          "label": "Type",
+          "none": "Aucun"
+        },
+        "opacity": {
+          "title": "Visibilité des Marques",
+          "description": "Contrôlez la visibilité des grains de beauté",
+          "min": "Discret",
+          "max": "Visible"
+        }
+      },
+      "chestHair": {
+        "category": "Personnalisation des Poils du Torse",
+        "style": {
+          "title": "Style des Poils",
+          "description": "Choisissez le style de pilosité du torse",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "color": {
+          "title": "Couleur des Poils",
+          "description": "Définissez la couleur de vos poils de torse",
+          "label": "Couleur"
+        },
+        "opacity": {
+          "title": "Densité des Poils",
+          "description": "Ajustez la densité de la pilosité",
+          "min": "Clairsemée",
+          "max": "Dense"
+        }
+      },
+      "bodyBlemishes": {
+        "category": "Imperfections Corporelles",
+        "style": {
+          "title": "Type d'Imperfections",
+          "description": "Ajoutez des imperfections comme des cicatrices ou taches",
+          "label": "Type",
+          "none": "Aucune"
+        },
+        "opacity": {
+          "title": "Visibilité des Imperfections",
+          "description": "Contrôlez la visibilité des imperfections",
+          "min": "Subtil",
+          "max": "Marqué"
+        }
+      }
+    },
+    "clothing": {
+      "continue": "Continuer",
+      "validateButton": "Valider les Vêtements",
+      "categories": {
+        "mask": "Masque",
+        "torso": "Torse",
+        "undershirt": "Sous-vêtement",
+        "arms": "Bras",
+        "jacket": "Veste",
+        "bodyArmor": "Gilet Pare-Balles",
+        "decals": "Décalcomanies",
+        "pants": "Pantalon",
+        "shoes": "Chaussures",
+        "backpack": "Sac à Dos",
+        "accessories": "Accessoires",
+        "watches": "Montres",
+        "bracelets": "Bracelets"
+      },
+      "mask": {
+        "category": "Masque",
+        "drawable": {
+          "title": "Style de Masque",
+          "description": "Choisissez le style de votre masque",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "texture": {
+          "title": "Variante de Masque",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "torso": {
+        "category": "Torse",
+        "drawable": {
+          "title": "Style de Torse",
+          "description": "Choisissez le type de vêtement pour le torse",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Variante de Torse",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "undershirt": {
+        "category": "Sous-vêtement",
+        "drawable": {
+          "title": "Style de Sous-vêtement",
+          "description": "Choisissez votre sous-vêtement",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "texture": {
+          "title": "Variante de Sous-vêtement",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "arms": {
+        "category": "Bras",
+        "drawable": {
+          "title": "Style de Bras",
+          "description": "Choisissez le style des manches",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Variante de Bras",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "jacket": {
+        "category": "Veste",
+        "drawable": {
+          "title": "Style de Veste",
+          "description": "Choisissez votre veste ou blouson",
+          "label": "Style",
+          "none": "Aucune"
+        },
+        "texture": {
+          "title": "Variante de Veste",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "bodyArmor": {
+        "category": "Gilet Pare-Balles",
+        "drawable": {
+          "title": "Style de Gilet",
+          "description": "Choisissez votre gilet pare-balles",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "texture": {
+          "title": "Variante de Gilet",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "decals": {
+        "category": "Décalcomanies",
+        "drawable": {
+          "title": "Style de Décalcomanie",
+          "description": "Ajoutez des décalcomanies sur votre torse",
+          "label": "Style",
+          "none": "Aucune"
+        },
+        "texture": {
+          "title": "Variante de Décalcomanie",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "pants": {
+        "category": "Pantalon",
+        "drawable": {
+          "title": "Style de Pantalon",
+          "description": "Choisissez votre pantalon",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Variante de Pantalon",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "shoes": {
+        "category": "Chaussures",
+        "drawable": {
+          "title": "Style de Chaussures",
+          "description": "Choisissez vos chaussures",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Variante de Chaussures",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "backpack": {
+        "category": "Sac à Dos",
+        "drawable": {
+          "title": "Style de Sac à Dos",
+          "description": "Choisissez votre sac à dos",
+          "label": "Style"
+        },
+        "texture": {
+          "title": "Variante de Sac à Dos",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "accessories": {
+        "category": "Accessoires",
+        "drawable": {
+          "title": "Style d'Accessoire",
+          "description": "Ajoutez des accessoires comme des lunettes ou chapeau",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "texture": {
+          "title": "Variante d'Accessoire",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "watches": {
+        "category": "Montres",
+        "drawable": {
+          "title": "Style de Montre",
+          "description": "Choisissez votre montre",
+          "label": "Style",
+          "none": "Aucune"
+        },
+        "texture": {
+          "title": "Variante de Montre",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "bracelets": {
+        "category": "Bracelets",
+        "drawable": {
+          "title": "Style de Bracelet",
+          "description": "Choisissez vos bracelets",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "texture": {
+          "title": "Variante de Bracelet",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      }
+    },
+    "accessories": {
+      "continue": "Continuer",
+      "validateButton": "Valider les Accessoires",
+      "categories": {
+        "hat": "Chapeau",
+        "glasses": "Lunettes",
+        "earrings": "Boucles d'Oreille",
+        "watch": "Montre",
+        "bracelet": "Bracelet",
+        "neckAccessory": "Tour de Cou"
+      },
+      "hat": {
+        "category": "Chapeau",
+        "drawable": {
+          "title": "Style de Chapeau",
+          "description": "Choisissez votre chapeau ou couvre-chef",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "texture": {
+          "title": "Variante de Chapeau",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "glasses": {
+        "category": "Lunettes",
+        "drawable": {
+          "title": "Style de Lunettes",
+          "description": "Choisissez vos lunettes",
+          "label": "Style",
+          "none": "Aucune"
+        },
+        "texture": {
+          "title": "Variante de Lunettes",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "earrings": {
+        "category": "Boucles d'Oreille",
+        "drawable": {
+          "title": "Style de Boucles",
+          "description": "Choisissez vos boucles d'oreille",
+          "label": "Style",
+          "none": "Aucune"
+        },
+        "texture": {
+          "title": "Variante de Boucles",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "watch": {
+        "category": "Montre",
+        "drawable": {
+          "title": "Style de Montre",
+          "description": "Choisissez votre montre",
+          "label": "Style",
+          "none": "Aucune"
+        },
+        "texture": {
+          "title": "Variante de Montre",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "bracelet": {
+        "category": "Bracelet",
+        "drawable": {
+          "title": "Style de Bracelet",
+          "description": "Choisissez votre bracelet",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "texture": {
+          "title": "Variante de Bracelet",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      },
+      "neckAccessory": {
+        "category": "Tour de Cou",
+        "drawable": {
+          "title": "Style d'Accessoire",
+          "description": "Choisissez collier, cravate, écharpe, etc.",
+          "label": "Style",
+          "none": "Aucun"
+        },
+        "texture": {
+          "title": "Variante d'Accessoire",
+          "description": "Sélectionnez la variante de couleur/texture",
+          "label": "Variante"
+        }
+      }
+    },
+    "tattoos": {
+      "continue": "Continuer",
+      "validateButton": "Valider les Tatouages",
+      "goToRecap": "Aller au Récapitulatif",
+      "categories": {
+        "head": "Tête",
+        "neck": "Cou",
+        "torso": "Torse",
+        "back": "Dos",
+        "leftArm": "Bras Gauche",
+        "rightArm": "Bras Droit",
+        "leftLeg": "Jambe Gauche",
+        "rightLeg": "Jambe Droite"
+      },
+      "head": {
+        "category": "Tatouages Tête",
+        "collection": {
+          "title": "Collection de Tatouages",
+          "description": "Choisissez la collection de tatouages pour la tête",
+          "label": "Collection",
+          "none": "Aucun"
+        },
+        "hash": {
+          "title": "Tatouage Spécifique",
+          "description": "Sélectionnez le tatouage exact",
+          "label": "Tatouage"
+        }
+      },
+      "neck": {
+        "category": "Tatouages Cou",
+        "collection": {
+          "title": "Collection de Tatouages",
+          "description": "Choisissez la collection de tatouages pour le cou",
+          "label": "Collection",
+          "none": "Aucun"
+        },
+        "hash": {
+          "title": "Tatouage Spécifique",
+          "description": "Sélectionnez le tatouage exact",
+          "label": "Tatouage"
+        }
+      },
+      "torso": {
+        "category": "Tatouages Torse",
+        "collection": {
+          "title": "Collection de Tatouages",
+          "description": "Choisissez la collection de tatouages pour le torse",
+          "label": "Collection",
+          "none": "Aucun"
+        },
+        "hash": {
+          "title": "Tatouage Spécifique",
+          "description": "Sélectionnez le tatouage exact",
+          "label": "Tatouage"
+        }
+      },
+      "back": {
+        "category": "Tatouages Dos",
+        "collection": {
+          "title": "Collection de Tatouages",
+          "description": "Choisissez la collection de tatouages pour le dos",
+          "label": "Collection",
+          "none": "Aucun"
+        },
+        "hash": {
+          "title": "Tatouage Spécifique",
+          "description": "Sélectionnez le tatouage exact",
+          "label": "Tatouage"
+        }
+      },
+      "leftArm": {
+        "category": "Tatouages Bras Gauche",
+        "collection": {
+          "title": "Collection de Tatouages",
+          "description": "Choisissez la collection de tatouages pour le bras gauche",
+          "label": "Collection",
+          "none": "Aucun"
+        },
+        "hash": {
+          "title": "Tatouage Spécifique",
+          "description": "Sélectionnez le tatouage exact",
+          "label": "Tatouage"
+        }
+      },
+      "rightArm": {
+        "category": "Tatouages Bras Droit",
+        "collection": {
+          "title": "Collection de Tatouages",
+          "description": "Choisissez la collection de tatouages pour le bras droit",
+          "label": "Collection",
+          "none": "Aucun"
+        },
+        "hash": {
+          "title": "Tatouage Spécifique",
+          "description": "Sélectionnez le tatouage exact",
+          "label": "Tatouage"
+        }
+      },
+      "leftLeg": {
+        "category": "Tatouages Jambe Gauche",
+        "collection": {
+          "title": "Collection de Tatouages",
+          "description": "Choisissez la collection de tatouages pour la jambe gauche",
+          "label": "Collection",
+          "none": "Aucun"
+        },
+        "hash": {
+          "title": "Tatouage Spécifique",
+          "description": "Sélectionnez le tatouage exact",
+          "label": "Tatouage"
+        }
+      },
+      "rightLeg": {
+        "category": "Tatouages Jambe Droite",
+        "collection": {
+          "title": "Collection de Tatouages",
+          "description": "Choisissez la collection de tatouages pour la jambe droite",
+          "label": "Collection",
+          "none": "Aucun"
+        },
+        "hash": {
+          "title": "Tatouage Spécifique",
+          "description": "Sélectionnez le tatouage exact",
+          "label": "Tatouage"
+        }
+      }
+    },
+    "recap": {
+      "title": "Récapitulatif",
+      "subtitle": "Vérifiez toutes vos informations avant de finaliser",
+      "sections": {
+        "identity": "Identité",
+        "ped": "Personnage",
+        "heritage": "Héritage",
+        "physical": "Customisation Physique",
+        "clothing": "Vêtements",
+        "accessories": "Accessoires",
+        "tattoos": "Tatouages"
+      },
+      "fields": {
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "dateOfBirth": "Date de naissance",
+        "gender": "Sexe",
+        "male": "Homme",
+        "female": "Femme",
+        "selectedPed": "Ped sélectionné",
+        "father": "Père",
+        "mother": "Mère",
+        "resemblance": "Ressemblance",
+        "skinTone": "Teinte de peau",
+        "noseWidth": "Largeur du Nez",
+        "noseHeight": "Hauteur du Nez",
+        "noseLength": "Longueur du Nez",
+        "noseBridge": "Pont du Nez",
+        "noseTip": "Bout du Nez",
+        "eyebrowHeight": "Hauteur des Sourcils",
+        "eyebrowDepth": "Profondeur des Sourcils",
+        "cheekboneHeight": "Hauteur des Pommettes",
+        "cheekboneWidth": "Largeur des Pommettes",
+        "cheeksWidth": "Largeur des Joues",
+        "eyesOpening": "Ouverture des Yeux",
+        "lipsThickness": "Épaisseur des Lèvres",
+        "jawWidth": "Largeur de la Mâchoire",
+        "jawHeight": "Hauteur de la Mâchoire",
+        "chinLength": "Longueur du Menton",
+        "chinPosition": "Position du Menton",
+        "chinWidth": "Largeur du Menton",
+        "chinShape": "Forme du Menton",
+        "neckThickness": "Épaisseur du Cou",
+        "eyeColor": "Couleur des Yeux",
+        "eyebrowStyle": "Style des Sourcils",
+        "facialHair": "Pilosité Faciale",
+        "chestHair": "Poils de Poitrine",
+        "blemishes": "Imperfections",
+        "ageing": "Vieillissement",
+        "complexion": "Teint",
+        "sunDamage": "Dommages Solaires",
+        "moles": "Grains de Beauté",
+        "bodyBlemishes": "Imperfections Corporelles"
+      },
+      "buttons": {
+        "edit": "Modifier",
+        "validate": "Valider et Créer le Personnage"
+      }
+    }
+  },
   "common": {
     "unknown": "Inconnu"
   }
