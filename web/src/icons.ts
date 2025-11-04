@@ -22,4 +22,7 @@ export {
   mdiClose,
   mdiAccountMultiple,
   mdiCardAccountDetails,
+  mdiChevronRight,
+  mdiFaceMan,
+  mdiPalette,
 } from '@mdi/js'
