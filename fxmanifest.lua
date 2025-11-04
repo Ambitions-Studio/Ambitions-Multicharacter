@@ -24,10 +24,15 @@ server_scripts {
 }
 
 client_scripts {
+  'client/modules/ui/*.lua'
 }
 
-files {
+ui_page 'web/dist/index.html'
 
+files {
+  'web/dist/index.html',
+  'web/dist/assets/*.css',
+  'web/dist/assets/*.js',
 }
 
 dependencies {
