@@ -22,30 +22,25 @@ local function OpenInterface(data)
   ambitionsPrint.success('NUI interface opened successfully')
 end
 
---- Close the character selection interface
-local function CloseInterface()
-  ambitionsPrint.info('CloseInterface called')
-  ambitionsPrint.info('Setting NUI focus to false')
-  SetNuiFocus(false, false)
-
-  SendNUIMessage({
-    action = 'hideCharacterSelection'
-  })
-  ambitionsPrint.success('NUI interface closed successfully')
-end
-
 RegisterNetEvent('ambitions-multicharacter:client:openInterface', function(data)
   ambitionsPrint.info('Received openInterface event from server')
   OpenInterface(data)
 end)
 
-RegisterNUICallback('closeCharacterSelection', function(data, cb)
-  ambitionsPrint.info('Received closeCharacterSelection callback from NUI')
-  CloseInterface()
+RegisterNUICallback('selectEmptySlot', function(data, cb)
+  ambitionsPrint.info('Received selectEmptySlot callback from NUI for slot:', data.slotIndex)
+  ambitionsPrint.info('Triggering showDefaultPed event')
+  TriggerEvent('ambitions-multicharacter:client:showDefaultPed')
+  cb('ok')
+end)
+
+RegisterNUICallback('deselectSlot', function(data, cb)
+  ambitionsPrint.info('Received deselectSlot callback from NUI')
+  ambitionsPrint.info('Triggering hideDefaultPed event')
+  TriggerEvent('ambitions-multicharacter:client:hideDefaultPed')
   cb('ok')
 end)
 
 return {
   OpenInterface = OpenInterface,
-  CloseInterface = CloseInterface
 }

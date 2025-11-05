@@ -71,6 +71,43 @@ RegisterNetEvent('ambitions-multicharacter:client:prepareCharacterSelection', fu
   PrepareCharacterSelection()
 end)
 
+--- Show the default ped for character creation
+local function ShowDefaultPed()
+  ambitionsPrint.info('ShowDefaultPed called - making ped visible for character creation')
+
+  local playerPed = PlayerPedId()
+
+  ambitionsPrint.info('Enabling ped visibility and rendering')
+  SetEntityVisible(playerPed, true, false)
+  SetEntityAlpha(playerPed, 255, false)
+  SetPedAoBlobRendering(playerPed, true)
+  SetEntityCollision(playerPed, true, true)
+
+  ambitionsPrint.success('Default ped is now visible for character creation')
+end
+
+--- Hide the ped completely
+local function HideDefaultPed()
+  ambitionsPrint.info('HideDefaultPed called - hiding ped from view')
+
+  local playerPed = PlayerPedId()
+
+  SetEntityVisible(playerPed, false, false)
+  SetEntityAlpha(playerPed, 0, false)
+  SetPedAoBlobRendering(playerPed, false)
+  SetEntityCollision(playerPed, false, false)
+
+  ambitionsPrint.success('Ped is now hidden')
+end
+
+RegisterNetEvent('ambitions-multicharacter:client:showDefaultPed', function()
+  ShowDefaultPed()
+end)
+
+RegisterNetEvent('ambitions-multicharacter:client:hideDefaultPed', function()
+  HideDefaultPed()
+end)
+
 CreateThread(function()
   ambitionsPrint.info('Starting player activation check thread')
   while not NetworkIsPlayerActive(PlayerId()) do
