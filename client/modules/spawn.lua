@@ -37,9 +37,10 @@ local function PrepareCharacterSelection()
 
     playerPed = PlayerPedId()
 
-    SetEntityVisible(playerPed, true, false)
-    SetEntityAlpha(playerPed, 255, false)
-    SetPedAoBlobRendering(playerPed, true)
+    ambitionsPrint.info('Hiding player ped completely for character selection')
+    SetEntityVisible(playerPed, false, false)
+    SetEntityAlpha(playerPed, 0, false)
+    SetPedAoBlobRendering(playerPed, false)
   end
 
   ambitionsPrint.info('Setting player position and freezing entity')
@@ -52,7 +53,7 @@ local function PrepareCharacterSelection()
   Wait(500)
 
   ambitionsPrint.info('Creating character selection camera')
-  cameraModule.CreateCharacterSelectionCamera(playerPed, 0.0, 2.5, 0.5, 1000)
+  cameraModule.CreateCharacterSelectionCamera(playerPed, -0.4, 2.5, 0.5, 1000)
 
   ambitionsPrint.info('Shutting down loading screens')
   ShutdownLoadingScreen()
