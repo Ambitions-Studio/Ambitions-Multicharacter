@@ -5,6 +5,7 @@ import { mdiArrowLeft, mdiAccountPlus, mdiPlay, mdiTrashCan } from '@/icons'
 import CharacterSlot, { type Character } from '@/components/characterSelection/CharacterSlot.vue'
 import CharacterDetails from '@/components/characterSelection/CharacterDetails.vue'
 import CustomButton from '@/components/CustomButton.vue'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -79,26 +80,14 @@ const selectSlot = (slotId: number, isEmpty: boolean) => {
   const wasSlotSelected = selectedSlot.value !== null
 
   if (wasSlotSelected) {
-    fetch('https://Ambitions-Multicharacter/deselectSlot', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({}),
-    }).catch(() => {})
+    sendNuiEvent('deselectSlot')
   }
 
   selectedSlot.value = slotId
   isSlotEmpty.value = isEmpty
 
   if (isEmpty) {
-    fetch('https://Ambitions-Multicharacter/selectEmptySlot', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ slotIndex: slotId }),
-    }).catch(() => {})
+    sendNuiEvent('selectEmptySlot', { slotIndex: slotId })
   }
 }
 
@@ -116,13 +105,7 @@ const deleteCharacter = () => {
 
 const closeInterface = () => {
   isVisible.value = false
-  fetch('https://Ambitions-Multicharacter/closeCharacterSelection', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({}),
-  }).catch(() => {})
+  sendNuiEvent('closeCharacterSelection')
 }
 
 const formatPlaytime = (seconds: number): string => {
