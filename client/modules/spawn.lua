@@ -4,6 +4,18 @@ local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client spawn module loaded')
 
+--- Set the default clothes for the player
+---@param ped number The ped of the player
+local function SetDefaultClothes(ped)
+  for i = 0, 11 do
+    SetPedComponentVariation(ped, i, 0, 0, 4)
+  end
+
+  for i = 0, 7 do
+    ClearPedProp(ped, i)
+  end
+end
+
 --- Prepare the character selection scene
 local function PrepareCharacterSelection()
   ambitionsPrint.info('PrepareCharacterSelection called - starting fade out')
@@ -36,6 +48,10 @@ local function PrepareCharacterSelection()
     SetModelAsNoLongerNeeded(modelHash)
 
     playerPed = PlayerPedId()
+
+    ambitionsPrint.info('Setting default clothes on ped')
+    SetDefaultClothes(playerPed)
+    Wait(100)
 
     ambitionsPrint.info('Hiding player ped completely for character selection')
     SetEntityAlpha(playerPed, 0, false)
