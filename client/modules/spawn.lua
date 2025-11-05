@@ -68,7 +68,7 @@ local function PrepareCharacterSelection()
   Wait(500)
 
   ambitionsPrint.info('Creating character selection camera')
-  cameraModule.CreateCharacterSelectionCamera(playerPed, -0.2, 0.6, 0.2, 1000)
+  cameraModule.CreateCharacterSelectionCamera(playerPed, -0.3, 1.0, 0.3, 1000)
 
   ambitionsPrint.info('Shutting down loading screens')
   ShutdownLoadingScreen()
