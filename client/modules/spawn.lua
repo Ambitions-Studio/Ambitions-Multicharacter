@@ -100,7 +100,7 @@ local function ShowDefaultPed()
   ambitionsPrint.info('Enabling ped visibility and rendering with alpha 255 and blob rendering')
   FreezeEntityPosition(playerPed, true)
   SetPedAoBlobRendering(playerPed, true)
-  ResetEntityAlpha(playerPed)
+  SetEntityAlpha(playerPed, 255)
 
   Wait(100)
 
