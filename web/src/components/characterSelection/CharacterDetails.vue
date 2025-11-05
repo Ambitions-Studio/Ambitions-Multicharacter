@@ -102,10 +102,10 @@ const statsItems = computed(() => [
         <div class="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 mb-4 ml-auto"></div>
 
         <h1
-          class="text-4xl fhd:text-3xl 2k:text-5xl font-black text-white leading-tight tracking-wide text-right"
+          class="text-4xl fhd:text-3xl 2k:text-4xl font-black text-white leading-tight tracking-wide text-right"
         >
           {{ t('characterSelection.details.title') }}
-          <span class="text-3xl fhd:text-2xl 2k:text-4xl font-light text-blue-200/80">{{
+          <span class="text-3xl fhd:text-2xl 2k:text-3xl font-light text-blue-200/80">{{
             t('characterSelection.details.subtitle')
           }}</span>
         </h1>

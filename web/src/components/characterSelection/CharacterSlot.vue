@@ -37,7 +37,7 @@ const handleClick = () => {
 
 <template>
   <div
-    class="character-slot cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/20 p-5 fhd:p-4 2k:p-8 rounded-xl"
+    class="character-slot cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/20 p-5 fhd:p-4 2k:p-6 rounded-xl"
     :class="{
       'bg-gradient-to-br from-blue-600/20 via-blue-500/15 to-blue-600/20': isSelected,
       'bg-gradient-to-br from-slate-800/50 via-slate-700/40 to-slate-800/50': !isSelected,

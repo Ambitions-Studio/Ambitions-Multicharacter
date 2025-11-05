@@ -206,7 +206,7 @@ onMounted(() => {
     ></div>
     <Transition name="fade-in" appear>
       <div
-        class="absolute left-16 top-16 w-[30rem] fhd:w-[26rem] 2k:w-[40rem] max-h-[85vh] fhd:max-h-[80vh] 2k:max-h-[90vh] overflow-hidden"
+        class="absolute left-16 top-16 w-[30rem] fhd:w-[26rem] 2k:w-[40rem] max-h-[85vh] fhd:max-h-[80vh] 2k:max-h-[95vh] overflow-hidden"
       >
         <div class="mb-8">
           <VBtn
@@ -223,17 +223,17 @@ onMounted(() => {
           <div class="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 mb-4"></div>
 
           <h1
-            class="text-4xl fhd:text-3xl 2k:text-5xl font-black text-white leading-tight tracking-wide"
+            class="text-4xl fhd:text-3xl 2k:text-4xl font-black text-white leading-tight tracking-wide"
           >
             {{ t('characterSelection.title') }}
-            <span class="text-3xl fhd:text-2xl 2k:text-4xl font-light text-blue-200/80">{{
+            <span class="text-3xl fhd:text-2xl 2k:text-3xl font-light text-blue-200/80">{{
               t('characterSelection.subtitle')
             }}</span>
           </h1>
         </div>
 
         <div
-          class="space-y-8 overflow-y-auto max-h-[calc(85vh-180px)] fhd:max-h-[calc(80vh-160px)] 2k:max-h-[calc(90vh-200px)] pr-3 scrollbar-thin scrollbar-track-slate-800/50 scrollbar-thumb-blue-600/40 hover:scrollbar-thumb-blue-500/60"
+          class="space-y-8 overflow-y-auto max-h-[calc(85vh-180px)] fhd:max-h-[calc(80vh-160px)] 2k:max-h-[calc(90vh-200px)] pr-3 pb-8 2k:pb-16 scrollbar-thin scrollbar-track-slate-800/50 scrollbar-thumb-blue-600/40 hover:scrollbar-thumb-blue-500/60"
         >
           <div class="space-y-4">
             <div class="flex items-center space-x-3 mb-6">
@@ -248,7 +248,7 @@ onMounted(() => {
               >
             </div>
 
-            <div class="space-y-6 2k:space-y-8">
+            <div class="space-y-6 2k:space-y-8 ml-6">
               <CharacterSlot
                 v-for="slot in allSlots"
                 :key="slot.id"
