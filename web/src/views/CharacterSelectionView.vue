@@ -76,8 +76,30 @@ const allSlots = computed(() => {
 })
 
 const selectSlot = (slotId: number, isEmpty: boolean) => {
+  const wasSlotSelected = selectedSlot.value !== null
+
+  if (wasSlotSelected) {
+    fetch('https://Ambitions-Multicharacter/deselectSlot', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    }).catch(() => {})
+  }
+
   selectedSlot.value = slotId
   isSlotEmpty.value = isEmpty
+
+  if (isEmpty) {
+    fetch('https://Ambitions-Multicharacter/selectEmptySlot', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ slotIndex: slotId }),
+    }).catch(() => {})
+  }
 }
 
 const createCharacter = () => {
