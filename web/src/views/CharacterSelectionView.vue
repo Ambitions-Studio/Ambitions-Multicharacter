@@ -22,7 +22,7 @@ const isVisible = ref<boolean>(false)
 const characterSlots = ref<number>(5)
 const playerCanDeleteCharacter = ref<boolean>(true)
 
-const characterData: Record<number, Character> = {
+const characterDataDev: Record<number, Character> = {
   1: {
     firstName: 'John',
     lastName: 'Doe',
@@ -58,14 +58,18 @@ const characterData: Record<number, Character> = {
   },
 }
 
+const characterData = ref<Record<number, Character>>(
+  props.forceVisible ? characterDataDev : {}
+)
+
 const allSlots = computed(() => {
   const slots = []
   for (let i = 1; i <= characterSlots.value; i++) {
-    const hasCharacter = characterData[i] !== undefined
+    const hasCharacter = characterData.value[i] !== undefined
     slots.push({
       id: i,
       isEmpty: !hasCharacter,
-      character: hasCharacter ? characterData[i] : null,
+      character: hasCharacter ? characterData.value[i] : null,
     })
   }
   return slots
@@ -99,13 +103,61 @@ const closeInterface = () => {
   }).catch(() => {})
 }
 
+const formatPlaytime = (seconds: number): string => {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  return `${hours}h ${minutes}m`
+}
+
+const formatLastPlayed = (timestamp: string): string => {
+  const now = new Date()
+  const lastPlayed = new Date(timestamp)
+  const diffMs = now.getTime() - lastPlayed.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+
+  if (diffMins < 60) {
+    return t('characterSelection.timeAgo.minutes', { count: diffMins })
+  } else if (diffHours < 24) {
+    return t('characterSelection.timeAgo.hours', { count: diffHours })
+  } else {
+    return t('characterSelection.timeAgo.days', { count: diffDays })
+  }
+}
+
 onMounted(() => {
   window.addEventListener('message', (event) => {
     if (event.data.action === 'showCharacterSelection') {
       isVisible.value = true
-      if (event.data.config) {
-        characterSlots.value = event.data.config.characterSlots
-        playerCanDeleteCharacter.value = event.data.config.playerCanDeleteCharacter
+      if (event.data.maxSlots !== undefined) {
+        characterSlots.value = event.data.maxSlots
+      }
+      if (event.data.canDelete !== undefined) {
+        playerCanDeleteCharacter.value = event.data.canDelete
+      }
+      if (event.data.characters !== undefined && Array.isArray(event.data.characters)) {
+        const receivedCharacters: Record<number, Character> = {}
+        const maxCharsToDisplay = Math.min(event.data.characters.length, event.data.maxSlots || characterSlots.value)
+
+        for (let i = 0; i < maxCharsToDisplay; i++) {
+          const char = event.data.characters[i]
+          receivedCharacters[i + 1] = {
+            firstName: char.firstname || '',
+            lastName: char.lastname || '',
+            job: null,
+            jobGrade: null,
+            crew: null,
+            crewGrade: null,
+            cash: 0,
+            bank: 0,
+            dirtyMoney: 0,
+            licenses: [],
+            totalPlaytime: formatPlaytime(char.playtime || 0),
+            lastPlayed: formatLastPlayed(char.lastPlayed || char.createdAt),
+          }
+        }
+        characterData.value = receivedCharacters
       }
     } else if (event.data.action === 'hideCharacterSelection') {
       isVisible.value = false
