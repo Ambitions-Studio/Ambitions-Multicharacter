@@ -38,7 +38,6 @@ local function PrepareCharacterSelection()
     playerPed = PlayerPedId()
 
     ambitionsPrint.info('Hiding player ped completely for character selection')
-    SetEntityVisible(playerPed, false, false)
     SetEntityAlpha(playerPed, 0, false)
     SetPedAoBlobRendering(playerPed, false)
   end
@@ -62,6 +61,11 @@ local function PrepareCharacterSelection()
   ambitionsPrint.success('Fading screen in')
   DoScreenFadeIn(500)
 
+  while not IsScreenFadedIn() do
+    Wait(100)
+  end
+
+  ambitionsPrint.success('Screen fade in complete')
   ambitionsPrint.info('Triggering server setupCharacter event')
   TriggerServerEvent('ambitions-multicharacter:server:setupCharacter')
 end
@@ -77,11 +81,12 @@ local function ShowDefaultPed()
 
   local playerPed = PlayerPedId()
 
-  ambitionsPrint.info('Enabling ped visibility and rendering')
-  SetEntityVisible(playerPed, true, false)
-  SetEntityAlpha(playerPed, 255, false)
+  ambitionsPrint.info('Enabling ped visibility and rendering with alpha 255 and blob rendering')
+  FreezeEntityPosition(playerPed, true)
   SetPedAoBlobRendering(playerPed, true)
-  SetEntityCollision(playerPed, true, true)
+  ResetEntityAlpha(playerPed)
+
+  Wait(100)
 
   ambitionsPrint.success('Default ped is now visible for character creation')
 end
@@ -92,10 +97,11 @@ local function HideDefaultPed()
 
   local playerPed = PlayerPedId()
 
-  SetEntityVisible(playerPed, false, false)
-  SetEntityAlpha(playerPed, 0, false)
+  ambitionsPrint.info('Hiding ped with alpha 0 and disabling blob rendering')
   SetPedAoBlobRendering(playerPed, false)
-  SetEntityCollision(playerPed, false, false)
+  SetEntityAlpha(playerPed, 0, false)
+
+  Wait(100)
 
   ambitionsPrint.success('Ped is now hidden')
 end
