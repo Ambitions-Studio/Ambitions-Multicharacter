@@ -1,4 +1,5 @@
 local spawnConfig = require('config.spawn')
+local pedsModule = require('client.modules.peds')
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client interface module loaded')
@@ -38,6 +39,12 @@ RegisterNUICallback('deselectSlot', function(data, cb)
   ambitionsPrint.info('Received deselectSlot callback from NUI')
   ambitionsPrint.info('Triggering hideDefaultPed event')
   TriggerEvent('ambitions-multicharacter:client:hideDefaultPed')
+  cb('ok')
+end)
+
+RegisterNUICallback('requestPedsConfig', function(data, cb)
+  ambitionsPrint.info('Received requestPedsConfig callback from NUI')
+  pedsModule.SendPedsConfigToNUI()
   cb('ok')
 end)
 

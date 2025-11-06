@@ -6,8 +6,10 @@ import CharacterSlot, { type Character } from '@/components/characterSelection/C
 import CharacterDetails from '@/components/characterSelection/CharacterDetails.vue'
 import CustomButton from '@/components/CustomButton.vue'
 import { sendNuiEvent } from '@/utils/nui'
+import { useCharacterStore } from '@/stores/useCharacterStore'
 
 const { t } = useI18n()
+const characterStore = useCharacterStore()
 
 const props = defineProps<{
   forceVisible?: boolean
@@ -92,6 +94,14 @@ const selectSlot = (slotId: number, isEmpty: boolean) => {
 }
 
 const createCharacter = () => {
+  if (selectedSlot.value === null) return
+
+  characterStore.startNewCharacter(selectedSlot.value)
+
+  isVisible.value = false
+
+  window.postMessage({ action: 'showIdentityCreator', slotId: selectedSlot.value }, '*')
+
   console.log('Créer un personnage pour le slot:', selectedSlot.value)
 }
 
@@ -273,7 +283,7 @@ onMounted(() => {
       <div v-if="selectedSlot && isSlotEmpty">
         <CustomButton
           variant="success"
-          size="large"
+          size="medium"
           :icon="mdiAccountPlus"
           width="w-80 2k:w-96"
           @click="createCharacter"
@@ -285,7 +295,7 @@ onMounted(() => {
       <div v-if="selectedSlot && !isSlotEmpty" class="space-y-3 flex flex-col">
         <CustomButton
           variant="success"
-          size="large"
+          size="medium"
           :icon="mdiPlay"
           width="w-80 2k:w-96"
           @click="playCharacter"
@@ -296,7 +306,7 @@ onMounted(() => {
         <CustomButton
           v-if="playerCanDeleteCharacter"
           variant="danger"
-          size="large"
+          size="medium"
           :icon="mdiTrashCan"
           width="w-80 2k:w-96"
           @click="deleteCharacter"

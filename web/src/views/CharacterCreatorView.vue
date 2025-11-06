@@ -314,6 +314,13 @@ onMounted(() => {
           }
         }
       }
+    } else if (event.data.action === 'setPedsConfig') {
+      if (event.data.config) {
+        authorizePedwhileInCreator.value = event.data.config.authorizePedwhileInCreator
+        if (event.data.config.pedModels) {
+          pedModels.value = event.data.config.pedModels
+        }
+      }
     } else if (event.data.action === 'hideCharacterCreator') {
       isVisible.value = false
     }
