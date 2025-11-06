@@ -1,8 +1,11 @@
 local spawnConfig = require('config.spawn')
 local pedsModule = require('client.modules.peds')
+local appearanceCallbacks = require('client.modules.appearance.callbacks')
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client interface module loaded')
+
+appearanceCallbacks.RegisterAppearanceCallbacks()
 
 --- Open the character selection interface
 ---@param data table The data containing characters and configuration

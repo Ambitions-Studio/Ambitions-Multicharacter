@@ -1,0 +1,65 @@
+local appearanceApply = require('client.modules.appearance.apply')
+local ambitionsPrint = require('Ambitions.shared.lib.log.print')
+
+ambitionsPrint.info('Client appearance callbacks module loaded')
+
+--- Register all appearance-related NUI callbacks
+local function RegisterAppearanceCallbacks()
+  -- Real-time ped model change
+  RegisterNUICallback('applyPedModel', function(data, cb)
+    ambitionsPrint.info('Applying ped model in real-time:', data.pedModel)
+    appearanceApply.ApplyPedModel(data.pedModel)
+    cb('ok')
+  end)
+
+  -- Real-time heritage change
+  RegisterNUICallback('applyHeritage', function(data, cb)
+    ambitionsPrint.info('Applying heritage in real-time')
+    appearanceApply.ApplyHeritage(data)
+    cb('ok')
+  end)
+
+  -- Real-time hair style change
+  RegisterNUICallback('applyHairStyle', function(data, cb)
+    ambitionsPrint.info('Applying hair style in real-time')
+    appearanceApply.ApplyHairStyle(data)
+    cb('ok')
+  end)
+
+  -- Real-time face feature change
+  RegisterNUICallback('applyFaceFeature', function(data, cb)
+    appearanceApply.ApplyFaceFeature(data.index, data.value)
+    cb('ok')
+  end)
+
+  -- Real-time eye color change
+  RegisterNUICallback('applyEyeColor', function(data, cb)
+    ambitionsPrint.info('Applying eye color in real-time')
+    appearanceApply.ApplyEyeColor(data.color)
+    cb('ok')
+  end)
+
+  -- Real-time head overlay change (beard, makeup, etc)
+  RegisterNUICallback('applyHeadOverlay', function(data, cb)
+    appearanceApply.ApplyHeadOverlay(data)
+    cb('ok')
+  end)
+
+  -- Real-time clothing change
+  RegisterNUICallback('applyClothing', function(data, cb)
+    appearanceApply.ApplyClothing(data)
+    cb('ok')
+  end)
+
+  -- Real-time prop change (accessories)
+  RegisterNUICallback('applyProp', function(data, cb)
+    appearanceApply.ApplyProp(data)
+    cb('ok')
+  end)
+
+  ambitionsPrint.success('All appearance callbacks registered')
+end
+
+return {
+  RegisterAppearanceCallbacks = RegisterAppearanceCallbacks,
+}

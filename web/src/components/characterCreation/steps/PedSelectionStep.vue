@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 const appearanceStore = useAppearanceStore()
@@ -62,6 +63,10 @@ const handlePedChange = (value: string | null) => {
   selectedPed.value = value
   pedSelectionError.value = ''
   emit('update:modelValue', value)
+
+  if (value) {
+    sendNuiEvent('applyPedModel', { pedModel: value })
+  }
 }
 </script>
 
