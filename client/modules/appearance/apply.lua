@@ -1,4 +1,4 @@
-local characterDefaults = require('config.character_defaults')
+local characterDefaults = require('config.character_default')
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client appearance module loaded')
