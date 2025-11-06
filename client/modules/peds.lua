@@ -1,4 +1,5 @@
 local pedsConfig = require('config.peds')
+local heritageConfig = require('config.heritage')
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client peds module loaded')
@@ -54,8 +55,77 @@ local function SendPedsConfigToNUI()
   })
 end
 
+--- Get texture name for heritage portraits
+---@param id number The heritage ID
+---@param isFemale boolean True for mothers, false for fathers
+---@return string textureName The texture filename
+local function GetHeritageTexture(id, isFemale)
+  if isFemale then
+    -- Mothers (21-41, 45)
+    if id == 45 then
+      return 'special_female_0'
+    else
+      return 'female_' .. (id - 21)
+    end
+  else
+    -- Fathers (0-20, 42-44)
+    if id >= 42 then
+      return 'special_male_' .. (id - 42)
+    else
+      return 'male_' .. id
+    end
+  end
+end
+
+--- Format heritage config for NUI with photo paths
+---@return table Heritage configuration with fathers and mothers
+local function GetHeritageConfig()
+  local fathers = {}
+  local mothers = {}
+
+  -- Format fathers
+  for _, father in ipairs(heritageConfig.fathers) do
+    table.insert(fathers, {
+      id = father.id,
+      name = father.name,
+      photo = GetHeritageTexture(father.id, false) .. '.png'
+    })
+  end
+
+  -- Format mothers
+  for _, mother in ipairs(heritageConfig.mothers) do
+    table.insert(mothers, {
+      id = mother.id,
+      name = mother.name,
+      photo = GetHeritageTexture(mother.id, true) .. '.png'
+    })
+  end
+
+  return {
+    fathers = fathers,
+    mothers = mothers
+  }
+end
+
+--- Send heritage configuration to NUI
+local function SendHeritageConfigToNUI()
+  local config = GetHeritageConfig()
+
+  ambitionsPrint.info('Sending heritage config to NUI')
+  ambitionsPrint.info('Total fathers:', #config.fathers)
+  ambitionsPrint.info('Total mothers:', #config.mothers)
+
+  SendNUIMessage({
+    action = 'setHeritageConfig',
+    config = config
+  })
+end
+
 return {
   GetPedsConfig = GetPedsConfig,
   SendPedsConfigToNUI = SendPedsConfigToNUI,
-  FormatPedsForNUI = FormatPedsForNUI
+  FormatPedsForNUI = FormatPedsForNUI,
+  GetHeritageConfig = GetHeritageConfig,
+  SendHeritageConfigToNUI = SendHeritageConfigToNUI,
+  GetHeritageTexture = GetHeritageTexture
 }

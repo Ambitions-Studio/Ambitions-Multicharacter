@@ -321,6 +321,15 @@ onMounted(() => {
           pedModels.value = event.data.config.pedModels
         }
       }
+    } else if (event.data.action === 'setHeritageConfig') {
+      if (event.data.config) {
+        if (event.data.config.fathers) {
+          fatherOptions.value = event.data.config.fathers
+        }
+        if (event.data.config.mothers) {
+          motherOptions.value = event.data.config.mothers
+        }
+      }
     } else if (event.data.action === 'hideCharacterCreator') {
       isVisible.value = false
     }

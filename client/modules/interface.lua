@@ -48,6 +48,7 @@ end)
 RegisterNUICallback('requestPedsConfig', function(data, cb)
   ambitionsPrint.info('Received requestPedsConfig callback from NUI')
   pedsModule.SendPedsConfigToNUI()
+  pedsModule.SendHeritageConfigToNUI()
   cb('ok')
 end)
 

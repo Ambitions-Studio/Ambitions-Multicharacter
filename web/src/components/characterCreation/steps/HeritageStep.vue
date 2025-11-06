@@ -124,10 +124,10 @@ const handleContinue = () => {
             >
               <img
                 v-if="
-                  localSelectedFather !== null && fatherOptions[localSelectedFather]?.photo
+                  localSelectedFather !== null && fatherOptions.find((f) => f.id === localSelectedFather)?.photo
                 "
-                :src="fatherOptions[localSelectedFather].photo"
-                :alt="fatherOptions[localSelectedFather]?.name"
+                :src="`/src/assets/img/parent_portrait/${fatherOptions.find((f) => f.id === localSelectedFather)?.photo}`"
+                :alt="fatherOptions.find((f) => f.id === localSelectedFather)?.name"
                 class="w-full h-full object-cover"
               />
               <div
@@ -175,10 +175,10 @@ const handleContinue = () => {
             >
               <img
                 v-if="
-                  localSelectedMother !== null && motherOptions[localSelectedMother]?.photo
+                  localSelectedMother !== null && motherOptions.find((m) => m.id === localSelectedMother)?.photo
                 "
-                :src="motherOptions[localSelectedMother].photo"
-                :alt="motherOptions[localSelectedMother]?.name"
+                :src="`/src/assets/img/parent_portrait/${motherOptions.find((m) => m.id === localSelectedMother)?.photo}`"
+                :alt="motherOptions.find((m) => m.id === localSelectedMother)?.name"
                 class="w-full h-full object-cover"
               />
               <div
