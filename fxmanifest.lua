@@ -35,6 +35,7 @@ files {
   'web/dist/index.html',
   'web/dist/assets/*.css',
   'web/dist/assets/*.js',
+  'web/dist/assets/*.png',
   'client/**/*.lua',
   'shared/**/*.lua',
   'config/*.lua'
