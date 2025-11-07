@@ -57,6 +57,11 @@ const localSkinResemblance = ref(
 
 // Get portrait image URL dynamically
 const getPortraitUrl = (photoFilename: string) => {
+  // In FiveM NUI, use relative path from the web root
+  if (import.meta.env.PROD) {
+    return `./assets/img/parent_portrait/${photoFilename}`
+  }
+  // In development, use Vite's dynamic import with @ alias
   return new URL(`@/assets/img/parent_portrait/${photoFilename}`, import.meta.url).href
 }
 
