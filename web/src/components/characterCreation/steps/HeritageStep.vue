@@ -131,7 +131,7 @@ const handleContinue = () => {
                 v-if="
                   localSelectedFather !== null && fatherOptions.find((f) => f.id === localSelectedFather)?.photo
                 "
-                :src="getPortraitUrl(fatherOptions.find((f) => f.id === localSelectedFather)!.photo)"
+                :src="getPortraitUrl(fatherOptions.find((f) => f.id === localSelectedFather)?.photo || 'male_0.png')"
                 :alt="fatherOptions.find((f) => f.id === localSelectedFather)?.name"
                 class="w-full h-full object-cover"
               />
@@ -182,7 +182,7 @@ const handleContinue = () => {
                 v-if="
                   localSelectedMother !== null && motherOptions.find((m) => m.id === localSelectedMother)?.photo
                 "
-                :src="getPortraitUrl(motherOptions.find((m) => m.id === localSelectedMother)!.photo)"
+                :src="getPortraitUrl(motherOptions.find((m) => m.id === localSelectedMother)?.photo || 'female_0.png')"
                 :alt="motherOptions.find((m) => m.id === localSelectedMother)?.name"
                 class="w-full h-full object-cover"
               />
