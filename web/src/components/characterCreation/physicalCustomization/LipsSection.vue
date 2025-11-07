@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import HAIR_COLORS from '@/data/hairColors'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -31,6 +33,15 @@ const localLipThickness = ref(props.lipThickness)
 const localLipstickStyle = ref(props.lipstickStyle)
 const localLipstickColor = ref(props.lipstickColor)
 const localLipstickOpacity = ref(props.lipstickOpacity)
+
+watch([localLipThickness, localLipstickStyle, localLipstickColor, localLipstickOpacity], ([thickness, style, color, opacity]) => {
+  sendNuiEvent('applyLipsCustomization', {
+    thickness,
+    style,
+    color,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -122,18 +133,14 @@ const localLipstickOpacity = ref(props.lipstickOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localLipstickColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:lipstickColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in HAIR_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localLipstickColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localLipstickColor = index; emit('update:lipstickColor', index)"
         />
       </div>
     </div>

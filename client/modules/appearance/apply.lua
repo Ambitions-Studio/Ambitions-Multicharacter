@@ -324,6 +324,23 @@ local function ApplyJawCustomization(data)
   ambitionsPrint.info('Applied jaw - Width:', data.width, 'Height:', data.height)
 end
 
+--- Apply lips customization in real-time (thickness + lipstick style, color, opacity)
+---@param data table Lips data with thickness, style, color, opacity
+local function ApplyLipsCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply lip thickness (face feature index 12)
+  SetPedFaceFeature(ped, 12, data.thickness)
+
+  -- Apply lipstick overlay (index 8 = lipstick)
+  SetPedHeadOverlay(ped, 8, data.style, data.opacity)
+
+  -- Apply lipstick color (type 2 = makeup color)
+  SetPedHeadOverlayColor(ped, 8, 2, data.color, data.color)
+
+  ambitionsPrint.info('Applied lips - Thickness:', data.thickness, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
+end
+
 --- Apply head overlay (beard, makeup, etc) in real-time
 ---@param data table Overlay data with index, style, opacity, color1, color2
 local function ApplyHeadOverlay(data)
@@ -367,6 +384,7 @@ return {
   ApplyCheeksCustomization = ApplyCheeksCustomization,
   ApplyBeardCustomization = ApplyBeardCustomization,
   ApplyJawCustomization = ApplyJawCustomization,
+  ApplyLipsCustomization = ApplyLipsCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
