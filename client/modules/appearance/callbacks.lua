@@ -130,6 +130,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time moles/freckles customization (style, opacity)
+  RegisterNUICallback('applyMolesFrecklesCustomization', function(data, cb)
+    ambitionsPrint.info('Applying moles/freckles customization in real-time')
+    appearanceApply.ApplyMolesFrecklesCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)

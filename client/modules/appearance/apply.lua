@@ -22,6 +22,7 @@ local function GetCustomizationLimits()
     blushStyles = GetNumHeadOverlayValues(5) - 1, -- Overlay 5 = Blush
     complexionStyles = GetNumHeadOverlayValues(6) - 1, -- Overlay 6 = Complexion
     sunDamageStyles = GetNumHeadOverlayValues(7) - 1, -- Overlay 7 = Sun Damage
+    molesFrecklesStyles = GetNumHeadOverlayValues(9) - 1, -- Overlay 9 = Moles/Freckles
   }
 end
 
@@ -443,6 +444,17 @@ local function ApplySunDamageCustomization(data)
   ambitionsPrint.info('Applied sun damage - Style:', data.style, 'Opacity:', data.opacity)
 end
 
+--- Apply moles/freckles customization in real-time (style, opacity)
+---@param data table Moles/freckles data with style, opacity
+local function ApplyMolesFrecklesCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply moles/freckles overlay (index 9 = moles/freckles)
+  SetPedHeadOverlay(ped, 9, data.style, data.opacity)
+
+  ambitionsPrint.info('Applied moles/freckles - Style:', data.style, 'Opacity:', data.opacity)
+end
+
 --- Apply head overlay (beard, makeup, etc) in real-time
 ---@param data table Overlay data with index, style, opacity, color1, color2
 local function ApplyHeadOverlay(data)
@@ -494,6 +506,7 @@ return {
   ApplyBlushCustomization = ApplyBlushCustomization,
   ApplyComplexionCustomization = ApplyComplexionCustomization,
   ApplySunDamageCustomization = ApplySunDamageCustomization,
+  ApplyMolesFrecklesCustomization = ApplyMolesFrecklesCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
