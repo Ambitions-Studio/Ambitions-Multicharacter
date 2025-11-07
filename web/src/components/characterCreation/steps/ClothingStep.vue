@@ -22,8 +22,6 @@ const maxUndershirtTypes = ref(100)
 const maxUndershirtVariants = ref(50)
 const maxArmsTypes = ref(100)
 const maxArmsVariants = ref(50)
-const maxJacketTypes = ref(100)
-const maxJacketVariants = ref(50)
 const maxBodyArmorTypes = ref(100)
 const maxBodyArmorVariants = ref(50)
 const maxDecalsTypes = ref(100)
@@ -40,7 +38,6 @@ const clothingCategories = ref([
   { titleKey: 'characterCreation.clothing.categories.torso', key: 'torso' },
   { titleKey: 'characterCreation.clothing.categories.undershirt', key: 'undershirt' },
   { titleKey: 'characterCreation.clothing.categories.arms', key: 'arms' },
-  { titleKey: 'characterCreation.clothing.categories.jacket', key: 'jacket' },
   { titleKey: 'characterCreation.clothing.categories.bodyArmor', key: 'bodyArmor' },
   { titleKey: 'characterCreation.clothing.categories.decals', key: 'decals' },
   { titleKey: 'characterCreation.clothing.categories.pants', key: 'pants' },
@@ -169,37 +166,31 @@ const saveSectionData = (categoryIndex: number) => {
         armsTexture: localArmsTexture.value,
       })
       break
-    case 4: // Jacket
-      appearanceStore.setJacketSection({
-        jacketDrawable: localJacketDrawable.value,
-        jacketTexture: localJacketTexture.value,
-      })
-      break
-    case 5: // Body Armor
+    case 4: // Body Armor
       appearanceStore.setBodyArmorSection({
         bodyArmorDrawable: localBodyArmorDrawable.value,
         bodyArmorTexture: localBodyArmorTexture.value,
       })
       break
-    case 6: // Decals
+    case 5: // Decals
       appearanceStore.setDecalsSection({
         decalsDrawable: localDecalsDrawable.value,
         decalsTexture: localDecalsTexture.value,
       })
       break
-    case 7: // Pants
+    case 6: // Pants
       appearanceStore.setPantsSection({
         pantsDrawable: localPantsDrawable.value,
         pantsTexture: localPantsTexture.value,
       })
       break
-    case 8: // Shoes
+    case 7: // Shoes
       appearanceStore.setShoesSection({
         shoesDrawable: localShoesDrawable.value,
         shoesTexture: localShoesTexture.value,
       })
       break
-    case 9: // Backpack
+    case 8: // Backpack
       appearanceStore.setBackpackSection({
         backpackDrawable: localBackpackDrawable.value,
         backpackTexture: localBackpackTexture.value,
@@ -352,39 +343,6 @@ watch(localArmsTexture, async (newVal) => {
     await sendNuiCallback('applyTorsoCustomization', { type: localArmsDrawable.value, variant: newVal })
   } catch (error) {
     console.error('Failed to apply arms texture:', error)
-  }
-})
-
-const updateJacketTypeLimit = async () => {
-  try {
-    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 3, drawable: localJacketDrawable.value })
-    if (response && typeof response.limit === 'number') {
-      maxJacketVariants.value = response.limit
-      if (localJacketTexture.value > response.limit) {
-        localJacketTexture.value = response.limit
-      }
-    }
-  } catch (error) {
-    console.error('Failed to get jacket texture limit:', error)
-  }
-}
-
-watch(localJacketDrawable, async (newVal) => {
-  appearanceStore.setJacketSection({ jacketDrawable: newVal, jacketTexture: localJacketTexture.value })
-  try {
-    await sendNuiCallback('applyTopsCustomization', { type: newVal, variant: localJacketTexture.value })
-    await updateJacketTypeLimit()
-  } catch (error) {
-    console.error('Failed to apply jacket drawable:', error)
-  }
-})
-
-watch(localJacketTexture, async (newVal) => {
-  appearanceStore.setJacketSection({ jacketDrawable: localJacketDrawable.value, jacketTexture: newVal })
-  try {
-    await sendNuiCallback('applyTopsCustomization', { type: localJacketDrawable.value, variant: newVal })
-  } catch (error) {
-    console.error('Failed to apply jacket texture:', error)
   }
 })
 
@@ -555,12 +513,11 @@ watch(localBackpackTexture, async (newVal) => {
 
 onMounted(async () => {
   try {
-    const limits = await sendNuiCallback<{}, { masks: number; torsos: number; undershirts: number; tops: number; legs: number; bags: number; shoes: number; accessories: number; armor: number; decals: number }>('getClothingLimits', {})
+    const limits = await sendNuiCallback<{}, { masks: number; torsos: number; undershirts: number; legs: number; bags: number; shoes: number; accessories: number; armor: number; decals: number }>('getClothingLimits', {})
     if (limits) {
       if (typeof limits.masks === 'number') maxMaskTypes.value = limits.masks
       if (typeof limits.torsos === 'number') maxTorsoTypes.value = limits.torsos
       if (typeof limits.undershirts === 'number') maxUndershirtTypes.value = limits.undershirts
-      if (typeof limits.tops === 'number') maxJacketTypes.value = limits.tops
       if (typeof limits.legs === 'number') maxPantsTypes.value = limits.legs
       if (typeof limits.bags === 'number') maxBackpackTypes.value = limits.bags
       if (typeof limits.shoes === 'number') maxShoesTypes.value = limits.shoes
@@ -573,7 +530,6 @@ onMounted(async () => {
     await updateTorsoTypeLimit()
     await updateUndershirtTypeLimit()
     await updateArmsTypeLimit()
-    await updateJacketTypeLimit()
     await updateBodyArmorTypeLimit()
     await updateDecalsTypeLimit()
     await updatePantsTypeLimit()
@@ -824,51 +780,8 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Jacket -->
-      <div v-if="selectedCategory === 4">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.clothing.jacket.drawable.title') }}
-              <span class="text-slate-500 text-xs ml-2">({{ localJacketDrawable }}/{{ maxJacketTypes }})</span>
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.clothing.jacket.drawable.description') }}
-            </p>
-            <VSlider
-              v-model="localJacketDrawable"
-              :min="0"
-              :max="maxJacketTypes"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.clothing.jacket.texture.title') }}
-              <span class="text-slate-500 text-xs ml-2">({{ localJacketTexture }}/{{ maxJacketVariants }})</span>
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.clothing.jacket.texture.description') }}
-            </p>
-            <VSlider
-              v-model="localJacketTexture"
-              :min="0"
-              :max="maxJacketVariants"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-        </div>
-      </div>
-
       <!-- Body Armor -->
-      <div v-if="selectedCategory === 5">
+      <div v-if="selectedCategory === 4">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
@@ -911,7 +824,7 @@ const handleContinue = () => {
       </div>
 
       <!-- Decals -->
-      <div v-if="selectedCategory === 6">
+      <div v-if="selectedCategory === 5">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
@@ -954,7 +867,7 @@ const handleContinue = () => {
       </div>
 
       <!-- Pants -->
-      <div v-if="selectedCategory === 7">
+      <div v-if="selectedCategory === 6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
@@ -997,7 +910,7 @@ const handleContinue = () => {
       </div>
 
       <!-- Shoes -->
-      <div v-if="selectedCategory === 8">
+      <div v-if="selectedCategory === 7">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
@@ -1040,7 +953,7 @@ const handleContinue = () => {
       </div>
 
       <!-- Backpack -->
-      <div v-if="selectedCategory === 9">
+      <div v-if="selectedCategory === 8">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
