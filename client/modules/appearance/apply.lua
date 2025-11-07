@@ -23,6 +23,7 @@ local function GetCustomizationLimits()
     complexionStyles = GetNumHeadOverlayValues(6) - 1, -- Overlay 6 = Complexion
     sunDamageStyles = GetNumHeadOverlayValues(7) - 1, -- Overlay 7 = Sun Damage
     molesFrecklesStyles = GetNumHeadOverlayValues(9) - 1, -- Overlay 9 = Moles/Freckles
+    chestHairStyles = GetNumHeadOverlayValues(10) - 1, -- Overlay 10 = Chest Hair
   }
 end
 
@@ -455,6 +456,20 @@ local function ApplyMolesFrecklesCustomization(data)
   ambitionsPrint.info('Applied moles/freckles - Style:', data.style, 'Opacity:', data.opacity)
 end
 
+--- Apply chest hair customization in real-time (style, color, opacity)
+---@param data table Chest hair data with style, color, opacity
+local function ApplyChestHairCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply chest hair overlay (index 10 = chest hair)
+  SetPedHeadOverlay(ped, 10, data.style, data.opacity)
+
+  -- Apply chest hair color (type 1 = hair color)
+  SetPedHeadOverlayColor(ped, 10, 1, data.color, data.color)
+
+  ambitionsPrint.info('Applied chest hair - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
+end
+
 --- Apply head overlay (beard, makeup, etc) in real-time
 ---@param data table Overlay data with index, style, opacity, color1, color2
 local function ApplyHeadOverlay(data)
@@ -507,6 +522,7 @@ return {
   ApplyComplexionCustomization = ApplyComplexionCustomization,
   ApplySunDamageCustomization = ApplySunDamageCustomization,
   ApplyMolesFrecklesCustomization = ApplyMolesFrecklesCustomization,
+  ApplyChestHairCustomization = ApplyChestHairCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,

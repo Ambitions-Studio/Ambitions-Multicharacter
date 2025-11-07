@@ -137,6 +137,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time chest hair customization (style, color, opacity)
+  RegisterNUICallback('applyChestHairCustomization', function(data, cb)
+    ambitionsPrint.info('Applying chest hair customization in real-time')
+    appearanceApply.ApplyChestHairCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)
