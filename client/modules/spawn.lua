@@ -132,9 +132,8 @@ end)
 
 RegisterNetEvent('ambitions-multicharacter:client:offsetCameraForCreation', function()
   ambitionsPrint.info('Offsetting camera for character creation UI')
-  local playerPed = PlayerPedId()
-  cameraModule.OffsetCameraForCreation(playerPed, 1000)
-  ambitionsPrint.success('Camera offset applied - ped should appear on right 2/3 of screen')
+  cameraModule.OffsetCameraForCreation(0.5, 1000)
+  ambitionsPrint.success('Camera offset applied - shifted left by 0.5 units')
 end)
 
 CreateThread(function()
