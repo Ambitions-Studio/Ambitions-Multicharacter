@@ -10,6 +10,7 @@ import AccessoriesStep from '@/components/characterCreation/steps/AccessoriesSte
 import TattoosStep from '@/components/characterCreation/steps/TattoosStep.vue'
 import RecapStep from '@/components/characterCreation/steps/RecapStep.vue'
 import ValidationButton from '@/components/characterCreation/steps/ValidationButton.vue'
+import { sendNuiEvent } from '@/utils/nui'
 
 const currentStep = ref(0)
 
@@ -246,13 +247,7 @@ const continueTattoosCustomization = () => {
 
 const closeInterface = () => {
   isVisible.value = false
-  fetch('https://Ambitions-Multicharacter/closeCharacterCreator', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({}),
-  }).catch(() => {})
+  sendNuiEvent('closeCharacterCreator')
 }
 
 // Camera controls - Mouse handlers
@@ -266,33 +261,21 @@ const handleMouseDown = (event: MouseEvent) => {
   if (event.button === 0) {
     // Left click
     isLeftMouseDown.value = true
-    fetch('https://Ambitions-Multicharacter/cameraControlStart', {
-      method: 'POST',
-      body: JSON.stringify({ type: 'pan' }),
-    }).catch(() => {})
+    sendNuiEvent('cameraControlStart', { type: 'pan' })
   } else if (event.button === 2) {
     // Right click
     isRightMouseDown.value = true
-    fetch('https://Ambitions-Multicharacter/cameraControlStart', {
-      method: 'POST',
-      body: JSON.stringify({ type: 'rotate' }),
-    }).catch(() => {})
+    sendNuiEvent('cameraControlStart', { type: 'rotate' })
   }
 }
 
 const handleMouseUp = (event: MouseEvent) => {
   if (event.button === 0) {
     isLeftMouseDown.value = false
-    fetch('https://Ambitions-Multicharacter/cameraControlStop', {
-      method: 'POST',
-      body: JSON.stringify({ type: 'pan' }),
-    }).catch(() => {})
+    sendNuiEvent('cameraControlStop', { type: 'pan' })
   } else if (event.button === 2) {
     isRightMouseDown.value = false
-    fetch('https://Ambitions-Multicharacter/cameraControlStop', {
-      method: 'POST',
-      body: JSON.stringify({ type: 'rotate' }),
-    }).catch(() => {})
+    sendNuiEvent('cameraControlStop', { type: 'rotate' })
   }
 }
 
@@ -301,14 +284,11 @@ const handleMouseMove = (event: MouseEvent) => {
   if (!isLeftMouseDown.value && !isRightMouseDown.value) return
 
   const type = isLeftMouseDown.value ? 'pan' : 'rotate'
-  fetch('https://Ambitions-Multicharacter/cameraControlMove', {
-    method: 'POST',
-    body: JSON.stringify({
-      type,
-      movementX: event.movementX,
-      movementY: event.movementY,
-    }),
-  }).catch(() => {})
+  sendNuiEvent('cameraControlMove', {
+    type,
+    movementX: event.movementX,
+    movementY: event.movementY,
+  })
 }
 
 // Prevent context menu on right click
@@ -316,6 +296,31 @@ const handleContextMenu = (event: MouseEvent) => {
   if (isVisible.value) {
     event.preventDefault()
   }
+}
+
+// Camera zoom - Mouse wheel
+const handleMouseWheel = (event: WheelEvent) => {
+  if (!isVisible.value) return
+
+  // Check if mouse is outside UI area
+  const uiWidth = window.innerWidth * 0.33
+  if (event.clientX < uiWidth) return
+
+  // Prevent page scroll
+  event.preventDefault()
+
+  // Calculate normalized mouse position (0 to 1)
+  const mouseX = event.clientX / window.innerWidth
+  const mouseY = event.clientY / window.innerHeight
+
+  // Determine zoom direction
+  const zoomIn = event.deltaY < 0
+
+  sendNuiEvent('cameraZoom', {
+    zoomIn,
+    mouseX,
+    mouseY,
+  })
 }
 
 onMounted(() => {
@@ -417,10 +422,7 @@ onMounted(() => {
 
     // Toggle arms up animation with X key
     if ((event.key === 'x' || event.key === 'X') && isVisible.value) {
-      fetch('https://Ambitions-Multicharacter/toggleArmsUp', {
-        method: 'POST',
-        body: JSON.stringify({}),
-      }).catch(() => {})
+      sendNuiEvent('toggleArmsUp')
     }
   })
 
@@ -429,6 +431,7 @@ onMounted(() => {
   document.addEventListener('mouseup', handleMouseUp)
   document.addEventListener('mousemove', handleMouseMove)
   document.addEventListener('contextmenu', handleContextMenu)
+  document.addEventListener('wheel', handleMouseWheel, { passive: false })
 })
 
 onUnmounted(() => {
@@ -437,6 +440,7 @@ onUnmounted(() => {
   document.removeEventListener('mouseup', handleMouseUp)
   document.removeEventListener('mousemove', handleMouseMove)
   document.removeEventListener('contextmenu', handleContextMenu)
+  document.removeEventListener('wheel', handleMouseWheel)
 })
 </script>
 

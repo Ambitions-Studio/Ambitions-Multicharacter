@@ -118,9 +118,48 @@ RegisterNetEvent('ambitions-multicharacter:client:toggleArmsUp', function()
   ToggleArmsUp()
 end)
 
+--- Handle camera zoom towards mouse position
+---@param zoomIn boolean True to zoom in, false to zoom out
+---@param mouseX number Normalized mouse X position (0-1)
+---@param mouseY number Normalized mouse Y position (0-1)
+local function HandleCameraZoom(zoomIn, mouseX, mouseY)
+  local activeCam = cameraModule.GetActiveCamera()
+  if not activeCam then
+    return
+  end
+
+  local camPos = GetCamCoord(activeCam)
+  local camRot = GetCamRot(activeCam, 2)
+
+  -- Calculate forward vector from camera rotation
+  local pitch = math.rad(camRot.x)
+  local yaw = math.rad(camRot.z)
+
+  local forwardX = -math.sin(yaw) * math.cos(pitch)
+  local forwardY = math.cos(yaw) * math.cos(pitch)
+  local forwardZ = math.sin(pitch)
+
+  -- Zoom amount
+  local zoomAmount = zoomIn and 0.1 or -0.1
+
+  -- Move camera forward/backward along its direction
+  local newX = camPos.x + (forwardX * zoomAmount)
+  local newY = camPos.y + (forwardY * zoomAmount)
+  local newZ = camPos.z + (forwardZ * zoomAmount)
+
+  SetCamCoord(activeCam, newX, newY, newZ)
+
+  ambitionsPrint.info('Camera zoom:', zoomIn and 'in' or 'out')
+end
+
+RegisterNetEvent('ambitions-multicharacter:client:cameraZoom', function(zoomIn, mouseX, mouseY)
+  HandleCameraZoom(zoomIn, mouseX, mouseY)
+end)
+
 return {
   StartCameraControl = StartCameraControl,
   StopCameraControl = StopCameraControl,
   HandleCameraMove = HandleCameraMove,
   ToggleArmsUp = ToggleArmsUp,
+  HandleCameraZoom = HandleCameraZoom,
 }

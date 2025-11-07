@@ -76,6 +76,11 @@ RegisterNUICallback('toggleArmsUp', function(data, cb)
   cb('ok')
 end)
 
+RegisterNUICallback('cameraZoom', function(data, cb)
+  TriggerEvent('ambitions-multicharacter:client:cameraZoom', data.zoomIn, data.mouseX, data.mouseY)
+  cb('ok')
+end)
+
 return {
   OpenInterface = OpenInterface,
 }
