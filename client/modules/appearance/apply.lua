@@ -186,8 +186,10 @@ local function ApplyHeritage(data)
     false             -- Is parent
   )
 
-  -- Force update the ped's appearance
-  UpdatePedHeadBlendData(ped)
+  CreateThread(function()
+    Wait(0)
+    UpdatePedHeadBlendData(ped)
+  end)
 
   ambitionsPrint.info('Applied heritage - Father:', data.father, 'Mother:', data.mother, 'Face:', data.faceResemblance, 'Skin:', data.skinResemblance)
 end
