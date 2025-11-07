@@ -186,11 +186,6 @@ local function ApplyHeritage(data)
     false             -- Is parent
   )
 
-  CreateThread(function()
-    Wait(0)
-    UpdatePedHeadBlendData(ped)
-  end)
-
   ambitionsPrint.info('Applied heritage - Father:', data.father, 'Mother:', data.mother, 'Face:', data.faceResemblance, 'Skin:', data.skinResemblance)
 end
 
