@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider, VBtn } from 'vuetify/components'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
 import ClothingNavigation from '@/components/characterCreation/layout/ClothingNavigation.vue'
+import { fetchNui } from '@/utils/nui'
 
 const { t } = useI18n()
 const appearanceStore = useAppearanceStore()
@@ -12,6 +13,9 @@ const characterStore = useCharacterStore()
 
 const selectedCategory = ref(0)
 const previousCategory = ref(0)
+
+const maxMaskTypes = ref(100)
+const maxMaskVariants = ref(50)
 
 const clothingCategories = ref([
   { titleKey: 'characterCreation.clothing.categories.mask', key: 'mask' },
@@ -192,6 +196,61 @@ watch(selectedCategory, (newCategory, oldCategory) => {
   previousCategory.value = oldCategory
 })
 
+const updateMaskTypeLimit = async () => {
+  try {
+    const response = await fetchNui('getClothingTextureLimit', { component: 1, drawable: localMaskDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxMaskVariants.value = response.limit
+      if (localMaskTexture.value > response.limit) {
+        localMaskTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get mask texture limit:', error)
+  }
+}
+
+watch(localMaskDrawable, async (newVal) => {
+  appearanceStore.setMaskSection({ maskDrawable: newVal, maskTexture: localMaskTexture.value })
+
+  try {
+    await fetchNui('applyMaskCustomization', {
+      type: newVal,
+      variant: localMaskTexture.value
+    })
+
+    await updateMaskTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply mask drawable:', error)
+  }
+})
+
+watch(localMaskTexture, async (newVal) => {
+  appearanceStore.setMaskSection({ maskDrawable: localMaskDrawable.value, maskTexture: newVal })
+
+  try {
+    await fetchNui('applyMaskCustomization', {
+      type: localMaskDrawable.value,
+      variant: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply mask texture:', error)
+  }
+})
+
+onMounted(async () => {
+  try {
+    const limits = await fetchNui('getClothingLimits', {})
+    if (limits && typeof limits.masks === 'number') {
+      maxMaskTypes.value = limits.masks
+    }
+
+    await updateMaskTypeLimit()
+  } catch (error) {
+    console.error('Failed to get clothing limits:', error)
+  }
+})
+
 const handleContinue = () => {
   // Save current section before validating
   saveSectionData(selectedCategory.value)
@@ -266,6 +325,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.mask.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localMaskDrawable }}/{{ maxMaskTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.mask.drawable.description') }}
@@ -273,7 +333,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localMaskDrawable"
               :min="0"
-              :max="100"
+              :max="maxMaskTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -284,6 +344,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.mask.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localMaskTexture }}/{{ maxMaskVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.mask.texture.description') }}
@@ -291,7 +352,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localMaskTexture"
               :min="0"
-              :max="50"
+              :max="maxMaskVariants"
               :step="1"
               color="blue"
               thumb-label
