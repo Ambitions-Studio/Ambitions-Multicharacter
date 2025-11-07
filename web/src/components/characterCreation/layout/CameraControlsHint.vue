@@ -13,7 +13,7 @@ const { t } = useI18n()
           <div
             class="w-10 h-14 flex items-center justify-center"
             :style="{
-              backgroundImage: 'url(/images/tips/tips_icon.png)',
+              backgroundImage: 'url(images/tips/tips_icon.png)',
               backgroundSize: '300% auto',
               backgroundPosition: '0% center',
               backgroundRepeat: 'no-repeat'
@@ -33,7 +33,7 @@ const { t } = useI18n()
           <div
             class="w-10 h-14 flex items-center justify-center"
             :style="{
-              backgroundImage: 'url(/images/tips/tips_icon.png)',
+              backgroundImage: 'url(images/tips/tips_icon.png)',
               backgroundSize: '300% auto',
               backgroundPosition: '50% center',
               backgroundRepeat: 'no-repeat'
@@ -53,7 +53,7 @@ const { t } = useI18n()
           <div
             class="w-10 h-14 flex items-center justify-center"
             :style="{
-              backgroundImage: 'url(/images/tips/tips_icon.png)',
+              backgroundImage: 'url(images/tips/tips_icon.png)',
               backgroundSize: '300% auto',
               backgroundPosition: '100% center',
               backgroundRepeat: 'no-repeat'
