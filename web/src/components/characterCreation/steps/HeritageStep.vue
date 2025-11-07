@@ -55,14 +55,14 @@ const localSkinResemblance = ref(
   appearanceStore.skinResemblance ?? props.skinResemblance
 )
 
+// Load all portrait images at build-time with Vite's glob import
+const portraits = import.meta.glob('@/assets/img/parent_portrait/*.png', { eager: true, import: 'default' }) as Record<string, string>
+
 // Get portrait image URL dynamically
 const getPortraitUrl = (photoFilename: string) => {
-  // In FiveM NUI, use relative path from the web root
-  if (import.meta.env.PROD) {
-    return `./assets/img/parent_portrait/${photoFilename}`
-  }
-  // In development, use Vite's dynamic import with @ alias
-  return new URL(`@/assets/img/parent_portrait/${photoFilename}`, import.meta.url).href
+  // Find the matching portrait in the glob results
+  const match = Object.entries(portraits).find(([path]) => path.includes(photoFilename))
+  return match ? match[1] : ''
 }
 
 // Computed refs for selected parents to avoid multiple .find() calls
