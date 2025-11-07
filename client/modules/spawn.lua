@@ -132,8 +132,8 @@ end)
 
 RegisterNetEvent('ambitions-multicharacter:client:offsetCameraForCreation', function()
   ambitionsPrint.info('Offsetting camera for character creation UI')
-  cameraModule.OffsetCameraForCreation(0.5, 1000)
-  ambitionsPrint.success('Camera offset applied - shifted left by 0.5 units')
+  cameraModule.OffsetCameraForCreation(1.0, 0.3, 1000) -- Shift left 1.0, zoom out 0.3
+  ambitionsPrint.success('Camera offset applied - shifted left and zoomed out')
 end)
 
 CreateThread(function()
