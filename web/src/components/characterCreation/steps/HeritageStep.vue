@@ -41,12 +41,12 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props
+// Initialize from store if available, otherwise use props or first item
 const localSelectedFather = ref(
-  appearanceStore.selectedFather ?? props.selectedFather
+  appearanceStore.selectedFather ?? props.selectedFather ?? props.fatherOptions[0]?.id ?? 0
 )
 const localSelectedMother = ref(
-  appearanceStore.selectedMother ?? props.selectedMother
+  appearanceStore.selectedMother ?? props.selectedMother ?? props.motherOptions[0]?.id ?? 21
 )
 const localFaceResemblance = ref(
   appearanceStore.faceResemblance ?? props.faceResemblance
@@ -56,6 +56,11 @@ const localSkinResemblance = ref(
 )
 
 const isDev = import.meta.env.DEV
+
+// Get portrait image URL dynamically
+const getPortraitUrl = (photoFilename: string) => {
+  return new URL(`@/assets/img/parent_portrait/${photoFilename}`, import.meta.url).href
+}
 
 const handleContinue = () => {
   // Save to AppearanceStore
@@ -126,7 +131,7 @@ const handleContinue = () => {
                 v-if="
                   localSelectedFather !== null && fatherOptions.find((f) => f.id === localSelectedFather)?.photo
                 "
-                :src="`/src/assets/img/parent_portrait/${fatherOptions.find((f) => f.id === localSelectedFather)?.photo}`"
+                :src="getPortraitUrl(fatherOptions.find((f) => f.id === localSelectedFather)!.photo)"
                 :alt="fatherOptions.find((f) => f.id === localSelectedFather)?.name"
                 class="w-full h-full object-cover"
               />
@@ -177,7 +182,7 @@ const handleContinue = () => {
                 v-if="
                   localSelectedMother !== null && motherOptions.find((m) => m.id === localSelectedMother)?.photo
                 "
-                :src="`/src/assets/img/parent_portrait/${motherOptions.find((m) => m.id === localSelectedMother)?.photo}`"
+                :src="getPortraitUrl(motherOptions.find((m) => m.id === localSelectedMother)!.photo)"
                 :alt="motherOptions.find((m) => m.id === localSelectedMother)?.name"
                 class="w-full h-full object-cover"
               />
