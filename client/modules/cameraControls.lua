@@ -57,8 +57,9 @@ local function HandleCameraMove(controlType, movementX, movementY)
     local rightY = math.sin(heading)
 
     -- Move camera along its right axis (left/right) and up/down (Z axis)
-    local newX = camPos.x + (rightX * movementX * sensitivity)
-    local newY = camPos.y + (rightY * movementX * sensitivity)
+    -- Inverted: mouse right = camera left, mouse left = camera right
+    local newX = camPos.x - (rightX * movementX * sensitivity)
+    local newY = camPos.y - (rightY * movementX * sensitivity)
     local newZ = camPos.z + (movementY * sensitivity)
 
     SetCamCoord(activeCam, newX, newY, newZ)
