@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider, VBtn } from 'vuetify/components'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
+import { sendNuiCallback } from '@/utils/nui'
 import TattoosNavigation from '@/components/characterCreation/layout/TattoosNavigation.vue'
 
 const { t } = useI18n()
@@ -12,6 +13,16 @@ const characterStore = useCharacterStore()
 
 const selectedCategory = ref(0)
 const previousCategory = ref(0)
+
+const collectionsLimit = ref(100)
+const headTattooHashLimit = ref(50)
+const neckTattooHashLimit = ref(50)
+const torsoTattooHashLimit = ref(50)
+const backTattooHashLimit = ref(50)
+const leftArmTattooHashLimit = ref(50)
+const rightArmTattooHashLimit = ref(50)
+const leftLegTattooHashLimit = ref(50)
+const rightLegTattooHashLimit = ref(50)
 
 const tattoosCategories = ref([
   { titleKey: 'characterCreation.tattoos.categories.head', key: 'head' },
@@ -180,6 +191,381 @@ watch(selectedCategory, (newCategory, oldCategory) => {
   previousCategory.value = oldCategory
 })
 
+const updateHeadTattooHashLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getTattooHashLimit', {
+      collection: localHeadTattooCollection.value,
+      zone: 'head'
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      headTattooHashLimit.value = response.limit
+      if (localHeadTattooHash.value > response.limit) {
+        localHeadTattooHash.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get head tattoo hash limit:', error)
+  }
+}
+
+const updateNeckTattooHashLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getTattooHashLimit', {
+      collection: localNeckTattooCollection.value,
+      zone: 'neck'
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      neckTattooHashLimit.value = response.limit
+      if (localNeckTattooHash.value > response.limit) {
+        localNeckTattooHash.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get neck tattoo hash limit:', error)
+  }
+}
+
+const updateTorsoTattooHashLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getTattooHashLimit', {
+      collection: localTorsoTattooCollection.value,
+      zone: 'torso'
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      torsoTattooHashLimit.value = response.limit
+      if (localTorsoTattooHash.value > response.limit) {
+        localTorsoTattooHash.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get torso tattoo hash limit:', error)
+  }
+}
+
+const updateBackTattooHashLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getTattooHashLimit', {
+      collection: localBackTattooCollection.value,
+      zone: 'back'
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      backTattooHashLimit.value = response.limit
+      if (localBackTattooHash.value > response.limit) {
+        localBackTattooHash.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get back tattoo hash limit:', error)
+  }
+}
+
+const updateLeftArmTattooHashLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getTattooHashLimit', {
+      collection: localLeftArmTattooCollection.value,
+      zone: 'leftArm'
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      leftArmTattooHashLimit.value = response.limit
+      if (localLeftArmTattooHash.value > response.limit) {
+        localLeftArmTattooHash.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get left arm tattoo hash limit:', error)
+  }
+}
+
+const updateRightArmTattooHashLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getTattooHashLimit', {
+      collection: localRightArmTattooCollection.value,
+      zone: 'rightArm'
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      rightArmTattooHashLimit.value = response.limit
+      if (localRightArmTattooHash.value > response.limit) {
+        localRightArmTattooHash.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get right arm tattoo hash limit:', error)
+  }
+}
+
+const updateLeftLegTattooHashLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getTattooHashLimit', {
+      collection: localLeftLegTattooCollection.value,
+      zone: 'leftLeg'
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      leftLegTattooHashLimit.value = response.limit
+      if (localLeftLegTattooHash.value > response.limit) {
+        localLeftLegTattooHash.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get left leg tattoo hash limit:', error)
+  }
+}
+
+const updateRightLegTattooHashLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getTattooHashLimit', {
+      collection: localRightLegTattooCollection.value,
+      zone: 'rightLeg'
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      rightLegTattooHashLimit.value = response.limit
+      if (localRightLegTattooHash.value > response.limit) {
+        localRightLegTattooHash.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get right leg tattoo hash limit:', error)
+  }
+}
+
+watch(localHeadTattooCollection, async (newVal) => {
+  appearanceStore.setHeadTattooSection({ headTattooCollection: newVal, headTattooHash: localHeadTattooHash.value })
+  try {
+    await sendNuiCallback('applyHeadTattoo', {
+      collection: newVal,
+      hash: localHeadTattooHash.value
+    })
+    await updateHeadTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to apply head tattoo collection:', error)
+  }
+})
+
+watch(localHeadTattooHash, async (newVal) => {
+  appearanceStore.setHeadTattooSection({ headTattooCollection: localHeadTattooCollection.value, headTattooHash: newVal })
+  try {
+    await sendNuiCallback('applyHeadTattoo', {
+      collection: localHeadTattooCollection.value,
+      hash: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply head tattoo hash:', error)
+  }
+})
+
+watch(localNeckTattooCollection, async (newVal) => {
+  appearanceStore.setNeckTattooSection({ neckTattooCollection: newVal, neckTattooHash: localNeckTattooHash.value })
+  try {
+    await sendNuiCallback('applyNeckTattoo', {
+      collection: newVal,
+      hash: localNeckTattooHash.value
+    })
+    await updateNeckTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to apply neck tattoo collection:', error)
+  }
+})
+
+watch(localNeckTattooHash, async (newVal) => {
+  appearanceStore.setNeckTattooSection({ neckTattooCollection: localNeckTattooCollection.value, neckTattooHash: newVal })
+  try {
+    await sendNuiCallback('applyNeckTattoo', {
+      collection: localNeckTattooCollection.value,
+      hash: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply neck tattoo hash:', error)
+  }
+})
+
+watch(localTorsoTattooCollection, async (newVal) => {
+  appearanceStore.setTorsoTattooSection({ torsoTattooCollection: newVal, torsoTattooHash: localTorsoTattooHash.value })
+  try {
+    await sendNuiCallback('applyTorsoTattoo', {
+      collection: newVal,
+      hash: localTorsoTattooHash.value
+    })
+    await updateTorsoTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to apply torso tattoo collection:', error)
+  }
+})
+
+watch(localTorsoTattooHash, async (newVal) => {
+  appearanceStore.setTorsoTattooSection({ torsoTattooCollection: localTorsoTattooCollection.value, torsoTattooHash: newVal })
+  try {
+    await sendNuiCallback('applyTorsoTattoo', {
+      collection: localTorsoTattooCollection.value,
+      hash: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply torso tattoo hash:', error)
+  }
+})
+
+watch(localBackTattooCollection, async (newVal) => {
+  appearanceStore.setBackTattooSection({ backTattooCollection: newVal, backTattooHash: localBackTattooHash.value })
+  try {
+    await sendNuiCallback('applyBackTattoo', {
+      collection: newVal,
+      hash: localBackTattooHash.value
+    })
+    await updateBackTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to apply back tattoo collection:', error)
+  }
+})
+
+watch(localBackTattooHash, async (newVal) => {
+  appearanceStore.setBackTattooSection({ backTattooCollection: localBackTattooCollection.value, backTattooHash: newVal })
+  try {
+    await sendNuiCallback('applyBackTattoo', {
+      collection: localBackTattooCollection.value,
+      hash: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply back tattoo hash:', error)
+  }
+})
+
+watch(localLeftArmTattooCollection, async (newVal) => {
+  appearanceStore.setLeftArmTattooSection({ leftArmTattooCollection: newVal, leftArmTattooHash: localLeftArmTattooHash.value })
+  try {
+    await sendNuiCallback('applyLeftArmTattoo', {
+      collection: newVal,
+      hash: localLeftArmTattooHash.value
+    })
+    await updateLeftArmTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to apply left arm tattoo collection:', error)
+  }
+})
+
+watch(localLeftArmTattooHash, async (newVal) => {
+  appearanceStore.setLeftArmTattooSection({ leftArmTattooCollection: localLeftArmTattooCollection.value, leftArmTattooHash: newVal })
+  try {
+    await sendNuiCallback('applyLeftArmTattoo', {
+      collection: localLeftArmTattooCollection.value,
+      hash: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply left arm tattoo hash:', error)
+  }
+})
+
+watch(localRightArmTattooCollection, async (newVal) => {
+  appearanceStore.setRightArmTattooSection({ rightArmTattooCollection: newVal, rightArmTattooHash: localRightArmTattooHash.value })
+  try {
+    await sendNuiCallback('applyRightArmTattoo', {
+      collection: newVal,
+      hash: localRightArmTattooHash.value
+    })
+    await updateRightArmTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to apply right arm tattoo collection:', error)
+  }
+})
+
+watch(localRightArmTattooHash, async (newVal) => {
+  appearanceStore.setRightArmTattooSection({ rightArmTattooCollection: localRightArmTattooCollection.value, rightArmTattooHash: newVal })
+  try {
+    await sendNuiCallback('applyRightArmTattoo', {
+      collection: localRightArmTattooCollection.value,
+      hash: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply right arm tattoo hash:', error)
+  }
+})
+
+watch(localLeftLegTattooCollection, async (newVal) => {
+  appearanceStore.setLeftLegTattooSection({ leftLegTattooCollection: newVal, leftLegTattooHash: localLeftLegTattooHash.value })
+  try {
+    await sendNuiCallback('applyLeftLegTattoo', {
+      collection: newVal,
+      hash: localLeftLegTattooHash.value
+    })
+    await updateLeftLegTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to apply left leg tattoo collection:', error)
+  }
+})
+
+watch(localLeftLegTattooHash, async (newVal) => {
+  appearanceStore.setLeftLegTattooSection({ leftLegTattooCollection: localLeftLegTattooCollection.value, leftLegTattooHash: newVal })
+  try {
+    await sendNuiCallback('applyLeftLegTattoo', {
+      collection: localLeftLegTattooCollection.value,
+      hash: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply left leg tattoo hash:', error)
+  }
+})
+
+watch(localRightLegTattooCollection, async (newVal) => {
+  appearanceStore.setRightLegTattooSection({ rightLegTattooCollection: newVal, rightLegTattooHash: localRightLegTattooHash.value })
+  try {
+    await sendNuiCallback('applyRightLegTattoo', {
+      collection: newVal,
+      hash: localRightLegTattooHash.value
+    })
+    await updateRightLegTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to apply right leg tattoo collection:', error)
+  }
+})
+
+watch(localRightLegTattooHash, async (newVal) => {
+  appearanceStore.setRightLegTattooSection({ rightLegTattooCollection: localRightLegTattooCollection.value, rightLegTattooHash: newVal })
+  try {
+    await sendNuiCallback('applyRightLegTattoo', {
+      collection: localRightLegTattooCollection.value,
+      hash: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply right leg tattoo hash:', error)
+  }
+})
+
+onMounted(async () => {
+  try {
+    const limitsResponse = (await sendNuiCallback('getTattoosLimits', {})) as {
+      collections: number
+      head: number
+      neck: number
+      torso: number
+      back: number
+      leftArm: number
+      rightArm: number
+      leftLeg: number
+      rightLeg: number
+    }
+
+    if (limitsResponse) {
+      collectionsLimit.value = limitsResponse.collections
+      headTattooHashLimit.value = limitsResponse.head
+      neckTattooHashLimit.value = limitsResponse.neck
+      torsoTattooHashLimit.value = limitsResponse.torso
+      backTattooHashLimit.value = limitsResponse.back
+      leftArmTattooHashLimit.value = limitsResponse.leftArm
+      rightArmTattooHashLimit.value = limitsResponse.rightArm
+      leftLegTattooHashLimit.value = limitsResponse.leftLeg
+      rightLegTattooHashLimit.value = limitsResponse.rightLeg
+    }
+
+    await updateHeadTattooHashLimit()
+    await updateNeckTattooHashLimit()
+    await updateTorsoTattooHashLimit()
+    await updateBackTattooHashLimit()
+    await updateLeftArmTattooHashLimit()
+    await updateRightArmTattooHashLimit()
+    await updateLeftLegTattooHashLimit()
+    await updateRightLegTattooHashLimit()
+  } catch (error) {
+    console.error('Failed to get tattoos limits:', error)
+  }
+})
+
 const handleContinue = () => {
   // Save current section before validating
   saveSectionData(selectedCategory.value)
@@ -250,7 +636,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localHeadTattooCollection"
               :min="0"
-              :max="100"
+              :max="collectionsLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -268,7 +654,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localHeadTattooHash"
               :min="0"
-              :max="100"
+              :max="headTattooHashLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -291,7 +677,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localNeckTattooCollection"
               :min="0"
-              :max="100"
+              :max="collectionsLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -309,7 +695,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localNeckTattooHash"
               :min="0"
-              :max="100"
+              :max="neckTattooHashLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -332,7 +718,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localTorsoTattooCollection"
               :min="0"
-              :max="100"
+              :max="collectionsLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -350,7 +736,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localTorsoTattooHash"
               :min="0"
-              :max="100"
+              :max="torsoTattooHashLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -373,7 +759,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBackTattooCollection"
               :min="0"
-              :max="100"
+              :max="collectionsLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -391,7 +777,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBackTattooHash"
               :min="0"
-              :max="100"
+              :max="backTattooHashLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -414,7 +800,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localLeftArmTattooCollection"
               :min="0"
-              :max="100"
+              :max="collectionsLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -432,7 +818,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localLeftArmTattooHash"
               :min="0"
-              :max="100"
+              :max="leftArmTattooHashLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -455,7 +841,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localRightArmTattooCollection"
               :min="0"
-              :max="100"
+              :max="collectionsLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -473,7 +859,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localRightArmTattooHash"
               :min="0"
-              :max="100"
+              :max="rightArmTattooHashLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -496,7 +882,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localLeftLegTattooCollection"
               :min="0"
-              :max="100"
+              :max="collectionsLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -514,7 +900,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localLeftLegTattooHash"
               :min="0"
-              :max="100"
+              :max="leftLegTattooHashLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -537,7 +923,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localRightLegTattooCollection"
               :min="0"
-              :max="100"
+              :max="collectionsLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -555,7 +941,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localRightLegTattooHash"
               :min="0"
-              :max="100"
+              :max="rightLegTattooHashLimit"
               :step="1"
               color="blue"
               thumb-label

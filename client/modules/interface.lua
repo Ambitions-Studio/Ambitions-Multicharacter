@@ -3,6 +3,7 @@ local pedsModule = require('client.modules.peds')
 local appearanceCallbacks = require('client.modules.appearance.callbacks')
 local clothingCallbacks = require('client.modules.clothing.callbacks')
 local accessoriesCallbacks = require('client.modules.accessories.callbacks')
+local tattoosCallbacks = require('client.modules.tattoos.callbacks')
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client interface module loaded')
@@ -10,6 +11,7 @@ ambitionsPrint.info('Client interface module loaded')
 appearanceCallbacks.RegisterAppearanceCallbacks()
 clothingCallbacks.RegisterClothingCallbacks()
 accessoriesCallbacks.RegisterAccessoriesCallbacks()
+tattoosCallbacks.RegisterTattoosCallbacks()
 
 --- Open the character selection interface
 ---@param data table The data containing characters and configuration
