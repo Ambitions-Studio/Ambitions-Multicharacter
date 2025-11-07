@@ -16,6 +16,24 @@ const previousCategory = ref(0)
 
 const maxMaskTypes = ref(100)
 const maxMaskVariants = ref(50)
+const maxTorsoTypes = ref(100)
+const maxTorsoVariants = ref(50)
+const maxUndershirtTypes = ref(100)
+const maxUndershirtVariants = ref(50)
+const maxArmsTypes = ref(100)
+const maxArmsVariants = ref(50)
+const maxJacketTypes = ref(100)
+const maxJacketVariants = ref(50)
+const maxBodyArmorTypes = ref(100)
+const maxBodyArmorVariants = ref(50)
+const maxDecalsTypes = ref(100)
+const maxDecalsVariants = ref(50)
+const maxPantsTypes = ref(100)
+const maxPantsVariants = ref(50)
+const maxShoesTypes = ref(100)
+const maxShoesVariants = ref(50)
+const maxBackpackTypes = ref(100)
+const maxBackpackVariants = ref(50)
 
 const clothingCategories = ref([
   { titleKey: 'characterCreation.clothing.categories.mask', key: 'mask' },
@@ -238,14 +256,329 @@ watch(localMaskTexture, async (newVal) => {
   }
 })
 
+const updateTorsoTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 11, drawable: localTorsoDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxTorsoVariants.value = response.limit
+      if (localTorsoTexture.value > response.limit) {
+        localTorsoTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get torso texture limit:', error)
+  }
+}
+
+watch(localTorsoDrawable, async (newVal) => {
+  appearanceStore.setTorsoSection({ torsoDrawable: newVal, torsoTexture: localTorsoTexture.value })
+  try {
+    await sendNuiCallback('applyTorsoCustomization', { type: newVal, variant: localTorsoTexture.value })
+    await updateTorsoTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply torso drawable:', error)
+  }
+})
+
+watch(localTorsoTexture, async (newVal) => {
+  appearanceStore.setTorsoSection({ torsoDrawable: localTorsoDrawable.value, torsoTexture: newVal })
+  try {
+    await sendNuiCallback('applyTorsoCustomization', { type: localTorsoDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply torso texture:', error)
+  }
+})
+
+const updateUndershirtTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 8, drawable: localUndershirtDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxUndershirtVariants.value = response.limit
+      if (localUndershirtTexture.value > response.limit) {
+        localUndershirtTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get undershirt texture limit:', error)
+  }
+}
+
+watch(localUndershirtDrawable, async (newVal) => {
+  appearanceStore.setUndershirtSection({ undershirtDrawable: newVal, undershirtTexture: localUndershirtTexture.value })
+  try {
+    await sendNuiCallback('applyUndershirtsCustomization', { type: newVal, variant: localUndershirtTexture.value })
+    await updateUndershirtTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply undershirt drawable:', error)
+  }
+})
+
+watch(localUndershirtTexture, async (newVal) => {
+  appearanceStore.setUndershirtSection({ undershirtDrawable: localUndershirtDrawable.value, undershirtTexture: newVal })
+  try {
+    await sendNuiCallback('applyUndershirtsCustomization', { type: localUndershirtDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply undershirt texture:', error)
+  }
+})
+
+const updateArmsTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 11, drawable: localArmsDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxArmsVariants.value = response.limit
+      if (localArmsTexture.value > response.limit) {
+        localArmsTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get arms texture limit:', error)
+  }
+}
+
+watch(localArmsDrawable, async (newVal) => {
+  appearanceStore.setArmsSection({ armsDrawable: newVal, armsTexture: localArmsTexture.value })
+  try {
+    await sendNuiCallback('applyTorsoCustomization', { type: newVal, variant: localArmsTexture.value })
+    await updateArmsTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply arms drawable:', error)
+  }
+})
+
+watch(localArmsTexture, async (newVal) => {
+  appearanceStore.setArmsSection({ armsDrawable: localArmsDrawable.value, armsTexture: newVal })
+  try {
+    await sendNuiCallback('applyTorsoCustomization', { type: localArmsDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply arms texture:', error)
+  }
+})
+
+const updateJacketTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 3, drawable: localJacketDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxJacketVariants.value = response.limit
+      if (localJacketTexture.value > response.limit) {
+        localJacketTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get jacket texture limit:', error)
+  }
+}
+
+watch(localJacketDrawable, async (newVal) => {
+  appearanceStore.setJacketSection({ jacketDrawable: newVal, jacketTexture: localJacketTexture.value })
+  try {
+    await sendNuiCallback('applyTopsCustomization', { type: newVal, variant: localJacketTexture.value })
+    await updateJacketTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply jacket drawable:', error)
+  }
+})
+
+watch(localJacketTexture, async (newVal) => {
+  appearanceStore.setJacketSection({ jacketDrawable: localJacketDrawable.value, jacketTexture: newVal })
+  try {
+    await sendNuiCallback('applyTopsCustomization', { type: localJacketDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply jacket texture:', error)
+  }
+})
+
+const updateBodyArmorTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 9, drawable: localBodyArmorDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxBodyArmorVariants.value = response.limit
+      if (localBodyArmorTexture.value > response.limit) {
+        localBodyArmorTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get body armor texture limit:', error)
+  }
+}
+
+watch(localBodyArmorDrawable, async (newVal) => {
+  appearanceStore.setBodyArmorSection({ bodyArmorDrawable: newVal, bodyArmorTexture: localBodyArmorTexture.value })
+  try {
+    await sendNuiCallback('applyArmorCustomization', { type: newVal, variant: localBodyArmorTexture.value })
+    await updateBodyArmorTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply body armor drawable:', error)
+  }
+})
+
+watch(localBodyArmorTexture, async (newVal) => {
+  appearanceStore.setBodyArmorSection({ bodyArmorDrawable: localBodyArmorDrawable.value, bodyArmorTexture: newVal })
+  try {
+    await sendNuiCallback('applyArmorCustomization', { type: localBodyArmorDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply body armor texture:', error)
+  }
+})
+
+const updateDecalsTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 10, drawable: localDecalsDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxDecalsVariants.value = response.limit
+      if (localDecalsTexture.value > response.limit) {
+        localDecalsTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get decals texture limit:', error)
+  }
+}
+
+watch(localDecalsDrawable, async (newVal) => {
+  appearanceStore.setDecalsSection({ decalsDrawable: newVal, decalsTexture: localDecalsTexture.value })
+  try {
+    await sendNuiCallback('applyDecalsCustomization', { type: newVal, variant: localDecalsTexture.value })
+    await updateDecalsTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply decals drawable:', error)
+  }
+})
+
+watch(localDecalsTexture, async (newVal) => {
+  appearanceStore.setDecalsSection({ decalsDrawable: localDecalsDrawable.value, decalsTexture: newVal })
+  try {
+    await sendNuiCallback('applyDecalsCustomization', { type: localDecalsDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply decals texture:', error)
+  }
+})
+
+const updatePantsTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 4, drawable: localPantsDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxPantsVariants.value = response.limit
+      if (localPantsTexture.value > response.limit) {
+        localPantsTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get pants texture limit:', error)
+  }
+}
+
+watch(localPantsDrawable, async (newVal) => {
+  appearanceStore.setPantsSection({ pantsDrawable: newVal, pantsTexture: localPantsTexture.value })
+  try {
+    await sendNuiCallback('applyLegsCustomization', { type: newVal, variant: localPantsTexture.value })
+    await updatePantsTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply pants drawable:', error)
+  }
+})
+
+watch(localPantsTexture, async (newVal) => {
+  appearanceStore.setPantsSection({ pantsDrawable: localPantsDrawable.value, pantsTexture: newVal })
+  try {
+    await sendNuiCallback('applyLegsCustomization', { type: localPantsDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply pants texture:', error)
+  }
+})
+
+const updateShoesTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 6, drawable: localShoesDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxShoesVariants.value = response.limit
+      if (localShoesTexture.value > response.limit) {
+        localShoesTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get shoes texture limit:', error)
+  }
+}
+
+watch(localShoesDrawable, async (newVal) => {
+  appearanceStore.setShoesSection({ shoesDrawable: newVal, shoesTexture: localShoesTexture.value })
+  try {
+    await sendNuiCallback('applyShoesCustomization', { type: newVal, variant: localShoesTexture.value })
+    await updateShoesTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply shoes drawable:', error)
+  }
+})
+
+watch(localShoesTexture, async (newVal) => {
+  appearanceStore.setShoesSection({ shoesDrawable: localShoesDrawable.value, shoesTexture: newVal })
+  try {
+    await sendNuiCallback('applyShoesCustomization', { type: localShoesDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply shoes texture:', error)
+  }
+})
+
+const updateBackpackTypeLimit = async () => {
+  try {
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 5, drawable: localBackpackDrawable.value })
+    if (response && typeof response.limit === 'number') {
+      maxBackpackVariants.value = response.limit
+      if (localBackpackTexture.value > response.limit) {
+        localBackpackTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get backpack texture limit:', error)
+  }
+}
+
+watch(localBackpackDrawable, async (newVal) => {
+  appearanceStore.setBackpackSection({ backpackDrawable: newVal, backpackTexture: localBackpackTexture.value })
+  try {
+    await sendNuiCallback('applyBagsCustomization', { type: newVal, variant: localBackpackTexture.value })
+    await updateBackpackTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply backpack drawable:', error)
+  }
+})
+
+watch(localBackpackTexture, async (newVal) => {
+  appearanceStore.setBackpackSection({ backpackDrawable: localBackpackDrawable.value, backpackTexture: newVal })
+  try {
+    await sendNuiCallback('applyBagsCustomization', { type: localBackpackDrawable.value, variant: newVal })
+  } catch (error) {
+    console.error('Failed to apply backpack texture:', error)
+  }
+})
+
 onMounted(async () => {
   try {
-    const limits = await sendNuiCallback<{}, { masks: number }>('getClothingLimits', {})
-    if (limits && typeof limits.masks === 'number') {
-      maxMaskTypes.value = limits.masks
+    const limits = await sendNuiCallback<{}, { masks: number; torsos: number; undershirts: number; tops: number; legs: number; bags: number; shoes: number; accessories: number; armor: number; decals: number }>('getClothingLimits', {})
+    if (limits) {
+      if (typeof limits.masks === 'number') maxMaskTypes.value = limits.masks
+      if (typeof limits.torsos === 'number') maxTorsoTypes.value = limits.torsos
+      if (typeof limits.undershirts === 'number') maxUndershirtTypes.value = limits.undershirts
+      if (typeof limits.tops === 'number') maxJacketTypes.value = limits.tops
+      if (typeof limits.legs === 'number') maxPantsTypes.value = limits.legs
+      if (typeof limits.bags === 'number') maxBackpackTypes.value = limits.bags
+      if (typeof limits.shoes === 'number') maxShoesTypes.value = limits.shoes
+      if (typeof limits.armor === 'number') maxBodyArmorTypes.value = limits.armor
+      if (typeof limits.decals === 'number') maxDecalsTypes.value = limits.decals
+      if (typeof limits.torsos === 'number') maxArmsTypes.value = limits.torsos
     }
 
     await updateMaskTypeLimit()
+    await updateTorsoTypeLimit()
+    await updateUndershirtTypeLimit()
+    await updateArmsTypeLimit()
+    await updateJacketTypeLimit()
+    await updateBodyArmorTypeLimit()
+    await updateDecalsTypeLimit()
+    await updatePantsTypeLimit()
+    await updateShoesTypeLimit()
+    await updateBackpackTypeLimit()
   } catch (error) {
     console.error('Failed to get clothing limits:', error)
   }
@@ -368,6 +701,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.torso.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localTorsoDrawable }}/{{ maxTorsoTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.torso.drawable.description') }}
@@ -375,7 +709,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localTorsoDrawable"
               :min="0"
-              :max="100"
+              :max="maxTorsoTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -386,6 +720,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.torso.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localTorsoTexture }}/{{ maxTorsoVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.torso.texture.description') }}
@@ -393,7 +728,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localTorsoTexture"
               :min="0"
-              :max="50"
+              :max="maxTorsoVariants"
               :step="1"
               color="blue"
               thumb-label
@@ -409,6 +744,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.undershirt.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localUndershirtDrawable }}/{{ maxUndershirtTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.undershirt.drawable.description') }}
@@ -416,7 +752,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localUndershirtDrawable"
               :min="0"
-              :max="100"
+              :max="maxUndershirtTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -427,6 +763,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.undershirt.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localUndershirtTexture }}/{{ maxUndershirtVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.undershirt.texture.description') }}
@@ -434,7 +771,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localUndershirtTexture"
               :min="0"
-              :max="50"
+              :max="maxUndershirtVariants"
               :step="1"
               color="blue"
               thumb-label
@@ -450,6 +787,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.arms.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localArmsDrawable }}/{{ maxArmsTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.arms.drawable.description') }}
@@ -457,7 +795,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localArmsDrawable"
               :min="0"
-              :max="100"
+              :max="maxArmsTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -468,6 +806,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.arms.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localArmsTexture }}/{{ maxArmsVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.arms.texture.description') }}
@@ -475,7 +814,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localArmsTexture"
               :min="0"
-              :max="50"
+              :max="maxArmsVariants"
               :step="1"
               color="blue"
               thumb-label
@@ -491,6 +830,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.jacket.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localJacketDrawable }}/{{ maxJacketTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.jacket.drawable.description') }}
@@ -498,7 +838,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localJacketDrawable"
               :min="0"
-              :max="100"
+              :max="maxJacketTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -509,6 +849,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.jacket.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localJacketTexture }}/{{ maxJacketVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.jacket.texture.description') }}
@@ -516,7 +857,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localJacketTexture"
               :min="0"
-              :max="50"
+              :max="maxJacketVariants"
               :step="1"
               color="blue"
               thumb-label
@@ -532,6 +873,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.bodyArmor.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localBodyArmorDrawable }}/{{ maxBodyArmorTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.bodyArmor.drawable.description') }}
@@ -539,7 +881,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBodyArmorDrawable"
               :min="0"
-              :max="100"
+              :max="maxBodyArmorTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -550,6 +892,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.bodyArmor.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localBodyArmorTexture }}/{{ maxBodyArmorVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.bodyArmor.texture.description') }}
@@ -557,7 +900,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBodyArmorTexture"
               :min="0"
-              :max="50"
+              :max="maxBodyArmorVariants"
               :step="1"
               color="blue"
               thumb-label
@@ -573,6 +916,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.decals.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localDecalsDrawable }}/{{ maxDecalsTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.decals.drawable.description') }}
@@ -580,7 +924,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localDecalsDrawable"
               :min="0"
-              :max="100"
+              :max="maxDecalsTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -591,6 +935,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.decals.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localDecalsTexture }}/{{ maxDecalsVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.decals.texture.description') }}
@@ -598,7 +943,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localDecalsTexture"
               :min="0"
-              :max="50"
+              :max="maxDecalsVariants"
               :step="1"
               color="blue"
               thumb-label
@@ -614,6 +959,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.pants.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localPantsDrawable }}/{{ maxPantsTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.pants.drawable.description') }}
@@ -621,7 +967,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localPantsDrawable"
               :min="0"
-              :max="100"
+              :max="maxPantsTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -632,6 +978,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.pants.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localPantsTexture }}/{{ maxPantsVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.pants.texture.description') }}
@@ -639,7 +986,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localPantsTexture"
               :min="0"
-              :max="50"
+              :max="maxPantsVariants"
               :step="1"
               color="blue"
               thumb-label
@@ -655,6 +1002,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.shoes.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localShoesDrawable }}/{{ maxShoesTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.shoes.drawable.description') }}
@@ -662,7 +1010,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localShoesDrawable"
               :min="0"
-              :max="100"
+              :max="maxShoesTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -673,6 +1021,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.shoes.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localShoesTexture }}/{{ maxShoesVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.shoes.texture.description') }}
@@ -680,7 +1029,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localShoesTexture"
               :min="0"
-              :max="50"
+              :max="maxShoesVariants"
               :step="1"
               color="blue"
               thumb-label
@@ -696,6 +1045,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.backpack.drawable.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localBackpackDrawable }}/{{ maxBackpackTypes }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.backpack.drawable.description') }}
@@ -703,7 +1053,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBackpackDrawable"
               :min="0"
-              :max="100"
+              :max="maxBackpackTypes"
               :step="1"
               color="blue"
               thumb-label
@@ -714,6 +1064,7 @@ const handleContinue = () => {
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
               {{ t('characterCreation.clothing.backpack.texture.title') }}
+              <span class="text-slate-500 text-xs ml-2">({{ localBackpackTexture }}/{{ maxBackpackVariants }})</span>
             </label>
             <p class="text-slate-500 text-xs mb-4">
               {{ t('characterCreation.clothing.backpack.texture.description') }}
@@ -721,7 +1072,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBackpackTexture"
               :min="0"
-              :max="50"
+              :max="maxBackpackVariants"
               :step="1"
               color="blue"
               thumb-label
