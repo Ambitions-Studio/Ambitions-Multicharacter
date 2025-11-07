@@ -217,12 +217,14 @@ local function ApplyEyesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   -- Apply eye opening (face feature index 11)
-  SetPedFaceFeature(ped, 11, data.opening)
+  -- Invert the value: slider -1 (narrow) should be 1 in game, slider 1 (wide) should be -1 in game
+  local invertedOpening = -data.opening
+  SetPedFaceFeature(ped, 11, invertedOpening)
 
   -- Apply eye color
   SetPedEyeColor(ped, data.color)
 
-  ambitionsPrint.info('Applied eyes - Opening:', data.opening, 'Color:', data.color)
+  ambitionsPrint.info('Applied eyes - Opening:', invertedOpening, 'Color:', data.color)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
