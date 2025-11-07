@@ -78,8 +78,6 @@ local function RegisterClothingCallbacks()
   ambitionsPrint.success('Registered all clothing callbacks')
 end
 
-RegisterClothingCallbacks()
-
 return {
   RegisterClothingCallbacks = RegisterClothingCallbacks,
 }
