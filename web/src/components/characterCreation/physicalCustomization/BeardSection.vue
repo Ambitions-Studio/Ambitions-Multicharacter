@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import HAIR_COLORS from '@/data/hairColors'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -31,6 +33,15 @@ const localBeardStyle = ref(props.beardStyle)
 const localBeardColor = ref(props.beardColor)
 const localBeardSecondaryColor = ref(props.beardSecondaryColor)
 const localBeardOpacity = ref(props.beardOpacity)
+
+watch([localBeardStyle, localBeardColor, localBeardSecondaryColor, localBeardOpacity], ([style, color, secondaryColor, opacity]) => {
+  sendNuiEvent('applyBeardCustomization', {
+    style,
+    color,
+    secondaryColor,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -72,6 +83,7 @@ const localBeardOpacity = ref(props.beardOpacity)
       </div>
     </div>
 
+    <!-- Beard Color -->
     <div class="bg-slate-800/80 rounded-xl p-5 border-2 border-solid border-slate-900/30 hover:border-slate-900/50 transition-all duration-300">
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1">
@@ -84,22 +96,19 @@ const localBeardOpacity = ref(props.beardOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localBeardColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:beardColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in HAIR_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localBeardColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localBeardColor = index; emit('update:beardColor', index)"
         />
       </div>
     </div>
 
+    <!-- Beard Secondary Color -->
     <div class="bg-slate-800/80 rounded-xl p-5 border-2 border-solid border-slate-900/30 hover:border-slate-900/50 transition-all duration-300">
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1">
@@ -112,18 +121,14 @@ const localBeardOpacity = ref(props.beardOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localBeardSecondaryColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:beardSecondaryColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in HAIR_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localBeardSecondaryColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localBeardSecondaryColor = index; emit('update:beardSecondaryColor', index)"
         />
       </div>
     </div>

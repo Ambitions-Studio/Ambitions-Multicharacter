@@ -282,16 +282,32 @@ end
 local function ApplyCheeksCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply cheekbone height (face feature index 8)
-  SetPedFaceFeature(ped, 8, data.boneHeight)
+  -- Apply cheekbone height (face feature index 8) - Inverted
+  local invertedBoneHeight = -data.boneHeight
+  SetPedFaceFeature(ped, 8, invertedBoneHeight)
 
   -- Apply cheekbone width (face feature index 9)
   SetPedFaceFeature(ped, 9, data.boneWidth)
 
-  -- Apply cheek width (face feature index 10)
-  SetPedFaceFeature(ped, 10, data.width)
+  -- Apply cheek width (face feature index 10) - Inverted
+  local invertedWidth = -data.width
+  SetPedFaceFeature(ped, 10, invertedWidth)
 
-  ambitionsPrint.info('Applied cheeks - BoneHeight:', data.boneHeight, 'BoneWidth:', data.boneWidth, 'Width:', data.width)
+  ambitionsPrint.info('Applied cheeks - BoneHeight:', invertedBoneHeight, 'BoneWidth:', data.boneWidth, 'Width:', invertedWidth)
+end
+
+--- Apply beard customization in real-time (style, color, secondaryColor, opacity)
+---@param data table Beard data with style, color, secondaryColor, opacity
+local function ApplyBeardCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply beard style and opacity (head overlay index 1)
+  SetPedHeadOverlay(ped, 1, data.style, data.opacity)
+
+  -- Apply beard colors (overlay color type 1 = hair color)
+  SetPedHeadOverlayColor(ped, 1, 1, data.color, data.secondaryColor)
+
+  ambitionsPrint.info('Applied beard - Style:', data.style, 'Color:', data.color, 'SecondaryColor:', data.secondaryColor, 'Opacity:', data.opacity)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
@@ -335,6 +351,7 @@ return {
   ApplyEyebrowsCustomization = ApplyEyebrowsCustomization,
   ApplyNoseCustomization = ApplyNoseCustomization,
   ApplyCheeksCustomization = ApplyCheeksCustomization,
+  ApplyBeardCustomization = ApplyBeardCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
