@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -27,6 +28,14 @@ const emit = defineEmits<{
 const localCheekBoneHeight = ref(props.cheekBoneHeight)
 const localCheekBoneWidth = ref(props.cheekBoneWidth)
 const localCheekWidth = ref(props.cheekWidth)
+
+watch([localCheekBoneHeight, localCheekBoneWidth, localCheekWidth], ([boneHeight, boneWidth, width]) => {
+  sendNuiEvent('applyCheeksCustomization', {
+    boneHeight,
+    boneWidth,
+    width,
+  })
+})
 </script>
 
 <template>

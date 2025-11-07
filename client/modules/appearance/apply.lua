@@ -267,13 +267,31 @@ local function ApplyNoseCustomization(data)
   local invertedBridge = -data.bridge
   SetPedFaceFeature(ped, 3, invertedBridge)
 
-  -- Apply nose bridge twist (face feature index 4) - SWITCHED with tipHeight
-  SetPedFaceFeature(ped, 4, data.tipHeight)
+  -- Apply nose bridge twist (face feature index 4) - SWITCHED with tipHeight AND inverted
+  local invertedTipHeight = -data.tipHeight
+  SetPedFaceFeature(ped, 4, invertedTipHeight)
 
   -- Apply nose tip height (face feature index 5) - SWITCHED with bridgeTwist
   SetPedFaceFeature(ped, 5, data.bridgeTwist)
 
   ambitionsPrint.info('Applied nose - Width:', data.width, 'Height:', data.height, 'Length:', invertedLength, 'Bridge:', invertedBridge, 'BridgeTwist:', data.bridgeTwist, 'TipHeight:', data.tipHeight)
+end
+
+--- Apply cheeks customization in real-time (boneHeight, boneWidth, width)
+---@param data table Cheeks data with boneHeight, boneWidth, width
+local function ApplyCheeksCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply cheekbone height (face feature index 8)
+  SetPedFaceFeature(ped, 8, data.boneHeight)
+
+  -- Apply cheekbone width (face feature index 9)
+  SetPedFaceFeature(ped, 9, data.boneWidth)
+
+  -- Apply cheek width (face feature index 10)
+  SetPedFaceFeature(ped, 10, data.width)
+
+  ambitionsPrint.info('Applied cheeks - BoneHeight:', data.boneHeight, 'BoneWidth:', data.boneWidth, 'Width:', data.width)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
@@ -316,6 +334,7 @@ return {
   ApplyEyesCustomization = ApplyEyesCustomization,
   ApplyEyebrowsCustomization = ApplyEyebrowsCustomization,
   ApplyNoseCustomization = ApplyNoseCustomization,
+  ApplyCheeksCustomization = ApplyCheeksCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
