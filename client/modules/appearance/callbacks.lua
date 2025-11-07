@@ -39,6 +39,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time eyebrows customization (height, depth, style, color, opacity)
+  RegisterNUICallback('applyEyebrowsCustomization', function(data, cb)
+    ambitionsPrint.info('Applying eyebrows customization in real-time')
+    appearanceApply.ApplyEyebrowsCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)

@@ -227,6 +227,26 @@ local function ApplyEyesCustomization(data)
   ambitionsPrint.info('Applied eyes - Opening:', invertedOpening, 'Color:', data.color)
 end
 
+--- Apply eyebrows customization in real-time (height, depth, style, color, opacity)
+---@param data table Eyebrows data with height, depth, style, color, opacity
+local function ApplyEyebrowsCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply eyebrow height (face feature index 6)
+  SetPedFaceFeature(ped, 6, data.height)
+
+  -- Apply eyebrow depth (face feature index 7)
+  SetPedFaceFeature(ped, 7, data.depth)
+
+  -- Apply eyebrow style (head overlay index 2)
+  SetPedHeadOverlay(ped, 2, data.style, data.opacity)
+
+  -- Apply eyebrow color (overlay color type 1 = hair color)
+  SetPedHeadOverlayColor(ped, 2, 1, data.color, data.color)
+
+  ambitionsPrint.info('Applied eyebrows - Height:', data.height, 'Depth:', data.depth, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
+end
+
 --- Apply head overlay (beard, makeup, etc) in real-time
 ---@param data table Overlay data with index, style, opacity, color1, color2
 local function ApplyHeadOverlay(data)
@@ -265,6 +285,7 @@ return {
   ApplyHairStyle = ApplyHairStyle,
   ApplyFaceFeature = ApplyFaceFeature,
   ApplyEyesCustomization = ApplyEyesCustomization,
+  ApplyEyebrowsCustomization = ApplyEyebrowsCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
