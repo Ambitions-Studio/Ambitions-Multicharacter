@@ -6,7 +6,7 @@ const { t } = useI18n()
 
 <template>
   <div class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none">
-    <div class="bg-slate-900/90 backdrop-blur-sm rounded-lg border border-slate-700/50 shadow-2xl px-4 py-2.5">
+    <div class="bg-slate-900/90 rounded-lg border border-slate-700/50 shadow-2xl px-4 py-2.5">
       <div class="flex items-center gap-4">
         <!-- Left Click - Pan Camera -->
         <div class="flex items-center gap-2">
