@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
 import HAIR_COLORS from '@/data/hairColors'
-import { sendNuiEvent } from '@/utils/nui'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -29,6 +29,15 @@ const emit = defineEmits<{
 const localBeardStyle = ref(props.beardStyle)
 const localBeardColor = ref(props.beardColor)
 const localBeardOpacity = ref(props.beardOpacity)
+const maxBeardStyles = ref(28) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxBeardStyles.value = limits.beardStyles
+  }
+})
 
 watch([localBeardStyle, localBeardColor, localBeardOpacity], ([style, color, opacity]) => {
   sendNuiEvent('applyBeardCustomization', {
@@ -66,7 +75,7 @@ watch([localBeardStyle, localBeardColor, localBeardOpacity], ([style, color, opa
         <VSlider
           v-model="localBeardStyle"
           :min="0"
-          :max="28"
+          :max="maxBeardStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"

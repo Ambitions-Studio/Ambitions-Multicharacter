@@ -81,6 +81,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time chin customization (lowering, length, width, cleft)
+  RegisterNUICallback('applyChinCustomization', function(data, cb)
+    ambitionsPrint.info('Applying chin customization in real-time')
+    appearanceApply.ApplyChinCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)

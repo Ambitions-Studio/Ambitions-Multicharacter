@@ -14,6 +14,9 @@ local function GetCustomizationLimits()
   return {
     hairStyles = GetNumberOfPedDrawableVariations(ped, 2) - 1, -- Component 2 = Hair
     hairTextures = GetNumberOfPedTextureVariations(ped, 2, 0) - 1, -- Textures for hair drawable 0
+    eyebrowsStyles = GetNumHeadOverlayValues(2) - 1, -- Overlay 2 = Eyebrows
+    beardStyles = GetNumHeadOverlayValues(1) - 1, -- Overlay 1 = Beard
+    lipstickStyles = GetNumHeadOverlayValues(8) - 1, -- Overlay 8 = Lipstick
   }
 end
 
@@ -329,8 +332,9 @@ end
 local function ApplyLipsCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply lip thickness (face feature index 12)
-  SetPedFaceFeature(ped, 12, data.thickness)
+  -- Apply lip thickness (face feature index 12) - Inverted
+  local invertedThickness = -data.thickness
+  SetPedFaceFeature(ped, 12, invertedThickness)
 
   -- Apply lipstick overlay (index 8 = lipstick)
   SetPedHeadOverlay(ped, 8, data.style, data.opacity)
@@ -338,7 +342,27 @@ local function ApplyLipsCustomization(data)
   -- Apply lipstick color (type 2 = makeup color)
   SetPedHeadOverlayColor(ped, 8, 2, data.color, data.color)
 
-  ambitionsPrint.info('Applied lips - Thickness:', data.thickness, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
+  ambitionsPrint.info('Applied lips - Thickness:', invertedThickness, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
+end
+
+--- Apply chin customization in real-time (lowering, length, width, cleft)
+---@param data table Chin data with lowering, length, width, cleft
+local function ApplyChinCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply chin lowering (face feature index 15)
+  SetPedFaceFeature(ped, 15, data.lowering)
+
+  -- Apply chin length (face feature index 16)
+  SetPedFaceFeature(ped, 16, data.length)
+
+  -- Apply chin width (face feature index 17)
+  SetPedFaceFeature(ped, 17, data.width)
+
+  -- Apply chin cleft (face feature index 18)
+  SetPedFaceFeature(ped, 18, data.cleft)
+
+  ambitionsPrint.info('Applied chin - Lowering:', data.lowering, 'Length:', data.length, 'Width:', data.width, 'Cleft:', data.cleft)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
@@ -385,6 +409,7 @@ return {
   ApplyBeardCustomization = ApplyBeardCustomization,
   ApplyJawCustomization = ApplyJawCustomization,
   ApplyLipsCustomization = ApplyLipsCustomization,
+  ApplyChinCustomization = ApplyChinCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,

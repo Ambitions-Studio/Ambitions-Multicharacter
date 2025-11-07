@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
-import HAIR_COLORS from '@/data/hairColors'
-import { sendNuiEvent } from '@/utils/nui'
+import MAKEUP_COLORS from '@/data/makeupColors'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -33,6 +33,15 @@ const localLipThickness = ref(props.lipThickness)
 const localLipstickStyle = ref(props.lipstickStyle)
 const localLipstickColor = ref(props.lipstickColor)
 const localLipstickOpacity = ref(props.lipstickOpacity)
+const maxLipstickStyles = ref(9) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxLipstickStyles.value = limits.lipstickStyles
+  }
+})
 
 watch([localLipThickness, localLipstickStyle, localLipstickColor, localLipstickOpacity], ([thickness, style, color, opacity]) => {
   sendNuiEvent('applyLipsCustomization', {
@@ -108,7 +117,7 @@ watch([localLipThickness, localLipstickStyle, localLipstickColor, localLipstickO
         <VSlider
           v-model="localLipstickStyle"
           :min="0"
-          :max="9"
+          :max="maxLipstickStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"
@@ -135,7 +144,7 @@ watch([localLipThickness, localLipstickStyle, localLipstickColor, localLipstickO
       </div>
       <div class="mt-4 pt-2 flex flex-wrap gap-2">
         <button
-          v-for="(color, index) in HAIR_COLORS"
+          v-for="(color, index) in MAKEUP_COLORS"
           :key="index"
           class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
           :class="localLipstickColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"

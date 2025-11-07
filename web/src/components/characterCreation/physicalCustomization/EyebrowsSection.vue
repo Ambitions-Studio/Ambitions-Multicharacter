@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
 import HAIR_COLORS from '@/data/hairColors'
-import { sendNuiEvent } from '@/utils/nui'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -37,6 +37,15 @@ const localEyebrowDepth = ref(props.eyebrowDepth)
 const localEyebrowsStyle = ref(props.eyebrowsStyle)
 const localEyebrowsColor = ref(props.eyebrowsColor)
 const localEyebrowsOpacity = ref(props.eyebrowsOpacity)
+const maxEyebrowsStyles = ref(33) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxEyebrowsStyles.value = limits.eyebrowsStyles
+  }
+})
 
 watch([localEyebrowHeight, localEyebrowDepth, localEyebrowsStyle, localEyebrowsColor, localEyebrowsOpacity], ([height, depth, style, color, opacity]) => {
   sendNuiEvent('applyEyebrowsCustomization', {
@@ -149,7 +158,7 @@ watch([localEyebrowHeight, localEyebrowDepth, localEyebrowsStyle, localEyebrowsC
         <VSlider
           v-model="localEyebrowsStyle"
           :min="0"
-          :max="33"
+          :max="maxEyebrowsStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"
