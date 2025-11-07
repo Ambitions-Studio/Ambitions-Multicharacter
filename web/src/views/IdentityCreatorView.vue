@@ -86,9 +86,6 @@ const submitForm = () => {
 
   isVisible.value = false
 
-  // Request camera offset for character creator (2/3 right side)
-  sendNuiEvent('startCharacterCreation')
-
   sendNuiEvent('requestPedsConfig')
 
   window.postMessage({ action: 'showCharacterCreator' }, '*')

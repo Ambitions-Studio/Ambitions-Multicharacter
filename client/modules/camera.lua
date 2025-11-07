@@ -41,29 +41,8 @@ local function GetActiveCamera()
   return activeCam
 end
 
---- Offset camera for character creation UI (shifts camera left and zooms out)
----@param offsetAmount number Amount to shift camera left (default: 1.0)
----@param zoomOutAmount number Amount to zoom out by moving back (default: 0.3)
----@param transitionTime number Transition time in milliseconds
-local function OffsetCameraForCreation(offsetAmount, zoomOutAmount, transitionTime)
-  if not activeCam then
-    return
-  end
-
-  -- Get current camera position
-  local currentPos = GetCamCoord(activeCam)
-
-  -- Shift camera to the left (negative X) and back (negative Y for zoom out)
-  local newX = currentPos.x - (offsetAmount or 1.0)
-  local newY = currentPos.y - (zoomOutAmount or 0.3)
-
-  -- Apply new camera position
-  SetCamCoord(activeCam, newX, newY, currentPos.z)
-end
-
 return {
   CreateCharacterSelectionCamera = CreateCharacterSelectionCamera,
   DestroyActiveCamera = DestroyActiveCamera,
   GetActiveCamera = GetActiveCamera,
-  OffsetCameraForCreation = OffsetCameraForCreation,
 }
