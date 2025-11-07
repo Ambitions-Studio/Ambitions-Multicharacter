@@ -3,27 +3,36 @@ local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 ambitionsPrint.info('Client tattoos module loaded')
 
 local tattooCollections = {
-  'mpairraces_overlays',
-  'mpbeach_overlays',
-  'mpbiker_overlays',
-  'mpbusiness_overlays',
-  'mpchristmas2_overlays',
-  'mpchristmas2017_overlays',
-  'mpchristmas3_overlays',
-  'mpgunrunning_overlays',
-  'mphipster_overlays',
-  'mpimportexport_overlays',
-  'mplowrider_overlays',
-  'mplowrider2_overlays',
-  'mpluxe_overlays',
-  'mpluxe2_overlays',
-  'mpsmuggler_overlays',
-  'mpstunt_overlays',
-  'mpvinewood_overlays',
-  'multiplayer_overlays',
+  { name = 'mpairraces_overlays', label = 'Air Races' },
+  { name = 'mpbeach_overlays', label = 'Beach' },
+  { name = 'mpbiker_overlays', label = 'Biker' },
+  { name = 'mpbusiness_overlays', label = 'Business' },
+  { name = 'mpchristmas2_overlays', label = 'Christmas 2' },
+  { name = 'mpchristmas2017_overlays', label = 'Christmas 2017' },
+  { name = 'mpchristmas3_overlays', label = 'Christmas 3' },
+  { name = 'mpgunrunning_overlays', label = 'Gunrunning' },
+  { name = 'mphipster_overlays', label = 'Hipster' },
+  { name = 'mpimportexport_overlays', label = 'Import Export' },
+  { name = 'mplowrider_overlays', label = 'Lowrider' },
+  { name = 'mplowrider2_overlays', label = 'Lowrider 2' },
+  { name = 'mpluxe_overlays', label = 'Luxe' },
+  { name = 'mpluxe2_overlays', label = 'Luxe 2' },
+  { name = 'mpsmuggler_overlays', label = 'Smuggler' },
+  { name = 'mpstunt_overlays', label = 'Stunt' },
+  { name = 'mpvinewood_overlays', label = 'Vinewood' },
+  { name = 'multiplayer_overlays', label = 'Multiplayer' },
 }
 
-local activeTattoos = {}
+local activeTattoos = {
+  head = nil,
+  neck = nil,
+  torso = nil,
+  back = nil,
+  leftArm = nil,
+  rightArm = nil,
+  leftLeg = nil,
+  rightLeg = nil,
+}
 
 local function GetTattoosLimits()
   return {
@@ -46,27 +55,51 @@ end
 local function ClearAllTattoos()
   local ped = PlayerPedId()
   ClearPedDecorations(ped)
-  activeTattoos = {}
+  activeTattoos = {
+    head = nil,
+    neck = nil,
+    torso = nil,
+    back = nil,
+    leftArm = nil,
+    rightArm = nil,
+    leftLeg = nil,
+    rightLeg = nil,
+  }
   ambitionsPrint.info('Cleared all tattoos')
+end
+
+local function ReapplyAllTattoos()
+  local ped = PlayerPedId()
+
+  for zone, tattoo in pairs(activeTattoos) do
+    if tattoo then
+      SetPedDecoration(ped, tattoo.collectionHash, tattoo.tattooHash)
+      ambitionsPrint.info('Reapplied tattoo for zone:', zone)
+    end
+  end
 end
 
 local function ApplyHeadTattoo(data)
   local ped = PlayerPedId()
 
   if data.collection > 0 and data.collection <= #tattooCollections then
-    local collectionName = tattooCollections[data.collection]
-    local tattooHash = GetHashKey('MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash))
+    local collection = tattooCollections[data.collection]
+    local collectionName = collection.name
+    local collectionHash = GetHashKey(collectionName)
+    local tattooName = 'MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash)
+    local tattooHash = GetHashKey(tattooName)
 
-    if activeTattoos.head then
-      ClearPedDecorations(ped)
-      activeTattoos.head = nil
-    end
+    ClearPedDecorations(ped)
 
     if data.hash > 0 then
-      SetPedDecoration(ped, GetHashKey(collectionName), tattooHash)
-      activeTattoos.head = { collection = collectionName, hash = tattooHash }
-      ambitionsPrint.info('Applied head tattoo - Collection:', collectionName, 'Hash:', data.hash)
+      activeTattoos.head = { collectionHash = collectionHash, tattooHash = tattooHash }
+      ambitionsPrint.info('Set head tattoo - Collection:', collectionName, 'Tattoo:', tattooName, 'Hash:', data.hash)
+    else
+      activeTattoos.head = nil
+      ambitionsPrint.info('Cleared head tattoo')
     end
+
+    ReapplyAllTattoos()
   end
 end
 
@@ -74,19 +107,23 @@ local function ApplyNeckTattoo(data)
   local ped = PlayerPedId()
 
   if data.collection > 0 and data.collection <= #tattooCollections then
-    local collectionName = tattooCollections[data.collection]
-    local tattooHash = GetHashKey('MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash))
+    local collection = tattooCollections[data.collection]
+    local collectionName = collection.name
+    local collectionHash = GetHashKey(collectionName)
+    local tattooName = 'MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash)
+    local tattooHash = GetHashKey(tattooName)
 
-    if activeTattoos.neck then
-      ClearPedDecorations(ped)
-      activeTattoos.neck = nil
-    end
+    ClearPedDecorations(ped)
 
     if data.hash > 0 then
-      SetPedDecoration(ped, GetHashKey(collectionName), tattooHash)
-      activeTattoos.neck = { collection = collectionName, hash = tattooHash }
-      ambitionsPrint.info('Applied neck tattoo - Collection:', collectionName, 'Hash:', data.hash)
+      activeTattoos.neck = { collectionHash = collectionHash, tattooHash = tattooHash }
+      ambitionsPrint.info('Set neck tattoo - Collection:', collectionName, 'Tattoo:', tattooName, 'Hash:', data.hash)
+    else
+      activeTattoos.neck = nil
+      ambitionsPrint.info('Cleared neck tattoo')
     end
+
+    ReapplyAllTattoos()
   end
 end
 
@@ -94,19 +131,23 @@ local function ApplyTorsoTattoo(data)
   local ped = PlayerPedId()
 
   if data.collection > 0 and data.collection <= #tattooCollections then
-    local collectionName = tattooCollections[data.collection]
-    local tattooHash = GetHashKey('MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash))
+    local collection = tattooCollections[data.collection]
+    local collectionName = collection.name
+    local collectionHash = GetHashKey(collectionName)
+    local tattooName = 'MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash)
+    local tattooHash = GetHashKey(tattooName)
 
-    if activeTattoos.torso then
-      ClearPedDecorations(ped)
-      activeTattoos.torso = nil
-    end
+    ClearPedDecorations(ped)
 
     if data.hash > 0 then
-      SetPedDecoration(ped, GetHashKey(collectionName), tattooHash)
-      activeTattoos.torso = { collection = collectionName, hash = tattooHash }
-      ambitionsPrint.info('Applied torso tattoo - Collection:', collectionName, 'Hash:', data.hash)
+      activeTattoos.torso = { collectionHash = collectionHash, tattooHash = tattooHash }
+      ambitionsPrint.info('Set torso tattoo - Collection:', collectionName, 'Tattoo:', tattooName, 'Hash:', data.hash)
+    else
+      activeTattoos.torso = nil
+      ambitionsPrint.info('Cleared torso tattoo')
     end
+
+    ReapplyAllTattoos()
   end
 end
 
@@ -114,19 +155,23 @@ local function ApplyBackTattoo(data)
   local ped = PlayerPedId()
 
   if data.collection > 0 and data.collection <= #tattooCollections then
-    local collectionName = tattooCollections[data.collection]
-    local tattooHash = GetHashKey('MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash))
+    local collection = tattooCollections[data.collection]
+    local collectionName = collection.name
+    local collectionHash = GetHashKey(collectionName)
+    local tattooName = 'MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash)
+    local tattooHash = GetHashKey(tattooName)
 
-    if activeTattoos.back then
-      ClearPedDecorations(ped)
-      activeTattoos.back = nil
-    end
+    ClearPedDecorations(ped)
 
     if data.hash > 0 then
-      SetPedDecoration(ped, GetHashKey(collectionName), tattooHash)
-      activeTattoos.back = { collection = collectionName, hash = tattooHash }
-      ambitionsPrint.info('Applied back tattoo - Collection:', collectionName, 'Hash:', data.hash)
+      activeTattoos.back = { collectionHash = collectionHash, tattooHash = tattooHash }
+      ambitionsPrint.info('Set back tattoo - Collection:', collectionName, 'Tattoo:', tattooName, 'Hash:', data.hash)
+    else
+      activeTattoos.back = nil
+      ambitionsPrint.info('Cleared back tattoo')
     end
+
+    ReapplyAllTattoos()
   end
 end
 
@@ -134,19 +179,23 @@ local function ApplyLeftArmTattoo(data)
   local ped = PlayerPedId()
 
   if data.collection > 0 and data.collection <= #tattooCollections then
-    local collectionName = tattooCollections[data.collection]
-    local tattooHash = GetHashKey('MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash))
+    local collection = tattooCollections[data.collection]
+    local collectionName = collection.name
+    local collectionHash = GetHashKey(collectionName)
+    local tattooName = 'MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash)
+    local tattooHash = GetHashKey(tattooName)
 
-    if activeTattoos.leftArm then
-      ClearPedDecorations(ped)
-      activeTattoos.leftArm = nil
-    end
+    ClearPedDecorations(ped)
 
     if data.hash > 0 then
-      SetPedDecoration(ped, GetHashKey(collectionName), tattooHash)
-      activeTattoos.leftArm = { collection = collectionName, hash = tattooHash }
-      ambitionsPrint.info('Applied left arm tattoo - Collection:', collectionName, 'Hash:', data.hash)
+      activeTattoos.leftArm = { collectionHash = collectionHash, tattooHash = tattooHash }
+      ambitionsPrint.info('Set left arm tattoo - Collection:', collectionName, 'Tattoo:', tattooName, 'Hash:', data.hash)
+    else
+      activeTattoos.leftArm = nil
+      ambitionsPrint.info('Cleared left arm tattoo')
     end
+
+    ReapplyAllTattoos()
   end
 end
 
@@ -154,19 +203,23 @@ local function ApplyRightArmTattoo(data)
   local ped = PlayerPedId()
 
   if data.collection > 0 and data.collection <= #tattooCollections then
-    local collectionName = tattooCollections[data.collection]
-    local tattooHash = GetHashKey('MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash))
+    local collection = tattooCollections[data.collection]
+    local collectionName = collection.name
+    local collectionHash = GetHashKey(collectionName)
+    local tattooName = 'MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash)
+    local tattooHash = GetHashKey(tattooName)
 
-    if activeTattoos.rightArm then
-      ClearPedDecorations(ped)
-      activeTattoos.rightArm = nil
-    end
+    ClearPedDecorations(ped)
 
     if data.hash > 0 then
-      SetPedDecoration(ped, GetHashKey(collectionName), tattooHash)
-      activeTattoos.rightArm = { collection = collectionName, hash = tattooHash }
-      ambitionsPrint.info('Applied right arm tattoo - Collection:', collectionName, 'Hash:', data.hash)
+      activeTattoos.rightArm = { collectionHash = collectionHash, tattooHash = tattooHash }
+      ambitionsPrint.info('Set right arm tattoo - Collection:', collectionName, 'Tattoo:', tattooName, 'Hash:', data.hash)
+    else
+      activeTattoos.rightArm = nil
+      ambitionsPrint.info('Cleared right arm tattoo')
     end
+
+    ReapplyAllTattoos()
   end
 end
 
@@ -174,19 +227,23 @@ local function ApplyLeftLegTattoo(data)
   local ped = PlayerPedId()
 
   if data.collection > 0 and data.collection <= #tattooCollections then
-    local collectionName = tattooCollections[data.collection]
-    local tattooHash = GetHashKey('MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash))
+    local collection = tattooCollections[data.collection]
+    local collectionName = collection.name
+    local collectionHash = GetHashKey(collectionName)
+    local tattooName = 'MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash)
+    local tattooHash = GetHashKey(tattooName)
 
-    if activeTattoos.leftLeg then
-      ClearPedDecorations(ped)
-      activeTattoos.leftLeg = nil
-    end
+    ClearPedDecorations(ped)
 
     if data.hash > 0 then
-      SetPedDecoration(ped, GetHashKey(collectionName), tattooHash)
-      activeTattoos.leftLeg = { collection = collectionName, hash = tattooHash }
-      ambitionsPrint.info('Applied left leg tattoo - Collection:', collectionName, 'Hash:', data.hash)
+      activeTattoos.leftLeg = { collectionHash = collectionHash, tattooHash = tattooHash }
+      ambitionsPrint.info('Set left leg tattoo - Collection:', collectionName, 'Tattoo:', tattooName, 'Hash:', data.hash)
+    else
+      activeTattoos.leftLeg = nil
+      ambitionsPrint.info('Cleared left leg tattoo')
     end
+
+    ReapplyAllTattoos()
   end
 end
 
@@ -194,19 +251,23 @@ local function ApplyRightLegTattoo(data)
   local ped = PlayerPedId()
 
   if data.collection > 0 and data.collection <= #tattooCollections then
-    local collectionName = tattooCollections[data.collection]
-    local tattooHash = GetHashKey('MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash))
+    local collection = tattooCollections[data.collection]
+    local collectionName = collection.name
+    local collectionHash = GetHashKey(collectionName)
+    local tattooName = 'MP_' .. string.upper(collectionName:gsub('_overlays', '')) .. '_TAT_' .. string.format('%03d', data.hash)
+    local tattooHash = GetHashKey(tattooName)
 
-    if activeTattoos.rightLeg then
-      ClearPedDecorations(ped)
-      activeTattoos.rightLeg = nil
-    end
+    ClearPedDecorations(ped)
 
     if data.hash > 0 then
-      SetPedDecoration(ped, GetHashKey(collectionName), tattooHash)
-      activeTattoos.rightLeg = { collection = collectionName, hash = tattooHash }
-      ambitionsPrint.info('Applied right leg tattoo - Collection:', collectionName, 'Hash:', data.hash)
+      activeTattoos.rightLeg = { collectionHash = collectionHash, tattooHash = tattooHash }
+      ambitionsPrint.info('Set right leg tattoo - Collection:', collectionName, 'Tattoo:', tattooName, 'Hash:', data.hash)
+    else
+      activeTattoos.rightLeg = nil
+      ambitionsPrint.info('Cleared right leg tattoo')
     end
+
+    ReapplyAllTattoos()
   end
 end
 
