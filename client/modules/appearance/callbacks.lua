@@ -102,6 +102,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time makeup customization (style, primary color, secondary color, opacity)
+  RegisterNUICallback('applyMakeupCustomization', function(data, cb)
+    ambitionsPrint.info('Applying makeup customization in real-time')
+    appearanceApply.ApplyMakeupCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)
