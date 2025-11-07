@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { mdiFaceMan, mdiPalette } from '@/icons'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
-import { sendNuiEvent } from '@/utils/nui'
+import { sendNuiCallback } from '@/utils/nui'
 
 const { t } = useI18n()
 const appearanceStore = useAppearanceStore()
@@ -83,7 +83,7 @@ watch(
   ([father, mother, faceResemblance, skinResemblance]) => {
     // Only apply if we have valid IDs (not 0)
     if (father && mother) {
-      sendNuiEvent('applyHeritage', {
+      sendNuiCallback('applyHeritage', {
         father,
         mother,
         faceResemblance,
