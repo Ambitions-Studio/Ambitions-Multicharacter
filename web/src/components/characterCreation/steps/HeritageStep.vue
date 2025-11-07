@@ -43,10 +43,16 @@ const emit = defineEmits<{
 
 // Initialize from store if available, otherwise use props or first item
 const localSelectedFather = ref(
-  appearanceStore.selectedFather ?? props.selectedFather ?? props.fatherOptions[0]?.id ?? 0
+  appearanceStore.selectedFather ??
+  (props.selectedFather !== 0 ? props.selectedFather : null) ??
+  props.fatherOptions[0]?.id ??
+  0
 )
 const localSelectedMother = ref(
-  appearanceStore.selectedMother ?? props.selectedMother ?? props.motherOptions[0]?.id ?? 21
+  appearanceStore.selectedMother ??
+  (props.selectedMother !== 0 ? props.selectedMother : null) ??
+  props.motherOptions[0]?.id ??
+  21
 )
 const localFaceResemblance = ref(
   appearanceStore.faceResemblance ?? props.faceResemblance
