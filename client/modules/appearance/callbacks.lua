@@ -32,10 +32,10 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
-  -- Real-time eye color change
-  RegisterNUICallback('applyEyeColor', function(data, cb)
-    ambitionsPrint.info('Applying eye color in real-time')
-    appearanceApply.ApplyEyeColor(data.color)
+  -- Real-time eyes customization (opening + color)
+  RegisterNUICallback('applyEyesCustomization', function(data, cb)
+    ambitionsPrint.info('Applying eyes customization in real-time')
+    appearanceApply.ApplyEyesCustomization(data)
     cb('ok')
   end)
 

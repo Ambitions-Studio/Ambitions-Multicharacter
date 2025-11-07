@@ -211,11 +211,18 @@ local function ApplyFaceFeature(index, value)
   SetPedFaceFeature(ped, index, value)
 end
 
---- Apply eye color in real-time
----@param color number Eye color index
-local function ApplyEyeColor(color)
+--- Apply eyes customization in real-time (opening + color)
+---@param data table Eyes data with opening and color
+local function ApplyEyesCustomization(data)
   local ped = currentPed or PlayerPedId()
-  SetPedEyeColor(ped, color)
+
+  -- Apply eye opening (face feature index 11)
+  SetPedFaceFeature(ped, 11, data.opening)
+
+  -- Apply eye color
+  SetPedEyeColor(ped, data.color)
+
+  ambitionsPrint.info('Applied eyes - Opening:', data.opening, 'Color:', data.color)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
@@ -255,7 +262,7 @@ return {
   ApplyHeritage = ApplyHeritage,
   ApplyHairStyle = ApplyHairStyle,
   ApplyFaceFeature = ApplyFaceFeature,
-  ApplyEyeColor = ApplyEyeColor,
+  ApplyEyesCustomization = ApplyEyesCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
