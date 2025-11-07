@@ -97,16 +97,17 @@ watch([localEyeOpening, localEyeColor], ([opening, color]) => {
         <button
           v-for="index in 32"
           :key="index - 1"
-          class="w-12 h-12 rounded-full border-2 transition-all duration-200 hover:scale-110 overflow-hidden relative"
+          class="w-12 h-12 rounded-full border-2 transition-all duration-200 hover:scale-110 overflow-hidden relative bg-slate-700"
           :class="localEyeColor === index - 1 ? 'border-white shadow-lg shadow-white/50 ring-2 ring-blue-500' : 'border-slate-600 hover:border-slate-400'"
           @click="localEyeColor = index - 1; emit('update:eyeColor', index - 1)"
         >
           <div
-            class="w-full h-full bg-cover bg-center"
+            class="w-full h-full"
             :style="{
               backgroundImage: 'url(/images/eyes_textures/mp_eye_colour.png)',
               backgroundSize: '800% 400%',
-              backgroundPosition: `${((index - 1) % 8) * (100 / 7)}% ${Math.floor((index - 1) / 8) * (100 / 3)}%`
+              backgroundPosition: `${((index - 1) % 8) * 14.285714}% ${Math.floor((index - 1) / 8) * 33.333333}%`,
+              backgroundRepeat: 'no-repeat'
             }"
           />
         </button>
