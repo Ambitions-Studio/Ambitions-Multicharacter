@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import CharacterCreatorLayout from '@/components/characterCreation/layout/CharacterCreatorLayout.vue'
 import StepBreadcrumb from '@/components/characterCreation/layout/StepBreadcrumb.vue'
+import CameraControlsHint from '@/components/characterCreation/layout/CameraControlsHint.vue'
 import PedSelectionStep from '@/components/characterCreation/steps/PedSelectionStep.vue'
 import HeritageStep from '@/components/characterCreation/steps/HeritageStep.vue'
 import PhysicalCustomizationStep from '@/components/characterCreation/steps/PhysicalCustomizationStep.vue'
@@ -450,6 +451,9 @@ onUnmounted(() => {
     :force-visible="forceVisible"
     @back-to-menu="emit('backToMenu')"
   >
+    <!-- Camera Controls Hint -->
+    <CameraControlsHint />
+
     <StepBreadcrumb
       v-model:current-step="currentStep"
       :steps="steps"

@@ -114,6 +114,14 @@
       "main": "Character",
       "sub": "Creator"
     },
+    "cameraControls": {
+      "leftClick": "Left Click",
+      "leftClickDescription": "Pan Camera",
+      "wheel": "Wheel",
+      "wheelDescription": "Zoom In/Out",
+      "rightClick": "Right Click",
+      "rightClickDescription": "Rotate"
+    },
     "steps": {
       "pedSelection": "Ped Selection",
       "heritage": "Heritage",

@@ -114,6 +114,14 @@
       "main": "Créateur",
       "sub": "de Personnage"
     },
+    "cameraControls": {
+      "leftClick": "Clic Gauche",
+      "leftClickDescription": "Déplacer la caméra",
+      "wheel": "Molette",
+      "wheelDescription": "Zoom / Dézoom",
+      "rightClick": "Clic Droit",
+      "rightClickDescription": "Faire pivoter"
+    },
     "steps": {
       "pedSelection": "Sélection du Ped",
       "heritage": "Héritage",
