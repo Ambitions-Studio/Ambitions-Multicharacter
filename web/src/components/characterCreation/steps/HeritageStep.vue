@@ -57,7 +57,7 @@ const localSkinResemblance = ref(
 
 // Get portrait image URL from public directory (no hashing)
 const getPortraitUrl = (photoFilename: string) => {
-  return `/images/parent_portrait/${photoFilename}`
+  return `images/parent_portrait/${photoFilename}`
 }
 
 // Computed refs for selected parents to avoid multiple .find() calls
