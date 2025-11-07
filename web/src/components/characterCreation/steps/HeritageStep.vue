@@ -55,14 +55,9 @@ const localSkinResemblance = ref(
   appearanceStore.skinResemblance ?? props.skinResemblance
 )
 
-// Load all portrait images at build-time with Vite's glob import
-const portraits = import.meta.glob('@/assets/img/parent_portrait/*.png', { eager: true, import: 'default' }) as Record<string, string>
-
-// Get portrait image URL dynamically
+// Get portrait image URL from public directory (no hashing)
 const getPortraitUrl = (photoFilename: string) => {
-  // Find the matching portrait in the glob results
-  const match = Object.entries(portraits).find(([path]) => path.includes(photoFilename))
-  return match ? match[1] : ''
+  return `/images/parent_portrait/${photoFilename}`
 }
 
 // Computed refs for selected parents to avoid multiple .find() calls
