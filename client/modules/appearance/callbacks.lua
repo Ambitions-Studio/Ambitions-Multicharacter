@@ -57,6 +57,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Get customization limits for current ped
+  RegisterNUICallback('getCustomizationLimits', function(data, cb)
+    local limits = appearanceApply.GetCustomizationLimits()
+    ambitionsPrint.info('Sending customization limits - Hair styles:', limits.hairStyles)
+    cb(limits)
+  end)
+
   ambitionsPrint.success('All appearance callbacks registered')
 end
 

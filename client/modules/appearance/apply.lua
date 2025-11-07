@@ -6,6 +6,17 @@ ambitionsPrint.info('Client appearance module loaded')
 local currentPed = nil
 local currentGender = 'm'
 
+--- Get available customization limits for current ped
+---@return table Limits with max values for each customization option
+local function GetCustomizationLimits()
+  local ped = currentPed or PlayerPedId()
+
+  return {
+    hairStyles = GetNumberOfPedDrawableVariations(ped, 2) - 1, -- Component 2 = Hair
+    hairTextures = GetNumberOfPedTextureVariations(ped, 2, 0) - 1, -- Textures for hair drawable 0
+  }
+end
+
 --- Apply ped model in real-time
 ---@param pedModel string The ped model to apply
 local function ApplyPedModel(pedModel)
@@ -160,21 +171,25 @@ end
 local function ApplyHeritage(data)
   local ped = currentPed or PlayerPedId()
 
+  -- Apply head blend with parent IDs and resemblance values
   SetPedHeadBlendData(
     ped,
-    data.mother,
-    data.father,
-    0,
-    data.mother,
-    data.father,
-    0,
-    data.faceResemblance,
-    data.skinResemblance,
-    0.0,
-    false
+    data.mother,      -- Shape first ID (mother)
+    data.father,      -- Shape second ID (father)
+    0,                -- Shape third ID (not used)
+    data.mother,      -- Skin first ID (mother)
+    data.father,      -- Skin second ID (father)
+    0,                -- Skin third ID (not used)
+    data.faceResemblance,  -- Shape mix (0.0 = father, 1.0 = mother)
+    data.skinResemblance,  -- Skin mix (0.0 = father, 1.0 = mother)
+    0.0,              -- Third mix (not used)
+    false             -- Is parent
   )
 
-  ambitionsPrint.info('Applied heritage - Father:', data.father, 'Mother:', data.mother)
+  -- Force update the ped's appearance
+  UpdatePedHeadBlendData(ped)
+
+  ambitionsPrint.info('Applied heritage - Father:', data.father, 'Mother:', data.mother, 'Face:', data.faceResemblance, 'Skin:', data.skinResemblance)
 end
 
 --- Apply hair style in real-time
@@ -182,10 +197,13 @@ end
 local function ApplyHairStyle(data)
   local ped = currentPed or PlayerPedId()
 
+  -- Apply hair style (component 2 = hair)
   SetPedComponentVariation(ped, 2, data.style, 0, 0)
+
+  -- Apply hair colors (primary and highlight)
   SetPedHairColor(ped, data.color, data.highlight)
 
-  ambitionsPrint.info('Applied hair - Style:', data.style, 'Color:', data.color)
+  ambitionsPrint.info('Applied hair - Style:', data.style, 'Color:', data.color, 'Highlight:', data.highlight)
 end
 
 --- Apply face feature in real-time
@@ -244,4 +262,5 @@ return {
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
+  GetCustomizationLimits = GetCustomizationLimits,
 }
