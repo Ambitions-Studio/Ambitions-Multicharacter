@@ -1,6 +1,6 @@
 local activeCam = nil
 
---- Create and setup a camera focused on the player ped
+--- Create and setup a camera at a position relative to the player ped
 ---@param ped number The player ped entity
 ---@param offsetX number Camera offset on X axis
 ---@param offsetY number Camera offset on Y axis
@@ -16,7 +16,7 @@ local function CreateCharacterSelectionCamera(ped, offsetX, offsetY, offsetZ, tr
   local camOffset = GetOffsetFromEntityInWorldCoords(ped, offsetX, offsetY, offsetZ)
 
   SetCamCoord(cam, camOffset.x, camOffset.y, camOffset.z)
-  PointCamAtEntity(cam, ped, 0.0, 0.0, 0.0, true)
+  -- Don't point at entity - camera stays in its natural orientation
   SetCamActive(cam, true)
   RenderScriptCams(true, true, transitionTime, true, false)
 
