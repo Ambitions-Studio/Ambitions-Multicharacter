@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import MAKEUP_COLORS from '@/data/makeupColors'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -27,6 +29,23 @@ const emit = defineEmits<{
 const localBlushStyle = ref(props.blushStyle)
 const localBlushColor = ref(props.blushColor)
 const localBlushOpacity = ref(props.blushOpacity)
+const maxBlushStyles = ref(6) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxBlushStyles.value = limits.blushStyles
+  }
+})
+
+watch([localBlushStyle, localBlushColor, localBlushOpacity], ([style, color, opacity]) => {
+  sendNuiEvent('applyBlushCustomization', {
+    style,
+    color,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -56,7 +75,7 @@ const localBlushOpacity = ref(props.blushOpacity)
         <VSlider
           v-model="localBlushStyle"
           :min="0"
-          :max="6"
+          :max="maxBlushStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"
@@ -68,6 +87,7 @@ const localBlushOpacity = ref(props.blushOpacity)
       </div>
     </div>
 
+    <!-- Blush Color -->
     <div class="bg-slate-800/80 rounded-xl p-5 border-2 border-solid border-slate-900/30 hover:border-slate-900/50 transition-all duration-300">
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1">
@@ -80,18 +100,14 @@ const localBlushOpacity = ref(props.blushOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localBlushColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:blushColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in MAKEUP_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localBlushColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localBlushColor = index; emit('update:blushColor', index)"
         />
       </div>
     </div>
