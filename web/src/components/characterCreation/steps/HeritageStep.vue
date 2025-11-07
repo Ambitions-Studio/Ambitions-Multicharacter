@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { mdiFaceMan, mdiPalette } from '@/icons'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 const appearanceStore = useAppearanceStore()
@@ -74,6 +75,22 @@ const selectedFatherData = computed(() =>
 
 const selectedMotherData = computed(() =>
   props.motherOptions.find((m) => m.id === localSelectedMother.value)
+)
+
+// Watch for heritage changes and apply in real-time
+watch(
+  [localSelectedFather, localSelectedMother, localFaceResemblance, localSkinResemblance],
+  ([father, mother, faceResemblance, skinResemblance]) => {
+    // Only apply if we have valid IDs (not 0)
+    if (father && mother) {
+      sendNuiEvent('applyHeritage', {
+        father,
+        mother,
+        faceResemblance,
+        skinResemblance,
+      })
+    }
+  }
 )
 
 const handleContinue = () => {
