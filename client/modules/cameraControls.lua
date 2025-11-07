@@ -46,15 +46,22 @@ local function HandleCameraMove(controlType, movementX, movementY)
   if controlType == 'pan' and isPanning then
     -- Pan camera (move left/right, up/down without rotating)
     local camPos = GetCamCoord(activeCam)
+    local camRot = GetCamRot(activeCam, 2)
 
     -- Sensitivity for panning
     local sensitivity = 0.002
 
-    -- Move camera left/right (X axis) and up/down (Z axis)
-    local newX = camPos.x - (movementX * sensitivity)
+    -- Calculate camera's right vector (perpendicular to forward)
+    local heading = math.rad(camRot.z)
+    local rightX = math.cos(heading)
+    local rightY = math.sin(heading)
+
+    -- Move camera along its right axis (left/right) and up/down (Z axis)
+    local newX = camPos.x + (rightX * movementX * sensitivity)
+    local newY = camPos.y + (rightY * movementX * sensitivity)
     local newZ = camPos.z + (movementY * sensitivity)
 
-    SetCamCoord(activeCam, newX, camPos.y, newZ)
+    SetCamCoord(activeCam, newX, newY, newZ)
 
   elseif controlType == 'rotate' and isRotating then
     -- Rotate ped on himself
