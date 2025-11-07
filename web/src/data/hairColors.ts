@@ -1,72 +1,72 @@
 /**
  * GTA V Hair Color Palette (64 colors, indices 0-63)
- * These hex values represent the hair colors available in GTA V
+ * Official hex values from GTA V game files
  */
 export const HAIR_COLORS: string[] = [
-  '#111111', // 0 - Black
-  '#1A1A1A', // 1 - Very Dark Gray
-  '#2B2B2B', // 2 - Dark Gray
-  '#3C3C3C', // 3 - Gray
-  '#4D4D4D', // 4 - Light Gray
-  '#5E5E5E', // 5 - Very Light Gray
-  '#6F6F6F', // 6 - Silver
-  '#808080', // 7 - Light Silver
-  '#916F5B', // 8 - Dark Brown
-  '#A0826D', // 9 - Brown
-  '#B29569', // 10 - Light Brown
-  '#C1A573', // 11 - Golden Brown
-  '#D0B987', // 12 - Light Golden Brown
-  '#DFCC9B', // 13 - Beige
-  '#EFDEB0', // 14 - Light Beige
-  '#FFF0C4', // 15 - Blonde
-  '#F7E7CE', // 16 - Platinum Blonde
-  '#EFD5B3', // 17 - Cream Blonde
-  '#E3C598', // 18 - Light Blonde
-  '#D7B67D', // 19 - Golden Blonde
-  '#CBA762', // 20 - Honey Blonde
-  '#C09747', // 21 - Dark Blonde
-  '#B4882C', // 22 - Dirty Blonde
-  '#A87811', // 23 - Dark Dirty Blonde
-  '#9B1003', // 24 - Auburn
-  '#8A0D00', // 25 - Dark Auburn
-  '#790B00', // 26 - Very Dark Auburn
-  '#680800', // 27 - Deep Auburn
-  '#570500', // 28 - Dark Red
-  '#460300', // 29 - Very Dark Red
-  '#350100', // 30 - Deep Red
-  '#240000', // 31 - Black Red
-  '#472800', // 32 - Dark Chestnut
-  '#583500', // 33 - Chestnut
-  '#694200', // 34 - Light Chestnut
-  '#7A4F00', // 35 - Golden Chestnut
-  '#8B5C00', // 36 - Light Golden Chestnut
-  '#9C6900', // 37 - Honey Chestnut
-  '#AD7600', // 38 - Light Honey Chestnut
-  '#BE8300', // 39 - Amber
-  '#CF9000', // 40 - Light Amber
-  '#E09D00', // 41 - Golden Amber
-  '#F1AA00', // 42 - Light Golden Amber
-  '#FFB700', // 43 - Yellow
-  '#FFC400', // 44 - Light Yellow
-  '#FFD100', // 45 - Golden Yellow
-  '#FFDE00', // 46 - Light Golden Yellow
-  '#FFEB00', // 47 - Platinum Yellow
-  '#9D0037', // 48 - Dark Pink
-  '#B20042', // 49 - Pink
-  '#C7004D', // 50 - Light Pink
-  '#DC0058', // 51 - Bright Pink
-  '#F10063', // 52 - Hot Pink
-  '#FF006E', // 53 - Very Hot Pink
-  '#FF0079', // 54 - Magenta
-  '#FF0084', // 55 - Light Magenta
-  '#0000FF', // 56 - Blue
-  '#0033FF', // 57 - Light Blue
-  '#0066FF', // 58 - Sky Blue
-  '#0099FF', // 59 - Cyan Blue
-  '#00CCFF', // 60 - Bright Cyan
-  '#00FFFF', // 61 - Cyan
-  '#00FF00', // 62 - Green
-  '#99FF00', // 63 - Lime Green
+  '#1c1f21', // 0
+  '#272a2c', // 1
+  '#312e2c', // 2
+  '#35261c', // 3
+  '#4b321f', // 4
+  '#5c3b24', // 5
+  '#6d4c35', // 6
+  '#6b503b', // 7
+  '#765c45', // 8
+  '#7f684e', // 9
+  '#99815d', // 10
+  '#a79369', // 11
+  '#af9c70', // 12
+  '#bba063', // 13
+  '#d6b97b', // 14
+  '#dac38e', // 15
+  '#9f7f59', // 16
+  '#845039', // 17
+  '#682b1f', // 18
+  '#61120c', // 19
+  '#640f0a', // 20
+  '#7c140f', // 21
+  '#a02e19', // 22
+  '#b64b28', // 23
+  '#a2502f', // 24
+  '#aa4e2b', // 25
+  '#626262', // 26
+  '#808080', // 27
+  '#aaaaaa', // 28
+  '#c5c5c5', // 29
+  '#463955', // 30
+  '#5a3f6b', // 31
+  '#763c76', // 32
+  '#ed74e3', // 33
+  '#eb4b93', // 34
+  '#f299bc', // 35
+  '#04959e', // 36
+  '#025f86', // 37
+  '#023974', // 38
+  '#3fa16a', // 39
+  '#217c61', // 40
+  '#185c55', // 41
+  '#b6c034', // 42
+  '#70a90b', // 43
+  '#439d13', // 44
+  '#dcb857', // 45
+  '#e5b103', // 46
+  '#e69102', // 47
+  '#f28831', // 48
+  '#fb8057', // 49
+  '#e28b58', // 50
+  '#d1593c', // 51
+  '#ce3120', // 52
+  '#ad0903', // 53
+  '#880302', // 54
+  '#1f1814', // 55
+  '#291f19', // 56
+  '#2e221b', // 57
+  '#37291e', // 58
+  '#2e2218', // 59
+  '#231b15', // 60
+  '#020202', // 61
+  '#706c66', // 62
+  '#9d7a50', // 63
 ]
 
 export default HAIR_COLORS

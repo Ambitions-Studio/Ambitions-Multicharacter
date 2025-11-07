@@ -98,7 +98,7 @@ function ApplyDefaultAppearance(ped, gender)
 
   -- Hair
   SetPedComponentVariation(ped, 2, defaults.hair_1, defaults.hair_2, 0)
-  SetPedHairColor(ped, defaults.hair_color_1, defaults.hair_color_2)
+  SetPedHairTint(ped, defaults.hair_color_1, defaults.hair_color_2)
 
   -- Clothing
   SetPedComponentVariation(ped, 8, defaults.tshirt_1, defaults.tshirt_2, 0)
@@ -201,7 +201,7 @@ local function ApplyHairStyle(data)
   SetPedComponentVariation(ped, 2, data.style, 0, 0)
 
   -- Apply hair colors (primary and highlight)
-  SetPedHairColor(ped, data.color, data.highlight)
+  SetPedHairTint(ped, data.color, data.highlight)
 
   ambitionsPrint.info('Applied hair - Style:', data.style, 'Color:', data.color, 'Highlight:', data.highlight)
 end
