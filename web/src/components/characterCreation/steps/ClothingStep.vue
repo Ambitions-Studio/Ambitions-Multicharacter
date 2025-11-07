@@ -5,7 +5,7 @@ import { VSlider, VBtn } from 'vuetify/components'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
 import ClothingNavigation from '@/components/characterCreation/layout/ClothingNavigation.vue'
-import { fetchNui } from '@/utils/nui'
+import { sendNuiCallback } from '@/utils/nui'
 
 const { t } = useI18n()
 const appearanceStore = useAppearanceStore()
@@ -198,7 +198,7 @@ watch(selectedCategory, (newCategory, oldCategory) => {
 
 const updateMaskTypeLimit = async () => {
   try {
-    const response = await fetchNui('getClothingTextureLimit', { component: 1, drawable: localMaskDrawable.value })
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 1, drawable: localMaskDrawable.value })
     if (response && typeof response.limit === 'number') {
       maxMaskVariants.value = response.limit
       if (localMaskTexture.value > response.limit) {
@@ -214,7 +214,7 @@ watch(localMaskDrawable, async (newVal) => {
   appearanceStore.setMaskSection({ maskDrawable: newVal, maskTexture: localMaskTexture.value })
 
   try {
-    await fetchNui('applyMaskCustomization', {
+    await sendNuiCallback('applyMaskCustomization', {
       type: newVal,
       variant: localMaskTexture.value
     })
@@ -229,7 +229,7 @@ watch(localMaskTexture, async (newVal) => {
   appearanceStore.setMaskSection({ maskDrawable: localMaskDrawable.value, maskTexture: newVal })
 
   try {
-    await fetchNui('applyMaskCustomization', {
+    await sendNuiCallback('applyMaskCustomization', {
       type: localMaskDrawable.value,
       variant: newVal
     })
@@ -240,7 +240,7 @@ watch(localMaskTexture, async (newVal) => {
 
 onMounted(async () => {
   try {
-    const limits = await fetchNui('getClothingLimits', {})
+    const limits = await sendNuiCallback<{}, { masks: number }>('getClothingLimits', {})
     if (limits && typeof limits.masks === 'number') {
       maxMaskTypes.value = limits.masks
     }
