@@ -11,13 +11,11 @@ const props = withDefaults(
   defineProps<{
     beardStyle?: number
     beardColor?: number
-    beardSecondaryColor?: number
     beardOpacity?: number
   }>(),
   {
     beardStyle: 0,
     beardColor: 0,
-    beardSecondaryColor: 0,
     beardOpacity: 1,
   },
 )
@@ -25,20 +23,17 @@ const props = withDefaults(
 const emit = defineEmits<{
   'update:beardStyle': [value: number]
   'update:beardColor': [value: number]
-  'update:beardSecondaryColor': [value: number]
   'update:beardOpacity': [value: number]
 }>()
 
 const localBeardStyle = ref(props.beardStyle)
 const localBeardColor = ref(props.beardColor)
-const localBeardSecondaryColor = ref(props.beardSecondaryColor)
 const localBeardOpacity = ref(props.beardOpacity)
 
-watch([localBeardStyle, localBeardColor, localBeardSecondaryColor, localBeardOpacity], ([style, color, secondaryColor, opacity]) => {
+watch([localBeardStyle, localBeardColor, localBeardOpacity], ([style, color, opacity]) => {
   sendNuiEvent('applyBeardCustomization', {
     style,
     color,
-    secondaryColor,
     opacity,
   })
 })
@@ -108,31 +103,7 @@ watch([localBeardStyle, localBeardColor, localBeardSecondaryColor, localBeardOpa
       </div>
     </div>
 
-    <!-- Beard Secondary Color -->
-    <div class="bg-slate-800/80 rounded-xl p-5 border-2 border-solid border-slate-900/30 hover:border-slate-900/50 transition-all duration-300">
-      <div class="flex items-start justify-between mb-3">
-        <div class="flex-1">
-          <h4 class="text-white text-base font-bold mb-1">{{ t('characterCreation.physicalCustomization.beard.secondaryColor.title') }}</h4>
-          <p class="text-slate-400 text-xs leading-relaxed">{{ t('characterCreation.physicalCustomization.beard.secondaryColor.description') }}</p>
-        </div>
-        <div class="ml-4">
-          <span class="inline-block bg-blue-500/20 text-blue-300 text-sm font-bold px-4 py-1.5 rounded-full border border-blue-500/40">
-            {{ localBeardSecondaryColor }}
-          </span>
-        </div>
-      </div>
-      <div class="mt-4 pt-2 flex flex-wrap gap-2">
-        <button
-          v-for="(color, index) in HAIR_COLORS"
-          :key="index"
-          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
-          :class="localBeardSecondaryColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
-          :style="{ backgroundColor: color }"
-          @click="localBeardSecondaryColor = index; emit('update:beardSecondaryColor', index)"
-        />
-      </div>
-    </div>
-
+    <!-- Beard Opacity -->
     <div class="bg-slate-800/80 rounded-xl p-5 border-2 border-solid border-slate-900/30 hover:border-slate-900/50 transition-all duration-300">
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1">

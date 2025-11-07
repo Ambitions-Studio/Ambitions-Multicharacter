@@ -296,18 +296,32 @@ local function ApplyCheeksCustomization(data)
   ambitionsPrint.info('Applied cheeks - BoneHeight:', invertedBoneHeight, 'BoneWidth:', data.boneWidth, 'Width:', invertedWidth)
 end
 
---- Apply beard customization in real-time (style, color, secondaryColor, opacity)
----@param data table Beard data with style, color, secondaryColor, opacity
+--- Apply beard customization in real-time (style, color, opacity)
+---@param data table Beard data with style, color, opacity
 local function ApplyBeardCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   -- Apply beard style and opacity (head overlay index 1)
   SetPedHeadOverlay(ped, 1, data.style, data.opacity)
 
-  -- Apply beard colors (overlay color type 1 = hair color)
-  SetPedHeadOverlayColor(ped, 1, 1, data.color, data.secondaryColor)
+  -- Apply beard color (overlay color type 1 = hair color)
+  SetPedHeadOverlayColor(ped, 1, 1, data.color, data.color)
 
-  ambitionsPrint.info('Applied beard - Style:', data.style, 'Color:', data.color, 'SecondaryColor:', data.secondaryColor, 'Opacity:', data.opacity)
+  ambitionsPrint.info('Applied beard - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
+end
+
+--- Apply jaw customization in real-time (width, height)
+---@param data table Jaw data with width, height
+local function ApplyJawCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply jaw width (face feature index 13)
+  SetPedFaceFeature(ped, 13, data.width)
+
+  -- Apply jaw height (face feature index 14)
+  SetPedFaceFeature(ped, 14, data.height)
+
+  ambitionsPrint.info('Applied jaw - Width:', data.width, 'Height:', data.height)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
@@ -352,6 +366,7 @@ return {
   ApplyNoseCustomization = ApplyNoseCustomization,
   ApplyCheeksCustomization = ApplyCheeksCustomization,
   ApplyBeardCustomization = ApplyBeardCustomization,
+  ApplyJawCustomization = ApplyJawCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
