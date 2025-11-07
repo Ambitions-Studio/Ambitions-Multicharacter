@@ -123,13 +123,13 @@ const handleContinue = () => {
           <div class="text-center">
             <!-- Father Portrait -->
             <div
-              class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-blue-400/50 overflow-hidden bg-slate-700/50"
+              class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-blue-400/50 overflow-hidden bg-slate-700/50 flex items-center justify-center"
             >
               <img
                 v-if="selectedFatherData?.photo"
                 :src="getPortraitUrl(selectedFatherData.photo)"
                 :alt="selectedFatherData.name"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover object-center"
               />
               <div
                 v-else
@@ -163,13 +163,13 @@ const handleContinue = () => {
           <div class="text-center">
             <!-- Mother Portrait -->
             <div
-              class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-pink-400/50 overflow-hidden bg-slate-700/50"
+              class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-pink-400/50 overflow-hidden bg-slate-700/50 flex items-center justify-center"
             >
               <img
                 v-if="selectedMotherData?.photo"
                 :src="getPortraitUrl(selectedMotherData.photo)"
                 :alt="selectedMotherData.name"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover object-center"
               />
               <div
                 v-else

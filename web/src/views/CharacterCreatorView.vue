@@ -325,9 +325,17 @@ onMounted(() => {
       if (event.data.config) {
         if (event.data.config.fathers) {
           fatherOptions.value = event.data.config.fathers
+          // Set default father to first in list
+          if (event.data.config.fathers.length > 0) {
+            selectedFather.value = event.data.config.fathers[0].id
+          }
         }
         if (event.data.config.mothers) {
           motherOptions.value = event.data.config.mothers
+          // Set default mother to first in list
+          if (event.data.config.mothers.length > 0) {
+            selectedMother.value = event.data.config.mothers[0].id
+          }
         }
       }
     } else if (event.data.action === 'hideCharacterCreator') {
