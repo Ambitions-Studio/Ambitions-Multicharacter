@@ -93,19 +93,23 @@ watch([localEyeOpening, localEyeColor], ([opening, color]) => {
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localEyeColor"
-          :min="0"
-          :max="31"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:eyeColor', $event)"
-        />
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="index in 32"
+          :key="index - 1"
+          class="w-12 h-12 rounded-full border-2 transition-all duration-200 hover:scale-110 overflow-hidden relative"
+          :class="localEyeColor === index - 1 ? 'border-white shadow-lg shadow-white/50 ring-2 ring-blue-500' : 'border-slate-600 hover:border-slate-400'"
+          @click="localEyeColor = index - 1; emit('update:eyeColor', index - 1)"
+        >
+          <div
+            class="w-full h-full bg-cover bg-center"
+            :style="{
+              backgroundImage: 'url(/images/eyes_textures/mp_eye_colour.png)',
+              backgroundSize: '800% 400%',
+              backgroundPosition: `${((index - 1) % 8) * (100 / 7)}% ${Math.floor((index - 1) / 8) * (100 / 3)}%`
+            }"
+          />
+        </button>
       </div>
     </div>
   </div>
