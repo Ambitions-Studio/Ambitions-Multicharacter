@@ -88,6 +88,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time neck customization (thickness)
+  RegisterNUICallback('applyNeckCustomization', function(data, cb)
+    ambitionsPrint.info('Applying neck customization in real-time')
+    appearanceApply.ApplyNeckCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)

@@ -350,8 +350,9 @@ end
 local function ApplyChinCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply chin lowering (face feature index 15)
-  SetPedFaceFeature(ped, 15, data.lowering)
+  -- Apply chin lowering (face feature index 15) - Inverted
+  local invertedLowering = -data.lowering
+  SetPedFaceFeature(ped, 15, invertedLowering)
 
   -- Apply chin length (face feature index 16)
   SetPedFaceFeature(ped, 16, data.length)
@@ -362,7 +363,18 @@ local function ApplyChinCustomization(data)
   -- Apply chin cleft (face feature index 18)
   SetPedFaceFeature(ped, 18, data.cleft)
 
-  ambitionsPrint.info('Applied chin - Lowering:', data.lowering, 'Length:', data.length, 'Width:', data.width, 'Cleft:', data.cleft)
+  ambitionsPrint.info('Applied chin - Lowering:', invertedLowering, 'Length:', data.length, 'Width:', data.width, 'Cleft:', data.cleft)
+end
+
+--- Apply neck customization in real-time (thickness)
+---@param data table Neck data with thickness
+local function ApplyNeckCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply neck thickness (face feature index 19)
+  SetPedFaceFeature(ped, 19, data.thickness)
+
+  ambitionsPrint.info('Applied neck - Thickness:', data.thickness)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
@@ -410,6 +422,7 @@ return {
   ApplyJawCustomization = ApplyJawCustomization,
   ApplyLipsCustomization = ApplyLipsCustomization,
   ApplyChinCustomization = ApplyChinCustomization,
+  ApplyNeckCustomization = ApplyNeckCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
