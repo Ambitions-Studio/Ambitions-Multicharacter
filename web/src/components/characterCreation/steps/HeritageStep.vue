@@ -41,25 +41,26 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props or first item
-const localSelectedFather = ref(
-  appearanceStore.selectedFather ??
-  (props.selectedFather !== 0 ? props.selectedFather : null) ??
-  props.fatherOptions[0]?.id ??
-  0
-)
-const localSelectedMother = ref(
-  appearanceStore.selectedMother ??
-  (props.selectedMother !== 0 ? props.selectedMother : null) ??
-  props.motherOptions[0]?.id ??
-  21
-)
-const localFaceResemblance = ref(
-  appearanceStore.faceResemblance ?? props.faceResemblance
-)
-const localSkinResemblance = ref(
-  appearanceStore.skinResemblance ?? props.skinResemblance
-)
+// Use computed with getter/setter for reactive updates
+const localSelectedFather = computed({
+  get: () => props.selectedFather || props.fatherOptions[0]?.id || 0,
+  set: (val) => emit('update:selectedFather', val),
+})
+
+const localSelectedMother = computed({
+  get: () => props.selectedMother || props.motherOptions[0]?.id || 21,
+  set: (val) => emit('update:selectedMother', val),
+})
+
+const localFaceResemblance = computed({
+  get: () => props.faceResemblance,
+  set: (val) => emit('update:faceResemblance', val),
+})
+
+const localSkinResemblance = computed({
+  get: () => props.skinResemblance,
+  set: (val) => emit('update:skinResemblance', val),
+})
 
 // Get portrait image URL from public directory (no hashing)
 const getPortraitUrl = (photoFilename: string) => {
