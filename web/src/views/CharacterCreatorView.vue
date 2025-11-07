@@ -255,6 +255,69 @@ const closeInterface = () => {
   }).catch(() => {})
 }
 
+// Camera controls - Mouse handlers
+const handleMouseDown = (event: MouseEvent) => {
+  if (!isVisible.value) return
+
+  // Check if click is on the UI area (left side ~33% of screen)
+  const uiWidth = window.innerWidth * 0.33
+  if (event.clientX < uiWidth) return
+
+  if (event.button === 0) {
+    // Left click
+    isLeftMouseDown.value = true
+    fetch('https://Ambitions-Multicharacter/cameraControlStart', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'pan' }),
+    }).catch(() => {})
+  } else if (event.button === 2) {
+    // Right click
+    isRightMouseDown.value = true
+    fetch('https://Ambitions-Multicharacter/cameraControlStart', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'rotate' }),
+    }).catch(() => {})
+  }
+}
+
+const handleMouseUp = (event: MouseEvent) => {
+  if (event.button === 0) {
+    isLeftMouseDown.value = false
+    fetch('https://Ambitions-Multicharacter/cameraControlStop', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'pan' }),
+    }).catch(() => {})
+  } else if (event.button === 2) {
+    isRightMouseDown.value = false
+    fetch('https://Ambitions-Multicharacter/cameraControlStop', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'rotate' }),
+    }).catch(() => {})
+  }
+}
+
+const handleMouseMove = (event: MouseEvent) => {
+  if (!isVisible.value) return
+  if (!isLeftMouseDown.value && !isRightMouseDown.value) return
+
+  const type = isLeftMouseDown.value ? 'pan' : 'rotate'
+  fetch('https://Ambitions-Multicharacter/cameraControlMove', {
+    method: 'POST',
+    body: JSON.stringify({
+      type,
+      movementX: event.movementX,
+      movementY: event.movementY,
+    }),
+  }).catch(() => {})
+}
+
+// Prevent context menu on right click
+const handleContextMenu = (event: MouseEvent) => {
+  if (isVisible.value) {
+    event.preventDefault()
+  }
+}
+
 onMounted(() => {
   // Development mode hardcoded data
   if (import.meta.env.DEV) {
@@ -361,69 +424,7 @@ onMounted(() => {
     }
   })
 
-  // Camera controls - Mouse down/up
-  const handleMouseDown = (event: MouseEvent) => {
-    if (!isVisible.value) return
-
-    // Check if click is on the UI area (left side ~33% of screen)
-    const uiWidth = window.innerWidth * 0.33
-    if (event.clientX < uiWidth) return
-
-    if (event.button === 0) {
-      // Left click
-      isLeftMouseDown.value = true
-      fetch('https://Ambitions-Multicharacter/cameraControlStart', {
-        method: 'POST',
-        body: JSON.stringify({ type: 'pan' }),
-      }).catch(() => {})
-    } else if (event.button === 2) {
-      // Right click
-      isRightMouseDown.value = true
-      fetch('https://Ambitions-Multicharacter/cameraControlStart', {
-        method: 'POST',
-        body: JSON.stringify({ type: 'rotate' }),
-      }).catch(() => {})
-    }
-  }
-
-  const handleMouseUp = (event: MouseEvent) => {
-    if (event.button === 0) {
-      isLeftMouseDown.value = false
-      fetch('https://Ambitions-Multicharacter/cameraControlStop', {
-        method: 'POST',
-        body: JSON.stringify({ type: 'pan' }),
-      }).catch(() => {})
-    } else if (event.button === 2) {
-      isRightMouseDown.value = false
-      fetch('https://Ambitions-Multicharacter/cameraControlStop', {
-        method: 'POST',
-        body: JSON.stringify({ type: 'rotate' }),
-      }).catch(() => {})
-    }
-  }
-
-  const handleMouseMove = (event: MouseEvent) => {
-    if (!isVisible.value) return
-    if (!isLeftMouseDown.value && !isRightMouseDown.value) return
-
-    const type = isLeftMouseDown.value ? 'pan' : 'rotate'
-    fetch('https://Ambitions-Multicharacter/cameraControlMove', {
-      method: 'POST',
-      body: JSON.stringify({
-        type,
-        movementX: event.movementX,
-        movementY: event.movementY,
-      }),
-    }).catch(() => {})
-  }
-
-  // Prevent context menu on right click
-  const handleContextMenu = (event: MouseEvent) => {
-    if (isVisible.value) {
-      event.preventDefault()
-    }
-  }
-
+  // Register mouse event listeners
   document.addEventListener('mousedown', handleMouseDown)
   document.addEventListener('mouseup', handleMouseUp)
   document.addEventListener('mousemove', handleMouseMove)
