@@ -247,6 +247,32 @@ local function ApplyEyebrowsCustomization(data)
   ambitionsPrint.info('Applied eyebrows - Height:', data.height, 'Depth:', data.depth, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
+--- Apply nose customization in real-time (width, height, length, bridge, bridgeTwist, tipHeight)
+---@param data table Nose data with width, height, length, bridge, bridgeTwist, tipHeight
+local function ApplyNoseCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply nose width (face feature index 0)
+  SetPedFaceFeature(ped, 0, data.width)
+
+  -- Apply nose height (face feature index 1)
+  SetPedFaceFeature(ped, 1, data.height)
+
+  -- Apply nose length (face feature index 2)
+  SetPedFaceFeature(ped, 2, data.length)
+
+  -- Apply nose bridge (face feature index 3)
+  SetPedFaceFeature(ped, 3, data.bridge)
+
+  -- Apply nose bridge twist (face feature index 4)
+  SetPedFaceFeature(ped, 4, data.bridgeTwist)
+
+  -- Apply nose tip height (face feature index 5)
+  SetPedFaceFeature(ped, 5, data.tipHeight)
+
+  ambitionsPrint.info('Applied nose - Width:', data.width, 'Height:', data.height, 'Length:', data.length, 'Bridge:', data.bridge, 'BridgeTwist:', data.bridgeTwist, 'TipHeight:', data.tipHeight)
+end
+
 --- Apply head overlay (beard, makeup, etc) in real-time
 ---@param data table Overlay data with index, style, opacity, color1, color2
 local function ApplyHeadOverlay(data)
@@ -286,6 +312,7 @@ return {
   ApplyFaceFeature = ApplyFaceFeature,
   ApplyEyesCustomization = ApplyEyesCustomization,
   ApplyEyebrowsCustomization = ApplyEyebrowsCustomization,
+  ApplyNoseCustomization = ApplyNoseCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,

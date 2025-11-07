@@ -46,6 +46,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time nose customization (width, height, length, bridge, bridgeTwist, tipHeight)
+  RegisterNUICallback('applyNoseCustomization', function(data, cb)
+    ambitionsPrint.info('Applying nose customization in real-time')
+    appearanceApply.ApplyNoseCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)
