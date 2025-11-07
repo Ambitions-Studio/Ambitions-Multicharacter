@@ -52,6 +52,12 @@ RegisterNUICallback('requestPedsConfig', function(data, cb)
   cb('ok')
 end)
 
+RegisterNUICallback('startCharacterCreation', function(data, cb)
+  ambitionsPrint.info('Starting character creation - offsetting camera for UI')
+  TriggerEvent('ambitions-multicharacter:client:offsetCameraForCreation')
+  cb('ok')
+end)
+
 return {
   OpenInterface = OpenInterface,
 }

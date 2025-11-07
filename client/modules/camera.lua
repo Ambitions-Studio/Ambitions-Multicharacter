@@ -41,8 +41,34 @@ local function GetActiveCamera()
   return activeCam
 end
 
+--- Offset camera for character creation UI (positions ped on right 2/3 of screen)
+---@param ped number The player ped entity
+---@param transitionTime number Transition time in milliseconds
+---@return number cam The created camera handle
+local function OffsetCameraForCreation(ped, transitionTime)
+  if activeCam then
+    DestroyCam(activeCam, false)
+  end
+
+  local cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+
+  -- Offset camera to the left so ped appears on right side
+  -- X = left/right, Y = forward/back, Z = up/down
+  local camOffset = GetOffsetFromEntityInWorldCoords(ped, -0.8, 1.0, 0.65)
+
+  SetCamCoord(cam, camOffset.x, camOffset.y, camOffset.z)
+  PointCamAtEntity(cam, ped, 0.0, 0.0, 0.65, true)
+  SetCamActive(cam, true)
+  RenderScriptCams(true, true, transitionTime or 1000, true, false)
+
+  activeCam = cam
+
+  return cam
+end
+
 return {
   CreateCharacterSelectionCamera = CreateCharacterSelectionCamera,
   DestroyActiveCamera = DestroyActiveCamera,
-  GetActiveCamera = GetActiveCamera
+  GetActiveCamera = GetActiveCamera,
+  OffsetCameraForCreation = OffsetCameraForCreation,
 }

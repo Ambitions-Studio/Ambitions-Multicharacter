@@ -130,6 +130,13 @@ RegisterNetEvent('ambitions-multicharacter:client:hideDefaultPed', function()
   HideDefaultPed()
 end)
 
+RegisterNetEvent('ambitions-multicharacter:client:offsetCameraForCreation', function()
+  ambitionsPrint.info('Offsetting camera for character creation UI')
+  local playerPed = PlayerPedId()
+  cameraModule.OffsetCameraForCreation(playerPed, 1000)
+  ambitionsPrint.success('Camera offset applied - ped should appear on right 2/3 of screen')
+end)
+
 CreateThread(function()
   ambitionsPrint.info('Starting player activation check thread')
   while not NetworkIsPlayerActive(PlayerId()) do
