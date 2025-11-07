@@ -20,6 +20,7 @@ local function GetCustomizationLimits()
     ageingStyles = GetNumHeadOverlayValues(3) - 1, -- Overlay 3 = Ageing
     makeupStyles = GetNumHeadOverlayValues(4) - 1, -- Overlay 4 = Makeup
     blushStyles = GetNumHeadOverlayValues(5) - 1, -- Overlay 5 = Blush
+    complexionStyles = GetNumHeadOverlayValues(6) - 1, -- Overlay 6 = Complexion
   }
 end
 
@@ -419,6 +420,17 @@ local function ApplyBlushCustomization(data)
   ambitionsPrint.info('Applied blush - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
+--- Apply complexion customization in real-time (style, opacity)
+---@param data table Complexion data with style, opacity
+local function ApplyComplexionCustomization(data)
+  local ped = currentPed or PlayerPedId()
+
+  -- Apply complexion overlay (index 6 = complexion)
+  SetPedHeadOverlay(ped, 6, data.style, data.opacity)
+
+  ambitionsPrint.info('Applied complexion - Style:', data.style, 'Opacity:', data.opacity)
+end
+
 --- Apply head overlay (beard, makeup, etc) in real-time
 ---@param data table Overlay data with index, style, opacity, color1, color2
 local function ApplyHeadOverlay(data)
@@ -468,6 +480,7 @@ return {
   ApplyAgeingCustomization = ApplyAgeingCustomization,
   ApplyMakeupCustomization = ApplyMakeupCustomization,
   ApplyBlushCustomization = ApplyBlushCustomization,
+  ApplyComplexionCustomization = ApplyComplexionCustomization,
   ApplyHeadOverlay = ApplyHeadOverlay,
   ApplyClothing = ApplyClothing,
   ApplyProp = ApplyProp,
