@@ -144,6 +144,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time body blemishes customization (style, opacity)
+  RegisterNUICallback('applyBodyBlemishesCustomization', function(data, cb)
+    ambitionsPrint.info('Applying body blemishes customization in real-time')
+    appearanceApply.ApplyBodyBlemishesCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)
