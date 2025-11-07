@@ -315,7 +315,7 @@ watch(localUndershirtTexture, async (newVal) => {
 
 const updateArmsTypeLimit = async () => {
   try {
-    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 11, drawable: localArmsDrawable.value })
+    const response = await sendNuiCallback<{ component: number; drawable: number }, { limit: number }>('getClothingTextureLimit', { component: 3, drawable: localArmsDrawable.value })
     if (response && typeof response.limit === 'number') {
       maxArmsVariants.value = response.limit
       if (localArmsTexture.value > response.limit) {
@@ -330,7 +330,7 @@ const updateArmsTypeLimit = async () => {
 watch(localArmsDrawable, async (newVal) => {
   appearanceStore.setArmsSection({ armsDrawable: newVal, armsTexture: localArmsTexture.value })
   try {
-    await sendNuiCallback('applyTorsoCustomization', { type: newVal, variant: localArmsTexture.value })
+    await sendNuiCallback('applyTopsCustomization', { type: newVal, variant: localArmsTexture.value })
     await updateArmsTypeLimit()
   } catch (error) {
     console.error('Failed to apply arms drawable:', error)
@@ -340,7 +340,7 @@ watch(localArmsDrawable, async (newVal) => {
 watch(localArmsTexture, async (newVal) => {
   appearanceStore.setArmsSection({ armsDrawable: localArmsDrawable.value, armsTexture: newVal })
   try {
-    await sendNuiCallback('applyTorsoCustomization', { type: localArmsDrawable.value, variant: newVal })
+    await sendNuiCallback('applyTopsCustomization', { type: localArmsDrawable.value, variant: newVal })
   } catch (error) {
     console.error('Failed to apply arms texture:', error)
   }
