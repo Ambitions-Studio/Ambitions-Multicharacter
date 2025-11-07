@@ -232,8 +232,9 @@ end
 local function ApplyEyebrowsCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply eyebrow height (face feature index 6)
-  SetPedFaceFeature(ped, 6, data.height)
+  -- Apply eyebrow height (face feature index 6) - Inverted
+  local invertedHeight = -data.height
+  SetPedFaceFeature(ped, 6, invertedHeight)
 
   -- Apply eyebrow depth (face feature index 7)
   SetPedFaceFeature(ped, 7, data.depth)
@@ -244,7 +245,7 @@ local function ApplyEyebrowsCustomization(data)
   -- Apply eyebrow color (overlay color type 1 = hair color)
   SetPedHeadOverlayColor(ped, 2, 1, data.color, data.color)
 
-  ambitionsPrint.info('Applied eyebrows - Height:', data.height, 'Depth:', data.depth, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
+  ambitionsPrint.info('Applied eyebrows - Height:', invertedHeight, 'Depth:', data.depth, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply nose customization in real-time (width, height, length, bridge, bridgeTwist, tipHeight)
@@ -258,19 +259,21 @@ local function ApplyNoseCustomization(data)
   -- Apply nose height (face feature index 1)
   SetPedFaceFeature(ped, 1, data.height)
 
-  -- Apply nose length (face feature index 2)
-  SetPedFaceFeature(ped, 2, data.length)
+  -- Apply nose length (face feature index 2) - Inverted
+  local invertedLength = -data.length
+  SetPedFaceFeature(ped, 2, invertedLength)
 
-  -- Apply nose bridge (face feature index 3)
-  SetPedFaceFeature(ped, 3, data.bridge)
+  -- Apply nose bridge (face feature index 3) - Inverted
+  local invertedBridge = -data.bridge
+  SetPedFaceFeature(ped, 3, invertedBridge)
 
-  -- Apply nose bridge twist (face feature index 4)
-  SetPedFaceFeature(ped, 4, data.bridgeTwist)
+  -- Apply nose bridge twist (face feature index 4) - SWITCHED with tipHeight
+  SetPedFaceFeature(ped, 4, data.tipHeight)
 
-  -- Apply nose tip height (face feature index 5)
-  SetPedFaceFeature(ped, 5, data.tipHeight)
+  -- Apply nose tip height (face feature index 5) - SWITCHED with bridgeTwist
+  SetPedFaceFeature(ped, 5, data.bridgeTwist)
 
-  ambitionsPrint.info('Applied nose - Width:', data.width, 'Height:', data.height, 'Length:', data.length, 'Bridge:', data.bridge, 'BridgeTwist:', data.bridgeTwist, 'TipHeight:', data.tipHeight)
+  ambitionsPrint.info('Applied nose - Width:', data.width, 'Height:', data.height, 'Length:', invertedLength, 'Bridge:', invertedBridge, 'BridgeTwist:', data.bridgeTwist, 'TipHeight:', data.tipHeight)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
