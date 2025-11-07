@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -23,6 +24,22 @@ const emit = defineEmits<{
 
 const localSunDamageStyle = ref(props.sunDamageStyle)
 const localSunDamageOpacity = ref(props.sunDamageOpacity)
+const maxSunDamageStyles = ref(10) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number; sunDamageStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxSunDamageStyles.value = limits.sunDamageStyles
+  }
+})
+
+watch([localSunDamageStyle, localSunDamageOpacity], ([style, opacity]) => {
+  sendNuiEvent('applySunDamageCustomization', {
+    style,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -52,7 +69,7 @@ const localSunDamageOpacity = ref(props.sunDamageOpacity)
         <VSlider
           v-model="localSunDamageStyle"
           :min="0"
-          :max="10"
+          :max="maxSunDamageStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"

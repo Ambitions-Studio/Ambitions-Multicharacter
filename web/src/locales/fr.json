@@ -172,7 +172,7 @@
         "ageing": "Vieillissement",
         "makeup": "Maquillage",
         "blush": "Fard à Joues",
-        "complexion": "Teint",
+        "complexion": "Rougeurs",
         "sunDamage": "Dommages du Soleil",
         "molesFreckles": "Grains de Beauté",
         "chestHair": "Poils du Torse",
@@ -485,16 +485,16 @@
         }
       },
       "complexion": {
-        "category": "Personnalisation du Teint",
+        "category": "Personnalisation des Rougeurs",
         "style": {
-          "title": "Type de Teint",
-          "description": "Modifiez la texture et l'apparence de votre peau",
+          "title": "Type de Rougeurs",
+          "description": "Ajoutez des rougeurs ou imperfections à votre peau",
           "label": "Type",
           "none": "Aucun"
         },
         "opacity": {
-          "title": "Intensité du Teint",
-          "description": "Ajustez l'intensité de la texture de peau",
+          "title": "Intensité des Rougeurs",
+          "description": "Ajustez l'intensité des rougeurs de peau",
           "min": "Léger",
           "max": "Marqué"
         }
@@ -1033,7 +1033,7 @@
         "chestHair": "Poils de Poitrine",
         "blemishes": "Imperfections",
         "ageing": "Vieillissement",
-        "complexion": "Teint",
+        "complexion": "Rougeurs",
         "sunDamage": "Dommages Solaires",
         "moles": "Grains de Beauté",
         "bodyBlemishes": "Imperfections Corporelles"

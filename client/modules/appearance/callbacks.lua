@@ -123,6 +123,13 @@ local function RegisterAppearanceCallbacks()
     cb('ok')
   end)
 
+  -- Real-time sun damage customization (style, opacity)
+  RegisterNUICallback('applySunDamageCustomization', function(data, cb)
+    ambitionsPrint.info('Applying sun damage customization in real-time')
+    appearanceApply.ApplySunDamageCustomization(data)
+    cb('ok')
+  end)
+
   -- Real-time head overlay change (beard, makeup, etc)
   RegisterNUICallback('applyHeadOverlay', function(data, cb)
     appearanceApply.ApplyHeadOverlay(data)
