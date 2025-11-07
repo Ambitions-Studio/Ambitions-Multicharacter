@@ -52,6 +52,30 @@ RegisterNUICallback('requestPedsConfig', function(data, cb)
   cb('ok')
 end)
 
+-- Camera controls
+RegisterNUICallback('cameraControlStart', function(data, cb)
+  ambitionsPrint.info('Camera control started:', data.type)
+  TriggerEvent('ambitions-multicharacter:client:cameraControlStart', data.type)
+  cb('ok')
+end)
+
+RegisterNUICallback('cameraControlStop', function(data, cb)
+  ambitionsPrint.info('Camera control stopped:', data.type)
+  TriggerEvent('ambitions-multicharacter:client:cameraControlStop', data.type)
+  cb('ok')
+end)
+
+RegisterNUICallback('cameraControlMove', function(data, cb)
+  TriggerEvent('ambitions-multicharacter:client:cameraControlMove', data.type, data.movementX, data.movementY)
+  cb('ok')
+end)
+
+RegisterNUICallback('toggleArmsUp', function(data, cb)
+  ambitionsPrint.info('Toggle arms up animation')
+  TriggerEvent('ambitions-multicharacter:client:toggleArmsUp')
+  cb('ok')
+end)
+
 return {
   OpenInterface = OpenInterface,
 }

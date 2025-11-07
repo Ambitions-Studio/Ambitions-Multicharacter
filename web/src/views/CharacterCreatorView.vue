@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import CharacterCreatorLayout from '@/components/characterCreation/layout/CharacterCreatorLayout.vue'
 import StepBreadcrumb from '@/components/characterCreation/layout/StepBreadcrumb.vue'
 import PedSelectionStep from '@/components/characterCreation/steps/PedSelectionStep.vue'
@@ -12,6 +12,10 @@ import RecapStep from '@/components/characterCreation/steps/RecapStep.vue'
 import ValidationButton from '@/components/characterCreation/steps/ValidationButton.vue'
 
 const currentStep = ref(0)
+
+// Camera controls state
+const isLeftMouseDown = ref(false)
+const isRightMouseDown = ref(false)
 
 const steps = ref([
   { titleKey: 'characterCreation.steps.pedSelection', key: 'ped' },
@@ -347,7 +351,91 @@ onMounted(() => {
     if (event.key === 'Escape' && isVisible.value) {
       closeInterface()
     }
+
+    // Toggle arms up animation with X key
+    if ((event.key === 'x' || event.key === 'X') && isVisible.value) {
+      fetch('https://Ambitions-Multicharacter/toggleArmsUp', {
+        method: 'POST',
+        body: JSON.stringify({}),
+      }).catch(() => {})
+    }
   })
+
+  // Camera controls - Mouse down/up
+  const handleMouseDown = (event: MouseEvent) => {
+    if (!isVisible.value) return
+
+    // Check if click is on the UI area (left side ~33% of screen)
+    const uiWidth = window.innerWidth * 0.33
+    if (event.clientX < uiWidth) return
+
+    if (event.button === 0) {
+      // Left click
+      isLeftMouseDown.value = true
+      fetch('https://Ambitions-Multicharacter/cameraControlStart', {
+        method: 'POST',
+        body: JSON.stringify({ type: 'pan' }),
+      }).catch(() => {})
+    } else if (event.button === 2) {
+      // Right click
+      isRightMouseDown.value = true
+      fetch('https://Ambitions-Multicharacter/cameraControlStart', {
+        method: 'POST',
+        body: JSON.stringify({ type: 'rotate' }),
+      }).catch(() => {})
+    }
+  }
+
+  const handleMouseUp = (event: MouseEvent) => {
+    if (event.button === 0) {
+      isLeftMouseDown.value = false
+      fetch('https://Ambitions-Multicharacter/cameraControlStop', {
+        method: 'POST',
+        body: JSON.stringify({ type: 'pan' }),
+      }).catch(() => {})
+    } else if (event.button === 2) {
+      isRightMouseDown.value = false
+      fetch('https://Ambitions-Multicharacter/cameraControlStop', {
+        method: 'POST',
+        body: JSON.stringify({ type: 'rotate' }),
+      }).catch(() => {})
+    }
+  }
+
+  const handleMouseMove = (event: MouseEvent) => {
+    if (!isVisible.value) return
+    if (!isLeftMouseDown.value && !isRightMouseDown.value) return
+
+    const type = isLeftMouseDown.value ? 'pan' : 'rotate'
+    fetch('https://Ambitions-Multicharacter/cameraControlMove', {
+      method: 'POST',
+      body: JSON.stringify({
+        type,
+        movementX: event.movementX,
+        movementY: event.movementY,
+      }),
+    }).catch(() => {})
+  }
+
+  // Prevent context menu on right click
+  const handleContextMenu = (event: MouseEvent) => {
+    if (isVisible.value) {
+      event.preventDefault()
+    }
+  }
+
+  document.addEventListener('mousedown', handleMouseDown)
+  document.addEventListener('mouseup', handleMouseUp)
+  document.addEventListener('mousemove', handleMouseMove)
+  document.addEventListener('contextmenu', handleContextMenu)
+})
+
+onUnmounted(() => {
+  // Cleanup event listeners
+  document.removeEventListener('mousedown', handleMouseDown)
+  document.removeEventListener('mouseup', handleMouseUp)
+  document.removeEventListener('mousemove', handleMouseMove)
+  document.removeEventListener('contextmenu', handleContextMenu)
 })
 </script>
 
