@@ -1,8 +1,5 @@
 local pedsConfig = require('config.peds')
 local heritageConfig = require('config.heritage')
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-
-ambitionsPrint.info('Client peds module loaded')
 
 --- Format ped list for NUI
 ---@return table Formatted ped models with title, value and category
@@ -42,10 +39,6 @@ end
 --- Send peds configuration to NUI
 local function SendPedsConfigToNUI()
   local config = GetPedsConfig()
-
-  ambitionsPrint.info('Sending peds config to NUI')
-  ambitionsPrint.info('authorizePedwhileInCreator:', config.authorizePedwhileInCreator)
-  ambitionsPrint.info('Total ped models:', #config.pedModels)
 
   SendNUIMessage({
     action = 'setPedsConfig',
@@ -104,10 +97,6 @@ end
 --- Send heritage configuration to NUI
 local function SendHeritageConfigToNUI()
   local config = GetHeritageConfig()
-
-  ambitionsPrint.info('Sending heritage config to NUI')
-  ambitionsPrint.info('Total fathers:', #config.fathers)
-  ambitionsPrint.info('Total mothers:', #config.mothers)
 
   SendNUIMessage({
     action = 'setHeritageConfig',

@@ -111,12 +111,9 @@ const createCharacter = () => {
   isVisible.value = false
 
   window.postMessage({ action: 'showIdentityCreator', slotId: selectedSlot.value }, '*')
-
-  console.log('Créer un personnage pour le slot:', selectedSlot.value)
 }
 
 const playCharacter = () => {
-  console.log('Jouer le personnage du slot:', selectedSlot.value)
 }
 
 const deleteCharacter = () => {
@@ -124,11 +121,8 @@ const deleteCharacter = () => {
 
   const character = characterData.value[selectedSlot.value]
   if (!character || !character.uniqueId) {
-    console.error('No character or uniqueId found for slot:', selectedSlot.value)
     return
   }
-
-  console.log('Deleting character:', character.firstName, character.lastName, 'UniqueID:', character.uniqueId)
 
   sendNuiEvent('deleteCharacter', { uniqueId: character.uniqueId })
 }

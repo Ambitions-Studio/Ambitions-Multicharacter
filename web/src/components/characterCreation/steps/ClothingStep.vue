@@ -212,7 +212,7 @@ const updateMaskTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get mask texture limit:', error)
+    // removed
   }
 }
 
@@ -227,7 +227,7 @@ watch(localMaskDrawable, async (newVal) => {
 
     await updateMaskTypeLimit()
   } catch (error) {
-    console.error('Failed to apply mask drawable:', error)
+    // removed
   }
 })
 
@@ -240,7 +240,7 @@ watch(localMaskTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply mask texture:', error)
+    // removed
   }
 })
 
@@ -254,7 +254,7 @@ const updateTorsoTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get torso texture limit:', error)
+    // removed
   }
 }
 
@@ -264,7 +264,7 @@ watch(localTorsoDrawable, async (newVal) => {
     await sendNuiCallback('applyTorsoCustomization', { type: newVal, variant: localTorsoTexture.value })
     await updateTorsoTypeLimit()
   } catch (error) {
-    console.error('Failed to apply torso drawable:', error)
+    // removed
   }
 })
 
@@ -273,7 +273,7 @@ watch(localTorsoTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyTorsoCustomization', { type: localTorsoDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply torso texture:', error)
+    // removed
   }
 })
 
@@ -287,7 +287,7 @@ const updateUndershirtTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get undershirt texture limit:', error)
+    // removed
   }
 }
 
@@ -297,7 +297,7 @@ watch(localUndershirtDrawable, async (newVal) => {
     await sendNuiCallback('applyUndershirtsCustomization', { type: newVal, variant: localUndershirtTexture.value })
     await updateUndershirtTypeLimit()
   } catch (error) {
-    console.error('Failed to apply undershirt drawable:', error)
+    // removed
   }
 })
 
@@ -306,7 +306,7 @@ watch(localUndershirtTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyUndershirtsCustomization', { type: localUndershirtDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply undershirt texture:', error)
+    // removed
   }
 })
 
@@ -320,7 +320,7 @@ const updateArmsTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get arms texture limit:', error)
+    // removed
   }
 }
 
@@ -330,7 +330,7 @@ watch(localArmsDrawable, async (newVal) => {
     await sendNuiCallback('applyTopsCustomization', { type: newVal, variant: localArmsTexture.value })
     await updateArmsTypeLimit()
   } catch (error) {
-    console.error('Failed to apply arms drawable:', error)
+    // removed
   }
 })
 
@@ -339,7 +339,7 @@ watch(localArmsTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyTopsCustomization', { type: localArmsDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply arms texture:', error)
+    // removed
   }
 })
 
@@ -353,7 +353,7 @@ const updateBodyArmorTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get body armor texture limit:', error)
+    // removed
   }
 }
 
@@ -363,7 +363,7 @@ watch(localBodyArmorDrawable, async (newVal) => {
     await sendNuiCallback('applyArmorCustomization', { type: newVal, variant: localBodyArmorTexture.value })
     await updateBodyArmorTypeLimit()
   } catch (error) {
-    console.error('Failed to apply body armor drawable:', error)
+    // removed
   }
 })
 
@@ -372,7 +372,7 @@ watch(localBodyArmorTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyArmorCustomization', { type: localBodyArmorDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply body armor texture:', error)
+    // removed
   }
 })
 
@@ -386,7 +386,7 @@ const updateDecalsTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get decals texture limit:', error)
+    // removed
   }
 }
 
@@ -396,7 +396,7 @@ watch(localDecalsDrawable, async (newVal) => {
     await sendNuiCallback('applyDecalsCustomization', { type: newVal, variant: localDecalsTexture.value })
     await updateDecalsTypeLimit()
   } catch (error) {
-    console.error('Failed to apply decals drawable:', error)
+    // removed
   }
 })
 
@@ -405,7 +405,7 @@ watch(localDecalsTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyDecalsCustomization', { type: localDecalsDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply decals texture:', error)
+    // removed
   }
 })
 
@@ -419,7 +419,7 @@ const updatePantsTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get pants texture limit:', error)
+    // removed
   }
 }
 
@@ -429,7 +429,7 @@ watch(localPantsDrawable, async (newVal) => {
     await sendNuiCallback('applyLegsCustomization', { type: newVal, variant: localPantsTexture.value })
     await updatePantsTypeLimit()
   } catch (error) {
-    console.error('Failed to apply pants drawable:', error)
+    // removed
   }
 })
 
@@ -438,7 +438,7 @@ watch(localPantsTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyLegsCustomization', { type: localPantsDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply pants texture:', error)
+    // removed
   }
 })
 
@@ -452,7 +452,7 @@ const updateShoesTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get shoes texture limit:', error)
+    // removed
   }
 }
 
@@ -462,7 +462,7 @@ watch(localShoesDrawable, async (newVal) => {
     await sendNuiCallback('applyShoesCustomization', { type: newVal, variant: localShoesTexture.value })
     await updateShoesTypeLimit()
   } catch (error) {
-    console.error('Failed to apply shoes drawable:', error)
+    // removed
   }
 })
 
@@ -471,7 +471,7 @@ watch(localShoesTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyShoesCustomization', { type: localShoesDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply shoes texture:', error)
+    // removed
   }
 })
 
@@ -485,7 +485,7 @@ const updateBackpackTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get backpack texture limit:', error)
+    // removed
   }
 }
 
@@ -495,7 +495,7 @@ watch(localBackpackDrawable, async (newVal) => {
     await sendNuiCallback('applyBagsCustomization', { type: newVal, variant: localBackpackTexture.value })
     await updateBackpackTypeLimit()
   } catch (error) {
-    console.error('Failed to apply backpack drawable:', error)
+    // removed
   }
 })
 
@@ -504,7 +504,7 @@ watch(localBackpackTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyBagsCustomization', { type: localBackpackDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply backpack texture:', error)
+    // removed
   }
 })
 
@@ -533,7 +533,7 @@ onMounted(async () => {
     await updateShoesTypeLimit()
     await updateBackpackTypeLimit()
   } catch (error) {
-    console.error('Failed to get clothing limits:', error)
+    // removed
   }
 })
 

@@ -1,7 +1,4 @@
 local cameraModule = require('client.modules.camera')
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-
-ambitionsPrint.info('Camera controls module loaded')
 
 local isPanning = false
 local isRotating = false
@@ -14,10 +11,8 @@ local armsUpActive = false
 local function StartCameraControl(controlType)
   if controlType == 'pan' then
     isPanning = true
-    ambitionsPrint.info('Camera panning started')
   elseif controlType == 'rotate' then
     isRotating = true
-    ambitionsPrint.info('Ped rotation started')
   end
 end
 
@@ -26,10 +21,8 @@ end
 local function StopCameraControl(controlType)
   if controlType == 'pan' then
     isPanning = false
-    ambitionsPrint.info('Camera panning stopped')
   elseif controlType == 'rotate' then
     isRotating = false
-    ambitionsPrint.info('Ped rotation stopped')
   end
 end
 
@@ -95,11 +88,9 @@ local function ToggleArmsUp()
 
     TaskPlayAnim(ped, 'random@mugging3', 'handsup_standing_base', 8.0, -8.0, -1, 50, 0, false, false, false)
     armsUpActive = true
-    ambitionsPrint.success('Arms up animation started')
   else
     ClearPedTasks(ped)
     armsUpActive = false
-    ambitionsPrint.success('Arms up animation stopped')
   end
 end
 
@@ -134,8 +125,6 @@ local function HandleCameraZoom(zoomIn, mouseX, mouseY)
   local newZ = camPos.z + (forwardZ * zoomAmount)
 
   SetCamCoord(activeCam, newX, newY, newZ)
-
-  ambitionsPrint.info('Camera zoom:', zoomIn and 'in' or 'out')
 end
 
 RegisterNetEvent('ambitions-multicharacter:client:cameraZoom', function(zoomIn, mouseX, mouseY)

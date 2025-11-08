@@ -1,7 +1,4 @@
 local characterDefaults = require('config.character_default')
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-
-ambitionsPrint.info('Client appearance module loaded')
 
 local currentPed = nil
 local currentGender = 'm'
@@ -47,8 +44,6 @@ local function ApplyPedModel(pedModel)
     currentPed = PlayerPedId()
 
     ApplyDefaultAppearance(currentPed, currentGender)
-
-    ambitionsPrint.success('Applied freemode ped model:', pedModel)
   else
     local modelHash = GetHashKey(pedModel)
     RequestModel(modelHash)
@@ -61,8 +56,6 @@ local function ApplyPedModel(pedModel)
     SetModelAsNoLongerNeeded(modelHash)
 
     currentPed = PlayerPedId()
-
-    ambitionsPrint.success('Applied ped model:', pedModel)
   end
 end
 
@@ -73,7 +66,6 @@ function ApplyDefaultAppearance(ped, gender)
   local defaults = characterDefaults.defaultCharacter[gender]
 
   if not defaults then
-    ambitionsPrint.error('No default appearance found for gender:', gender)
     return
   end
 
@@ -160,8 +152,6 @@ function ApplyDefaultAppearance(ped, gender)
   if defaults.bodyb_3 ~= -1 then
     SetPedHeadOverlay(ped, 12, defaults.bodyb_3, defaults.bodyb_4 / 10.0)
   end
-
-  ambitionsPrint.success('Applied default appearance for gender:', gender)
 end
 
 --- Apply heritage in real-time
@@ -182,8 +172,6 @@ local function ApplyHeritage(data)
     0.0,              -- Third mix (not used)
     false             -- Is parent
   )
-
-  ambitionsPrint.info('Applied heritage - Father:', data.father, 'Mother:', data.mother, 'Face:', data.faceResemblance, 'Skin:', data.skinResemblance)
 end
 
 --- Apply hair style in real-time
@@ -194,8 +182,6 @@ local function ApplyHairStyle(data)
   SetPedComponentVariation(ped, 2, data.style, 0, 0)
 
   SetPedHairTint(ped, data.color, data.highlight)
-
-  ambitionsPrint.info('Applied hair - Style:', data.style, 'Color:', data.color, 'Highlight:', data.highlight)
 end
 
 --- Apply face feature in real-time
@@ -215,8 +201,6 @@ local function ApplyEyesCustomization(data)
   SetPedFaceFeature(ped, 11, invertedOpening)
 
   SetPedEyeColor(ped, data.color)
-
-  ambitionsPrint.info('Applied eyes - Opening:', invertedOpening, 'Color:', data.color)
 end
 
 --- Apply eyebrows customization in real-time (height, depth, style, color, opacity)
@@ -232,8 +216,6 @@ local function ApplyEyebrowsCustomization(data)
   SetPedHeadOverlay(ped, 2, data.style, data.opacity)
 
   SetPedHeadOverlayColor(ped, 2, 1, data.color, data.color)
-
-  ambitionsPrint.info('Applied eyebrows - Height:', invertedHeight, 'Depth:', data.depth, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply nose customization in real-time (width, height, length, bridge, bridgeTwist, tipHeight)
@@ -255,8 +237,6 @@ local function ApplyNoseCustomization(data)
   SetPedFaceFeature(ped, 4, invertedTipHeight)
 
   SetPedFaceFeature(ped, 5, data.bridgeTwist)
-
-  ambitionsPrint.info('Applied nose - Width:', data.width, 'Height:', data.height, 'Length:', invertedLength, 'Bridge:', invertedBridge, 'BridgeTwist:', data.bridgeTwist, 'TipHeight:', data.tipHeight)
 end
 
 --- Apply cheeks customization in real-time (boneHeight, boneWidth, width)
@@ -271,8 +251,6 @@ local function ApplyCheeksCustomization(data)
 
   local invertedWidth = -data.width
   SetPedFaceFeature(ped, 10, invertedWidth)
-
-  ambitionsPrint.info('Applied cheeks - BoneHeight:', invertedBoneHeight, 'BoneWidth:', data.boneWidth, 'Width:', invertedWidth)
 end
 
 --- Apply beard customization in real-time (style, color, opacity)
@@ -283,8 +261,6 @@ local function ApplyBeardCustomization(data)
   SetPedHeadOverlay(ped, 1, data.style, data.opacity)
 
   SetPedHeadOverlayColor(ped, 1, 1, data.color, data.color)
-
-  ambitionsPrint.info('Applied beard - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply jaw customization in real-time (width, height)
@@ -295,8 +271,6 @@ local function ApplyJawCustomization(data)
   SetPedFaceFeature(ped, 13, data.width)
 
   SetPedFaceFeature(ped, 14, data.height)
-
-  ambitionsPrint.info('Applied jaw - Width:', data.width, 'Height:', data.height)
 end
 
 --- Apply lips customization in real-time (thickness + lipstick style, color, opacity)
@@ -310,8 +284,6 @@ local function ApplyLipsCustomization(data)
   SetPedHeadOverlay(ped, 8, data.style, data.opacity)
 
   SetPedHeadOverlayColor(ped, 8, 2, data.color, data.color)
-
-  ambitionsPrint.info('Applied lips - Thickness:', invertedThickness, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply chin customization in real-time (lowering, length, width, cleft)
@@ -327,8 +299,6 @@ local function ApplyChinCustomization(data)
   SetPedFaceFeature(ped, 17, data.width)
 
   SetPedFaceFeature(ped, 18, data.cleft)
-
-  ambitionsPrint.info('Applied chin - Lowering:', invertedLowering, 'Length:', data.length, 'Width:', data.width, 'Cleft:', data.cleft)
 end
 
 --- Apply neck customization in real-time (thickness)
@@ -337,8 +307,6 @@ local function ApplyNeckCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedFaceFeature(ped, 19, data.thickness)
-
-  ambitionsPrint.info('Applied neck - Thickness:', data.thickness)
 end
 
 --- Apply ageing customization in real-time (style, opacity)
@@ -347,8 +315,6 @@ local function ApplyAgeingCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 3, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied ageing - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply makeup customization in real-time (style, primary color, secondary color, opacity)
@@ -359,8 +325,6 @@ local function ApplyMakeupCustomization(data)
   SetPedHeadOverlay(ped, 4, data.style, data.opacity)
 
   SetPedHeadOverlayColor(ped, 4, 2, data.primaryColor, data.secondaryColor)
-
-  ambitionsPrint.info('Applied makeup - Style:', data.style, 'PrimaryColor:', data.primaryColor, 'SecondaryColor:', data.secondaryColor, 'Opacity:', data.opacity)
 end
 
 --- Apply blush customization in real-time (style, color, opacity)
@@ -371,8 +335,6 @@ local function ApplyBlushCustomization(data)
   SetPedHeadOverlay(ped, 5, data.style, data.opacity)
 
   SetPedHeadOverlayColor(ped, 5, 2, data.color, data.color)
-
-  ambitionsPrint.info('Applied blush - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply complexion customization in real-time (style, opacity)
@@ -381,8 +343,6 @@ local function ApplyComplexionCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 6, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied complexion - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply sun damage customization in real-time (style, opacity)
@@ -391,8 +351,6 @@ local function ApplySunDamageCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 7, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied sun damage - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply moles/freckles customization in real-time (style, opacity)
@@ -401,8 +359,6 @@ local function ApplyMolesFrecklesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 9, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied moles/freckles - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply chest hair customization in real-time (style, color, opacity)
@@ -413,8 +369,6 @@ local function ApplyChestHairCustomization(data)
   SetPedHeadOverlay(ped, 10, data.style, data.opacity)
 
   SetPedHeadOverlayColor(ped, 10, 1, data.color, data.color)
-
-  ambitionsPrint.info('Applied chest hair - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply body blemishes customization in real-time (style, opacity)
@@ -423,8 +377,6 @@ local function ApplyBodyBlemishesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 11, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied body blemishes - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time

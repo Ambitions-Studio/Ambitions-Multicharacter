@@ -159,7 +159,6 @@ const updateHatTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get hat texture limit:', error)
   }
 }
 
@@ -176,7 +175,6 @@ const updateGlassesTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get glasses texture limit:', error)
   }
 }
 
@@ -193,7 +191,6 @@ const updateEarringsTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get earrings texture limit:', error)
   }
 }
 
@@ -210,7 +207,6 @@ const updateWatchTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get watch texture limit:', error)
   }
 }
 
@@ -227,7 +223,6 @@ const updateBraceletTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get bracelet texture limit:', error)
   }
 }
 
@@ -244,7 +239,6 @@ const updateNeckAccessoryTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get neck accessory texture limit:', error)
   }
 }
 
@@ -257,7 +251,6 @@ watch(localHatDrawable, async (newVal) => {
     })
     await updateHatTypeLimit()
   } catch (error) {
-    console.error('Failed to apply hat drawable:', error)
   }
 })
 
@@ -269,7 +262,6 @@ watch(localHatTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply hat texture:', error)
   }
 })
 
@@ -282,7 +274,6 @@ watch(localGlassesDrawable, async (newVal) => {
     })
     await updateGlassesTypeLimit()
   } catch (error) {
-    console.error('Failed to apply glasses drawable:', error)
   }
 })
 
@@ -294,7 +285,6 @@ watch(localGlassesTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply glasses texture:', error)
   }
 })
 
@@ -307,7 +297,6 @@ watch(localEarringsDrawable, async (newVal) => {
     })
     await updateEarringsTypeLimit()
   } catch (error) {
-    console.error('Failed to apply earrings drawable:', error)
   }
 })
 
@@ -319,7 +308,6 @@ watch(localEarringsTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply earrings texture:', error)
   }
 })
 
@@ -332,7 +320,6 @@ watch(localWatchDrawable, async (newVal) => {
     })
     await updateWatchTypeLimit()
   } catch (error) {
-    console.error('Failed to apply watch drawable:', error)
   }
 })
 
@@ -344,7 +331,6 @@ watch(localWatchTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply watch texture:', error)
   }
 })
 
@@ -357,7 +343,6 @@ watch(localBraceletDrawable, async (newVal) => {
     })
     await updateBraceletTypeLimit()
   } catch (error) {
-    console.error('Failed to apply bracelet drawable:', error)
   }
 })
 
@@ -369,7 +354,6 @@ watch(localBraceletTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply bracelet texture:', error)
   }
 })
 
@@ -382,7 +366,6 @@ watch(localNeckAccessoryDrawable, async (newVal) => {
     })
     await updateNeckAccessoryTypeLimit()
   } catch (error) {
-    console.error('Failed to apply neck accessory drawable:', error)
   }
 })
 
@@ -394,7 +377,6 @@ watch(localNeckAccessoryTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply neck accessory texture:', error)
   }
 })
 
@@ -425,7 +407,6 @@ onMounted(async () => {
     await updateBraceletTypeLimit()
     await updateNeckAccessoryTypeLimit()
   } catch (error) {
-    console.error('Failed to get accessories limits:', error)
   }
 })
 
@@ -476,7 +457,6 @@ const handleContinue = () => {
     />
 
     <div class="h-[60vh] overflow-y-scroll pr-2 pb-32">
-      <!-- Hat -->
       <div v-if="selectedCategory === 0" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -517,7 +497,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Glasses -->
       <div v-if="selectedCategory === 1" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -558,7 +537,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Earrings -->
       <div v-if="selectedCategory === 2" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -599,7 +577,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Watch -->
       <div v-if="selectedCategory === 3" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -640,7 +617,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Bracelet -->
       <div v-if="selectedCategory === 4" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -681,7 +657,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Neck Accessory -->
       <div v-if="selectedCategory === 5" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -722,7 +697,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Continue Button for Accessories -->
       <div class="mt-6 flex justify-center">
       <VBtn
         variant="outlined"

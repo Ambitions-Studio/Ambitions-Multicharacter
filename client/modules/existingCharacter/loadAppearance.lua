@@ -1,24 +1,15 @@
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-
-ambitionsPrint.info('Existing character appearance loader module loaded')
-
 --- Load complete character appearance from database data
 ---@param ped number The ped entity to apply appearance to
 ---@param appearanceData table Complete appearance data from database
 ---@return nil
 local function LoadFullAppearance(ped, appearanceData)
   if not ped or not DoesEntityExist(ped) then
-    ambitionsPrint.error('Invalid ped entity provided to LoadFullAppearance')
     return
   end
 
   if not appearanceData then
-    ambitionsPrint.error('No appearance data provided to LoadFullAppearance')
     return
   end
-
-  ambitionsPrint.info('========== LOADING FULL APPEARANCE ==========')
-  ambitionsPrint.info('Ped:', ped, 'Model:', GetEntityModel(ped))
 
   SetPedDefaultComponentVariation(ped)
   ClearAllPedProps(ped)
@@ -30,12 +21,10 @@ local function LoadFullAppearance(ped, appearanceData)
   local tattoos = appearanceData.tattoos or {}
 
   if heritage and (heritage.father or heritage.mother) then
-    ambitionsPrint.info('Applying heritage...')
     SetPedHeadBlendData(ped, heritage.father or 0, heritage.mother or 0, 0, heritage.father or 0, heritage.mother or 0, 0, heritage.faceResemblance or 0.5, heritage.skinResemblance or 0.5, 0.0, false)
   end
 
   if physical.hairStyle then
-    ambitionsPrint.info('Applying hair...')
     SetPedComponentVariation(ped, 2, physical.hairStyle, 0, 0)
     SetPedHairColor(ped, physical.hairColor or 0, physical.hairHighlight or 0)
   end
@@ -45,13 +34,11 @@ local function LoadFullAppearance(ped, appearanceData)
   end
 
   if physical.eyebrowsStyle then
-    ambitionsPrint.info('Applying eyebrows...')
     SetPedHeadOverlay(ped, 2, physical.eyebrowsStyle, physical.eyebrowsOpacity or 1.0)
     SetPedHeadOverlayColor(ped, 2, 1, physical.eyebrowsColor or 0, physical.eyebrowsColor or 0)
   end
 
   if physical.beardStyle then
-    ambitionsPrint.info('Applying beard...')
     SetPedHeadOverlay(ped, 1, physical.beardStyle, physical.beardOpacity or 1.0)
     SetPedHeadOverlayColor(ped, 1, 1, physical.beardColor or 0, physical.beardSecondaryColor or 0)
   end
@@ -125,7 +112,6 @@ local function LoadFullAppearance(ped, appearanceData)
     end
   end
 
-  ambitionsPrint.info('Applying clothing...')
   SetPedComponentVariation(ped, 1, clothing.maskDrawable or 0, clothing.maskTexture or 0, 0)
   SetPedComponentVariation(ped, 3, clothing.armsDrawable or 0, clothing.armsTexture or 0, 0)
   SetPedComponentVariation(ped, 4, clothing.pantsDrawable or 0, clothing.pantsTexture or 0, 0)
@@ -137,7 +123,6 @@ local function LoadFullAppearance(ped, appearanceData)
   SetPedComponentVariation(ped, 10, clothing.decalsDrawable or 0, clothing.decalsTexture or 0, 0)
   SetPedComponentVariation(ped, 11, clothing.torsoDrawable or 0, clothing.torsoTexture or 0, 0)
 
-  ambitionsPrint.info('Applying accessories...')
   if accessories.hatDrawable and accessories.hatDrawable > 0 then
     SetPedPropIndex(ped, 0, accessories.hatDrawable, accessories.hatTexture or 0, true)
   else
@@ -168,10 +153,7 @@ local function LoadFullAppearance(ped, appearanceData)
     ClearPedProp(ped, 7)
   end
 
-  ambitionsPrint.info('Applying tattoos...')
   ClearPedDecorations(ped)
-
-  ambitionsPrint.success('========== FULL APPEARANCE LOADED ==========')
 end
 
 return {

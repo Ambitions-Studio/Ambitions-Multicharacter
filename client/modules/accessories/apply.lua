@@ -1,7 +1,3 @@
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-
-ambitionsPrint.info('Client accessories module loaded')
-
 --- Get available accessory variations for current ped
 ---@return table Table containing max values for hats, glasses, earrings, watches, bracelets, neckAccessories
 local function GetAccessoriesLimits()
@@ -37,8 +33,6 @@ local function ApplyHatCustomization(data)
   else
     SetPedPropIndex(ped, 0, data.type, data.variant, true)
   end
-
-  ambitionsPrint.info('Applied hat - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply glasses customization to player ped
@@ -52,8 +46,6 @@ local function ApplyGlassesCustomization(data)
   else
     SetPedPropIndex(ped, 1, data.type, data.variant, true)
   end
-
-  ambitionsPrint.info('Applied glasses - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply earrings customization to player ped
@@ -67,8 +59,6 @@ local function ApplyEarringsCustomization(data)
   else
     SetPedPropIndex(ped, 2, data.type, data.variant, true)
   end
-
-  ambitionsPrint.info('Applied earrings - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply watch customization to player ped
@@ -82,8 +72,6 @@ local function ApplyWatchCustomization(data)
   else
     SetPedPropIndex(ped, 6, data.type, data.variant, true)
   end
-
-  ambitionsPrint.info('Applied watch - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply bracelet customization to player ped
@@ -97,8 +85,6 @@ local function ApplyBraceletCustomization(data)
   else
     SetPedPropIndex(ped, 7, data.type, data.variant, true)
   end
-
-  ambitionsPrint.info('Applied bracelet - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply neck accessory customization to player ped
@@ -108,8 +94,6 @@ local function ApplyNeckAccessoryCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 7, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied neck accessory - Type:', data.type, 'Variant:', data.variant)
 end
 
 return {

@@ -1,7 +1,4 @@
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 local ConfigTattoos = require('config.tattoo')
-
-ambitionsPrint.info('Client tattoos module loaded')
 
 --- Build tattoos organized by body zone from configuration
 ---@return table Table containing tattoos organized by zone (head, neck, torso, back, leftArm, rightArm, leftLeg, rightLeg)
@@ -81,14 +78,6 @@ local function BuildTattoosByZone()
     end
   end
 
-  ambitionsPrint.success('Loaded tattoos from config:')
-  ambitionsPrint.info('  Head:', #tattoosByZone.head)
-  ambitionsPrint.info('  Torso:', #tattoosByZone.torso)
-  ambitionsPrint.info('  Left Arm:', #tattoosByZone.leftArm)
-  ambitionsPrint.info('  Right Arm:', #tattoosByZone.rightArm)
-  ambitionsPrint.info('  Left Leg:', #tattoosByZone.leftLeg)
-  ambitionsPrint.info('  Right Leg:', #tattoosByZone.rightLeg)
-
   return tattoosByZone
 end
 
@@ -132,30 +121,19 @@ local function ClearAllTattoos()
     leftLeg = nil,
     rightLeg = nil,
   }
-  ambitionsPrint.info('Cleared all tattoos')
 end
 
 --- Reapply all active tattoos to player ped after clearing decorations
 ---@return nil
 local function ReapplyAllTattoos()
   local ped = PlayerPedId()
-  local pedModel = GetEntityModel(ped)
-
-  ambitionsPrint.info('========== ReapplyAllTattoos START ==========')
-  ambitionsPrint.info('Ped ID:', ped, 'Model:', pedModel)
 
   local currentTorso = GetPedDrawableVariation(ped, 3)
   local currentTorsoTexture = GetPedTextureVariation(ped, 3)
 
   for zone, tattoo in pairs(activeTattoos) do
     if tattoo then
-      ambitionsPrint.info('Processing tattoo for zone:', zone)
-      ambitionsPrint.info('  Collection:', tattoo.collection)
-      ambitionsPrint.info('  Collection Hash:', tattoo.collectionHash)
-      ambitionsPrint.info('  Tattoo Hash:', tattoo.tattooHash)
-
       AddPedDecorationFromHashes(ped, tattoo.collectionHash, tattoo.tattooHash)
-      ambitionsPrint.success('Applied decoration for zone:', zone)
     end
   end
 
@@ -165,9 +143,6 @@ local function ReapplyAllTattoos()
   local currentArms = GetPedDrawableVariation(ped, 11)
   local currentArmsTexture = GetPedTextureVariation(ped, 11)
   SetPedComponentVariation(ped, 11, currentArms, currentArmsTexture, 0)
-
-  ambitionsPrint.info('Refreshed components to display overlays')
-  ambitionsPrint.info('========== ReapplyAllTattoos END ==========')
 end
 
 --- Apply head tattoo to player ped
@@ -178,33 +153,22 @@ local function ApplyHeadTattoo(data)
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.head
 
-  ambitionsPrint.info('========== ApplyHeadTattoo START ==========')
-  ambitionsPrint.info('Tattoo Index:', tattooIndex, 'Available head tattoos:', #zoneTattoos)
-
   if tattooIndex > 0 and tattooIndex <= #zoneTattoos then
     local tattoo = zoneTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
-
-    ambitionsPrint.info('Applying head tattoo:', tattoo.label)
-    ambitionsPrint.info('  Collection:', tattoo.collection)
-    ambitionsPrint.info('  Name:', tattoo.name)
 
     activeTattoos.head = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-
-    ambitionsPrint.success('Head tattoo set:', tattoo.label)
   else
     activeTattoos.head = nil
-    ambitionsPrint.info('Cleared head tattoo')
   end
 
   ClearPedDecorations(ped)
   ReapplyAllTattoos()
-  ambitionsPrint.info('========== ApplyHeadTattoo END ==========')
 end
 
 --- Apply neck tattoo to player ped

@@ -119,7 +119,7 @@ watch(localHeadTattooIndex, async (newVal) => {
   try {
     await sendNuiCallback('applyHeadTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply head tattoo:', error)
+    // removed
   }
 })
 
@@ -128,7 +128,7 @@ watch(localNeckTattooIndex, async (newVal) => {
   try {
     await sendNuiCallback('applyNeckTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply neck tattoo:', error)
+    // removed
   }
 })
 
@@ -137,7 +137,7 @@ watch(localTorsoTattooIndex, async (newVal) => {
   try {
     await sendNuiCallback('applyTorsoTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply torso tattoo:', error)
+    // removed
   }
 })
 
@@ -146,7 +146,7 @@ watch(localBackTattooIndex, async (newVal) => {
   try {
     await sendNuiCallback('applyBackTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply back tattoo:', error)
+    // removed
   }
 })
 
@@ -155,7 +155,7 @@ watch(localLeftArmTattooIndex, async (newVal) => {
   try {
     await sendNuiCallback('applyLeftArmTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply left arm tattoo:', error)
+    // removed
   }
 })
 
@@ -164,7 +164,7 @@ watch(localRightArmTattooIndex, async (newVal) => {
   try {
     await sendNuiCallback('applyRightArmTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply right arm tattoo:', error)
+    // removed
   }
 })
 
@@ -173,7 +173,7 @@ watch(localLeftLegTattooIndex, async (newVal) => {
   try {
     await sendNuiCallback('applyLeftLegTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply left leg tattoo:', error)
+    // removed
   }
 })
 
@@ -182,7 +182,7 @@ watch(localRightLegTattooIndex, async (newVal) => {
   try {
     await sendNuiCallback('applyRightLegTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply right leg tattoo:', error)
+    // removed
   }
 })
 
@@ -211,7 +211,7 @@ onMounted(async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get tattoos limits:', error)
+    // removed
   }
 })
 

@@ -306,19 +306,12 @@ const handleValidateCharacter = async () => {
   const appearanceMatch = JSON.stringify(characterAppearance) === JSON.stringify(storeAppearance)
 
   if (!identityMatch || !appearanceMatch) {
-    console.error('❌ VALIDATION ERROR: Data mismatch between stores!')
-    console.error('Character Store Identity:', JSON.stringify(characterIdentity, null, 2))
-    console.error('Identity Store:', JSON.stringify(storeIdentity, null, 2))
-    console.error('Character Store Appearance:', JSON.stringify(characterAppearance, null, 2))
-    console.error('Appearance Store:', JSON.stringify(storeAppearance, null, 2))
-
     try {
       await sendNuiCallback('characterCreationError', {
         error: 'DATA_MISMATCH',
         message: 'Les données ne correspondent pas entre les stores'
       })
     } catch (error) {
-      console.error('Failed to send error to Lua:', error)
     }
     return
   }
@@ -329,15 +322,9 @@ const handleValidateCharacter = async () => {
     slot: characterStore.selectedSlot
   }
 
-  console.log('✅ VALIDATION SUCCESS: All data matches!')
-  console.log('📋 Complete Character Data:')
-  console.log(JSON.stringify(completeCharacterData, null, 2))
-
   try {
     await sendNuiCallback('createCharacter', completeCharacterData)
-    console.log('✅ Character data sent to Lua successfully!')
   } catch (error) {
-    console.error('❌ Failed to send character data to Lua:', error)
   }
 }
 

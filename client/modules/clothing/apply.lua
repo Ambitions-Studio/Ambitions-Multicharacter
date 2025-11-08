@@ -1,7 +1,3 @@
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-
-ambitionsPrint.info('Client clothing module loaded')
-
 --- Get available clothing variations for current ped
 ---@return table Table containing max values for all clothing components
 local function GetClothingLimits()
@@ -37,8 +33,6 @@ local function ApplyMaskCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 1, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied mask - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply torso customization to player ped
@@ -48,8 +42,6 @@ local function ApplyTorsoCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 11, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied torso - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply legs customization to player ped
@@ -59,8 +51,6 @@ local function ApplyLegsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 4, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied legs - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply bags customization to player ped
@@ -70,8 +60,6 @@ local function ApplyBagsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 5, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied bags - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply shoes customization to player ped
@@ -81,8 +69,6 @@ local function ApplyShoesCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 6, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied shoes - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply accessories customization to player ped
@@ -92,8 +78,6 @@ local function ApplyAccessoriesCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 7, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied accessories - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply undershirts customization to player ped
@@ -103,8 +87,6 @@ local function ApplyUndershirtsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 8, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied undershirts - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply armor customization to player ped
@@ -114,8 +96,6 @@ local function ApplyArmorCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 9, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied armor - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply decals customization to player ped
@@ -125,8 +105,6 @@ local function ApplyDecalsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 10, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied decals - Type:', data.type, 'Variant:', data.variant)
 end
 
 --- Apply tops customization to player ped
@@ -136,8 +114,6 @@ local function ApplyTopsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 3, data.type, data.variant, 0)
-
-  ambitionsPrint.info('Applied tops - Type:', data.type, 'Variant:', data.variant)
 end
 
 return {

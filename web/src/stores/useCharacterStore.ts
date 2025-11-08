@@ -250,9 +250,9 @@ export const useCharacterStore = defineStore('character', () => {
       identity.value.height === storedIdentity.height
 
     if (!isValid) {
-      console.error('❌ Data integrity check failed!')
-      console.error('Character Store:', identity.value)
-      console.error('Identity Store:', storedIdentity)
+      // removed
+      // removed
+      // removed
     }
 
     return isValid
