@@ -14,7 +14,16 @@ const characterStore = useCharacterStore()
 const selectedCategory = ref(0)
 const previousCategory = ref(0)
 
-const tattooLimit = ref(60)
+const tattooLimits = ref({
+  head: 3,
+  neck: 3,
+  torso: 23,
+  back: 20,
+  leftArm: 9,
+  rightArm: 4,
+  leftLeg: 1,
+  rightLeg: 1,
+})
 
 const tattoosCategories = ref([
   { titleKey: 'characterCreation.tattoos.categories.head', key: 'head' },
@@ -181,11 +190,26 @@ watch(localRightLegTattooIndex, async (newVal) => {
 onMounted(async () => {
   try {
     const limitsResponse = (await sendNuiCallback('getTattoosLimits', {})) as {
-      totalTattoos: number
+      headTattoos: number
+      torsoTattoos: number
+      backTattoos: number
+      leftArmTattoos: number
+      rightArmTattoos: number
+      leftLegTattoos: number
+      rightLegTattoos: number
     }
 
     if (limitsResponse) {
-      tattooLimit.value = limitsResponse.totalTattoos
+      tattooLimits.value = {
+        head: limitsResponse.headTattoos,
+        neck: limitsResponse.headTattoos,
+        torso: limitsResponse.torsoTattoos,
+        back: limitsResponse.backTattoos,
+        leftArm: limitsResponse.leftArmTattoos,
+        rightArm: limitsResponse.rightArmTattoos,
+        leftLeg: limitsResponse.leftLegTattoos,
+        rightLeg: limitsResponse.rightLegTattoos,
+      }
     }
   } catch (error) {
     console.error('Failed to get tattoos limits:', error)
@@ -243,7 +267,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localHeadTattooIndex"
               :min="0"
-              :max="tattooLimit"
+              :max="tattooLimits.head"
               :step="1"
               color="blue"
               thumb-label
@@ -266,7 +290,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localNeckTattooIndex"
               :min="0"
-              :max="tattooLimit"
+              :max="tattooLimits.neck"
               :step="1"
               color="blue"
               thumb-label
@@ -289,7 +313,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localTorsoTattooIndex"
               :min="0"
-              :max="tattooLimit"
+              :max="tattooLimits.torso"
               :step="1"
               color="blue"
               thumb-label
@@ -312,7 +336,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBackTattooIndex"
               :min="0"
-              :max="tattooLimit"
+              :max="tattooLimits.back"
               :step="1"
               color="blue"
               thumb-label
@@ -335,7 +359,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localLeftArmTattooIndex"
               :min="0"
-              :max="tattooLimit"
+              :max="tattooLimits.leftArm"
               :step="1"
               color="blue"
               thumb-label
@@ -358,7 +382,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localRightArmTattooIndex"
               :min="0"
-              :max="tattooLimit"
+              :max="tattooLimits.rightArm"
               :step="1"
               color="blue"
               thumb-label
@@ -381,7 +405,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localLeftLegTattooIndex"
               :min="0"
-              :max="tattooLimit"
+              :max="tattooLimits.leftLeg"
               :step="1"
               color="blue"
               thumb-label
@@ -404,7 +428,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localRightLegTattooIndex"
               :min="0"
-              :max="tattooLimit"
+              :max="tattooLimits.rightLeg"
               :step="1"
               color="blue"
               thumb-label
