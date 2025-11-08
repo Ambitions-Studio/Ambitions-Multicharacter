@@ -134,11 +134,11 @@ RegisterNUICallback('createCharacter', function(data, cb)
   end
 
   if not isValid then
-    ambitionsPrint.error('Validation FAILED:')
+    ambitionsPrint.warning('Validation FAILED:')
     for i, error in ipairs(errors) do
-      ambitionsPrint.error('  ' .. i .. '. ' .. error)
+      ambitionsPrint.warning('  ' .. i .. '. ' .. error)
     end
-    ambitionsPrint.error('========== END VALIDATION (FAILED) ==========')
+    ambitionsPrint.warning('========== END VALIDATION (FAILED) ==========')
     cb({ success = false, errors = errors })
     return
   end
@@ -164,10 +164,10 @@ RegisterNUICallback('createCharacter', function(data, cb)
 end)
 
 RegisterNUICallback('characterCreationError', function(data, cb)
-  ambitionsPrint.error('CHARACTER CREATION ERROR')
-  ambitionsPrint.error('Error Type:', data.error)
-  ambitionsPrint.error('Error Message:', data.message)
-  ambitionsPrint.error('END ERROR')
+  ambitionsPrint.warning('CHARACTER CREATION ERROR')
+  ambitionsPrint.warning('Error Type:', data.error)
+  ambitionsPrint.warning('Error Message:', data.message)
+  ambitionsPrint.warning('END ERROR')
   cb('ok')
 end)
 
