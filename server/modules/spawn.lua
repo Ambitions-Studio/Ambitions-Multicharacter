@@ -56,14 +56,15 @@ local function SetupCharacter(sessionId)
       characterData[#characterData + 1] = {
         id = char.id,
         uniqueId = char.unique_id,
-        firstname = char.firstname,
-        lastname = char.lastname,
-        dateofbirth = char.dateofbirth,
-        sex = char.sex,
+        firstName = char.firstname,
+        lastName = char.lastname,
+        dateOfBirth = char.dateofbirth,
+        gender = char.sex,
         nationality = char.nationality,
         height = char.height,
         appearance = appearanceData,
-        group = char.group,
+        job = char.group or 'Unemployed',
+        crew = 'None',
         pedModel = char.ped_model,
         position = {
           x = char.position_x,
@@ -71,7 +72,7 @@ local function SetupCharacter(sessionId)
           z = char.position_z,
           heading = char.heading
         },
-        playtime = char.playtime,
+        playtime = char.playtime or 0,
         createdAt = char.created_at,
         lastPlayed = char.last_played
       }
