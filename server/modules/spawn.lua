@@ -1,5 +1,6 @@
 local identifiers = require('Ambitions.server.lib.player.identifiers')
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
+local random = require('Ambitions.shared.lib.math.random')
 local spawnConfig = require('config.spawn')
 
 ambitionsPrint.info('Server module loaded')
@@ -142,24 +143,30 @@ RegisterNetEvent('ambitions-multicharacter:server:checkPlayerData', function()
   CheckPlayerData()
 end)
 
---- Generate a unique character ID
----@return string uniqueId The unique character ID in format AMCXXXXXXXXXXXX
-local function GenerateUniqueCharacterId()
-  local charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  local uniqueId = 'AMC'
+--- Check if the unique id is already in use by a character
+---@param uniqueId string The unique id to check
+---@return boolean isInUse True if the unique id is in use, false otherwise
+local function isUniqueIdInUse(uniqueId)
+  local count = MySQL.scalar.await('SELECT COUNT(*) FROM characters WHERE unique_id = ?', { uniqueId })
+  return count > 0
+end
 
-  for i = 1, 12 do
-    local randomIndex = math.random(1, #charset)
-    uniqueId = uniqueId .. charset:sub(randomIndex, randomIndex)
+--- Get a valid unique id for the character
+---@param sessionId number The session id of the player
+---@return string | nil uniqueId The unique id or nil if failed to generate a valid unique id
+local function GetValidUniqueId(sessionId)
+  local uniqueId
+  local maxAttempts = 10
+
+  for _ = 1, maxAttempts do
+    uniqueId = random.alphanumeric(6)
+    if not isUniqueIdInUse(uniqueId) then
+      return uniqueId
+    end
   end
 
-  local exists = MySQL.scalar.await('SELECT id FROM characters WHERE unique_id = ?', { uniqueId })
-
-  if exists then
-    return GenerateUniqueCharacterId()
-  end
-
-  return uniqueId
+  ambitionsPrint.error('Failed to generate a valid unique id for player: ', sessionId, ' after ', maxAttempts, ' attempts')
+  return nil
 end
 
 --- Create a new character in the database
@@ -207,7 +214,17 @@ local function CreateCharacter(sessionId, data)
     return
   end
 
-  local uniqueId = GenerateUniqueCharacterId()
+  local uniqueId = GetValidUniqueId(sessionId)
+
+  if not uniqueId then
+    ambitionsPrint.error('Failed to generate unique ID for session:', sessionId)
+    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+      success = false,
+      error = 'Failed to generate unique character ID'
+    })
+    return
+  end
+
   ambitionsPrint.info('Generated unique ID:', uniqueId)
 
   local identity = data.identity
