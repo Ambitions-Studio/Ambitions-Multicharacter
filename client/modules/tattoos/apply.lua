@@ -1,84 +1,96 @@
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
+local Config = require('Ambitions-Multicharacter.config.tattoo')
 
 ambitionsPrint.info('Client tattoos module loaded')
 
-local tattoosByZone = {
-  head = {
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_009_M', label = 'Morbid Arachnid' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_038_M', label = 'Gas Guzzler' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_048_M', label = 'Muffler Helmet' },
-  },
-  torso = {
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_000_M', label = 'Demon Rider' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_001_M', label = 'Both Barrels' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_003_M', label = 'Web Rider' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_005_M', label = 'Made In America' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_006_M', label = 'Chopper Freedom' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_007_M', label = 'Swooping Eagle' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_010_M', label = 'Skull Of Taurus' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_011_M', label = 'R.I.P. My Brothers' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_013_M', label = 'Clawed Beast' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_017_M', label = 'These Colors Don\'t Run' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_018_M', label = 'Nightmare Stallion' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_019_M', label = 'Grim Rider' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_021_M', label = 'Brothers For Life' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_024_M', label = 'Western Stylized' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_026_M', label = 'Laughing Skull' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_036_M', label = 'Eagle Emblem' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_037_M', label = 'Brotherhood of Bikes' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_042_M', label = 'Skeleton' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_044_M', label = 'Thicker Than Blood' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_045_M', label = 'Ride or Die' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_054_M', label = 'Blazing Skull' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_056_M', label = 'Morbid' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_057_M', label = 'Bikers Mount' },
-  },
-  back = {
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_002_M', label = 'Rose Tribute' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_004_M', label = 'Dragon\'s Fury' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_008_M', label = 'Freedom Wheels' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_012_M', label = 'Demon Crossbones' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_014_M', label = 'Midnight Rider' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_015_M', label = 'Skull Chain' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_016_M', label = 'Snake Bike' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_022_M', label = 'Ride Forever' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_023_M', label = 'Ride Free' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_027_M', label = 'Reaper Vulture' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_029_M', label = 'Western MC' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_035_M', label = 'Bikertribe Insignia' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_039_M', label = 'No Regrets' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_041_M', label = 'Virtue Eagle' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_046_M', label = 'Bad Luck' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_047_M', label = 'Skull of Flames' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_049_M', label = 'Wheels of Death' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_053_M', label = 'Flaming Scorpion' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_055_M', label = 'Majestic Finish' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_059_M', label = 'Western Eagle' },
-  },
-  leftArm = {
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_020_M', label = 'Bone Wrench' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_028_M', label = 'Faggio' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_030_M', label = 'American Dream' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_031_M', label = 'Combat Skull' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_032_M', label = 'Praying Gloves' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_034_M', label = 'Dagger Devil' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_043_M', label = 'STFU' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_052_M', label = 'Executioner' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_058_M', label = 'Skull and Sword' },
-  },
-  rightArm = {
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_025_M', label = 'Bone Cruiser' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_033_M', label = 'Mum' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_040_M', label = 'Ride Hard Die Fast' },
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_051_M', label = 'Laughing Skull' },
-  },
-  leftLeg = {
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_050_M', label = 'Bone Rattle' },
-  },
-  rightLeg = {
-    { collection = 'mpbiker_overlays', name = 'MP_MP_Biker_Tat_060_M', label = 'Eagle Emblem' },
-  },
-}
+local function BuildTattoosByZone()
+  local tattoosByZone = {
+    head = {},
+    neck = {},
+    torso = {},
+    back = {},
+    leftArm = {},
+    rightArm = {},
+    leftLeg = {},
+    rightLeg = {},
+  }
+
+  if Config.Tattoos.ZONE_HEAD then
+    for _, tattoo in ipairs(Config.Tattoos.ZONE_HEAD) do
+      table.insert(tattoosByZone.head, {
+        collection = tattoo.collection,
+        name = tattoo.hashMale,
+        label = tattoo.label
+      })
+    end
+  end
+
+  tattoosByZone.neck = tattoosByZone.head
+
+  if Config.Tattoos.ZONE_TORSO then
+    for _, tattoo in ipairs(Config.Tattoos.ZONE_TORSO) do
+      table.insert(tattoosByZone.torso, {
+        collection = tattoo.collection,
+        name = tattoo.hashMale,
+        label = tattoo.label
+      })
+    end
+  end
+
+  tattoosByZone.back = tattoosByZone.torso
+
+  if Config.Tattoos.ZONE_LEFT_ARM then
+    for _, tattoo in ipairs(Config.Tattoos.ZONE_LEFT_ARM) do
+      table.insert(tattoosByZone.leftArm, {
+        collection = tattoo.collection,
+        name = tattoo.hashMale,
+        label = tattoo.label
+      })
+    end
+  end
+
+  if Config.Tattoos.ZONE_RIGHT_ARM then
+    for _, tattoo in ipairs(Config.Tattoos.ZONE_RIGHT_ARM) do
+      table.insert(tattoosByZone.rightArm, {
+        collection = tattoo.collection,
+        name = tattoo.hashMale,
+        label = tattoo.label
+      })
+    end
+  end
+
+  if Config.Tattoos.ZONE_LEFT_LEG then
+    for _, tattoo in ipairs(Config.Tattoos.ZONE_LEFT_LEG) do
+      table.insert(tattoosByZone.leftLeg, {
+        collection = tattoo.collection,
+        name = tattoo.hashMale,
+        label = tattoo.label
+      })
+    end
+  end
+
+  if Config.Tattoos.ZONE_RIGHT_LEG then
+    for _, tattoo in ipairs(Config.Tattoos.ZONE_RIGHT_LEG) do
+      table.insert(tattoosByZone.rightLeg, {
+        collection = tattoo.collection,
+        name = tattoo.hashMale,
+        label = tattoo.label
+      })
+    end
+  end
+
+  ambitionsPrint.success('Loaded tattoos from config:')
+  ambitionsPrint.info('  Head:', #tattoosByZone.head)
+  ambitionsPrint.info('  Torso:', #tattoosByZone.torso)
+  ambitionsPrint.info('  Left Arm:', #tattoosByZone.leftArm)
+  ambitionsPrint.info('  Right Arm:', #tattoosByZone.rightArm)
+  ambitionsPrint.info('  Left Leg:', #tattoosByZone.leftLeg)
+  ambitionsPrint.info('  Right Leg:', #tattoosByZone.rightLeg)
+
+  return tattoosByZone
+end
+
+local tattoosByZone = BuildTattoosByZone()
 
 local activeTattoos = {
   head = nil,

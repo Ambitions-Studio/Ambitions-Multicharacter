@@ -15,14 +15,14 @@ const selectedCategory = ref(0)
 const previousCategory = ref(0)
 
 const tattooLimits = ref({
-  head: 3,
-  neck: 3,
-  torso: 23,
-  back: 20,
-  leftArm: 9,
-  rightArm: 4,
-  leftLeg: 1,
-  rightLeg: 1,
+  head: 0,
+  neck: 0,
+  torso: 0,
+  back: 0,
+  leftArm: 0,
+  rightArm: 0,
+  leftLeg: 0,
+  rightLeg: 0,
 })
 
 const tattoosCategories = ref([
