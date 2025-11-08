@@ -1,5 +1,5 @@
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-local Config = require('Ambitions-Multicharacter.config.tattoo')
+local Config = require('config.tattoo')
 
 ambitionsPrint.info('Client tattoos module loaded')
 
