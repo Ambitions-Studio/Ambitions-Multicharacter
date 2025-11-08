@@ -116,11 +116,11 @@ local function DeleteCharacter(sessionId, uniqueId)
   end
 
   ambitionsPrint.info('Deleting character from database...')
-  local affectedRows = MySQL.query.await('DELETE FROM characters WHERE unique_id = ?', { uniqueId })
+  local result = MySQL.query.await('DELETE FROM characters WHERE unique_id = ?', { uniqueId })
 
-  if affectedRows and affectedRows > 0 then
+  if result and result.affectedRows and result.affectedRows > 0 then
     ambitionsPrint.success('Character deleted successfully from database')
-    ambitionsPrint.info('Affected rows:', affectedRows)
+    ambitionsPrint.info('Affected rows:', result.affectedRows)
 
     TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
       success = true
