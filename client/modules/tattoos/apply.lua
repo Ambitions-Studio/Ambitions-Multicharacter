@@ -137,24 +137,8 @@ local function ReapplyAllTattoos()
       ambitionsPrint.info('  Collection Hash:', tattoo.collectionHash)
       ambitionsPrint.info('  Tattoo Hash:', tattoo.tattooHash)
 
-      if not HasStreamedTextureDictLoaded(tattoo.collection) then
-        ambitionsPrint.warning('Texture dict not loaded, requesting:', tattoo.collection)
-        RequestStreamedTextureDict(tattoo.collection, true)
-        local timeout = 0
-        while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-          Wait(10)
-          timeout = timeout + 1
-        end
-        if HasStreamedTextureDictLoaded(tattoo.collection) then
-          ambitionsPrint.success('Texture dict loaded:', tattoo.collection)
-        else
-          ambitionsPrint.error('Failed to load texture dict:', tattoo.collection)
-        end
-      else
-        ambitionsPrint.info('Texture dict already loaded:', tattoo.collection)
-      end
-
-      -- Appliquer la decoration
+      -- Les overlays ne nécessitent PAS de RequestStreamedTextureDict
+      -- Appliquer directement la decoration
       AddPedDecorationFromHashes(ped, tattoo.collectionHash, tattoo.tattooHash)
       ambitionsPrint.success('Applied decoration for zone:', zone)
     end
@@ -190,15 +174,6 @@ local function ApplyHeadTattoo(data)
     ambitionsPrint.info('  Collection:', tattoo.collection)
     ambitionsPrint.info('  Name:', tattoo.name)
 
-    if not HasStreamedTextureDictLoaded(tattoo.collection) then
-      RequestStreamedTextureDict(tattoo.collection, true)
-      local timeout = 0
-      while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-      end
-    end
-
     activeTattoos.head = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
@@ -223,22 +198,10 @@ local function ApplyNeckTattoo(data)
 
   if tattooIndex > 0 and tattooIndex <= #zoneTattoos then
     local tattoo = zoneTattoos[tattooIndex]
-    local collectionHash = GetHashKey(tattoo.collection)
-    local tattooHash = GetHashKey(tattoo.name)
-
-    if not HasStreamedTextureDictLoaded(tattoo.collection) then
-      RequestStreamedTextureDict(tattoo.collection, true)
-      local timeout = 0
-      while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-      end
-    end
-
     activeTattoos.neck = {
       collection = tattoo.collection,
-      collectionHash = collectionHash,
-      tattooHash = tattooHash
+      collectionHash = GetHashKey(tattoo.collection),
+      tattooHash = GetHashKey(tattoo.name)
     }
   else
     activeTattoos.neck = nil
@@ -255,22 +218,10 @@ local function ApplyTorsoTattoo(data)
 
   if tattooIndex > 0 and tattooIndex <= #zoneTattoos then
     local tattoo = zoneTattoos[tattooIndex]
-    local collectionHash = GetHashKey(tattoo.collection)
-    local tattooHash = GetHashKey(tattoo.name)
-
-    if not HasStreamedTextureDictLoaded(tattoo.collection) then
-      RequestStreamedTextureDict(tattoo.collection, true)
-      local timeout = 0
-      while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-      end
-    end
-
     activeTattoos.torso = {
       collection = tattoo.collection,
-      collectionHash = collectionHash,
-      tattooHash = tattooHash
+      collectionHash = GetHashKey(tattoo.collection),
+      tattooHash = GetHashKey(tattoo.name)
     }
   else
     activeTattoos.torso = nil
@@ -287,22 +238,10 @@ local function ApplyBackTattoo(data)
 
   if tattooIndex > 0 and tattooIndex <= #zoneTattoos then
     local tattoo = zoneTattoos[tattooIndex]
-    local collectionHash = GetHashKey(tattoo.collection)
-    local tattooHash = GetHashKey(tattoo.name)
-
-    if not HasStreamedTextureDictLoaded(tattoo.collection) then
-      RequestStreamedTextureDict(tattoo.collection, true)
-      local timeout = 0
-      while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-      end
-    end
-
     activeTattoos.back = {
       collection = tattoo.collection,
-      collectionHash = collectionHash,
-      tattooHash = tattooHash
+      collectionHash = GetHashKey(tattoo.collection),
+      tattooHash = GetHashKey(tattoo.name)
     }
   else
     activeTattoos.back = nil
@@ -319,22 +258,10 @@ local function ApplyLeftArmTattoo(data)
 
   if tattooIndex > 0 and tattooIndex <= #zoneTattoos then
     local tattoo = zoneTattoos[tattooIndex]
-    local collectionHash = GetHashKey(tattoo.collection)
-    local tattooHash = GetHashKey(tattoo.name)
-
-    if not HasStreamedTextureDictLoaded(tattoo.collection) then
-      RequestStreamedTextureDict(tattoo.collection, true)
-      local timeout = 0
-      while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-      end
-    end
-
     activeTattoos.leftArm = {
       collection = tattoo.collection,
-      collectionHash = collectionHash,
-      tattooHash = tattooHash
+      collectionHash = GetHashKey(tattoo.collection),
+      tattooHash = GetHashKey(tattoo.name)
     }
   else
     activeTattoos.leftArm = nil
@@ -351,22 +278,10 @@ local function ApplyRightArmTattoo(data)
 
   if tattooIndex > 0 and tattooIndex <= #zoneTattoos then
     local tattoo = zoneTattoos[tattooIndex]
-    local collectionHash = GetHashKey(tattoo.collection)
-    local tattooHash = GetHashKey(tattoo.name)
-
-    if not HasStreamedTextureDictLoaded(tattoo.collection) then
-      RequestStreamedTextureDict(tattoo.collection, true)
-      local timeout = 0
-      while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-      end
-    end
-
     activeTattoos.rightArm = {
       collection = tattoo.collection,
-      collectionHash = collectionHash,
-      tattooHash = tattooHash
+      collectionHash = GetHashKey(tattoo.collection),
+      tattooHash = GetHashKey(tattoo.name)
     }
   else
     activeTattoos.rightArm = nil
@@ -383,22 +298,10 @@ local function ApplyLeftLegTattoo(data)
 
   if tattooIndex > 0 and tattooIndex <= #zoneTattoos then
     local tattoo = zoneTattoos[tattooIndex]
-    local collectionHash = GetHashKey(tattoo.collection)
-    local tattooHash = GetHashKey(tattoo.name)
-
-    if not HasStreamedTextureDictLoaded(tattoo.collection) then
-      RequestStreamedTextureDict(tattoo.collection, true)
-      local timeout = 0
-      while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-      end
-    end
-
     activeTattoos.leftLeg = {
       collection = tattoo.collection,
-      collectionHash = collectionHash,
-      tattooHash = tattooHash
+      collectionHash = GetHashKey(tattoo.collection),
+      tattooHash = GetHashKey(tattoo.name)
     }
   else
     activeTattoos.leftLeg = nil
@@ -415,22 +318,10 @@ local function ApplyRightLegTattoo(data)
 
   if tattooIndex > 0 and tattooIndex <= #zoneTattoos then
     local tattoo = zoneTattoos[tattooIndex]
-    local collectionHash = GetHashKey(tattoo.collection)
-    local tattooHash = GetHashKey(tattoo.name)
-
-    if not HasStreamedTextureDictLoaded(tattoo.collection) then
-      RequestStreamedTextureDict(tattoo.collection, true)
-      local timeout = 0
-      while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-      end
-    end
-
     activeTattoos.rightLeg = {
       collection = tattoo.collection,
-      collectionHash = collectionHash,
-      tattooHash = tattooHash
+      collectionHash = GetHashKey(tattoo.collection),
+      tattooHash = GetHashKey(tattoo.name)
     }
   else
     activeTattoos.rightLeg = nil
