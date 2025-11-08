@@ -138,7 +138,7 @@ local function ReapplyAllTattoos()
       ambitionsPrint.info('  Tattoo Hash:', tattoo.tattooHash)
 
       if not HasStreamedTextureDictLoaded(tattoo.collection) then
-        ambitionsPrint.warn('Texture dict not loaded, requesting:', tattoo.collection)
+        ambitionsPrint.warning('Texture dict not loaded, requesting:', tattoo.collection)
         RequestStreamedTextureDict(tattoo.collection, true)
         local timeout = 0
         while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
