@@ -101,23 +101,41 @@ end
 
 local function ReapplyAllTattoos()
   local ped = PlayerPedId()
+  local pedModel = GetEntityModel(ped)
 
-  ambitionsPrint.info('ReapplyAllTattoos - Ped ID:', ped, 'Model:', GetEntityModel(ped))
+  ambitionsPrint.info('========== ReapplyAllTattoos START ==========')
+  ambitionsPrint.info('Ped ID:', ped, 'Model:', pedModel)
 
   for zone, tattoo in pairs(activeTattoos) do
     if tattoo then
+      ambitionsPrint.info('Processing tattoo for zone:', zone)
+      ambitionsPrint.info('  Collection:', tattoo.collection)
+      ambitionsPrint.info('  Collection Hash:', tattoo.collectionHash)
+      ambitionsPrint.info('  Tattoo Hash:', tattoo.tattooHash)
+
       if not HasStreamedTextureDictLoaded(tattoo.collection) then
+        ambitionsPrint.warn('Texture dict not loaded, requesting:', tattoo.collection)
         RequestStreamedTextureDict(tattoo.collection, true)
-        while not HasStreamedTextureDictLoaded(tattoo.collection) do
-          Wait(0)
+        local timeout = 0
+        while not HasStreamedTextureDictLoaded(tattoo.collection) and timeout < 100 do
+          Wait(10)
+          timeout = timeout + 1
         end
-        ambitionsPrint.info('Loaded texture dict:', tattoo.collection)
+        if HasStreamedTextureDictLoaded(tattoo.collection) then
+          ambitionsPrint.success('Texture dict loaded:', tattoo.collection)
+        else
+          ambitionsPrint.error('Failed to load texture dict:', tattoo.collection)
+        end
+      else
+        ambitionsPrint.info('Texture dict already loaded:', tattoo.collection)
       end
 
       AddPedDecorationFromHashes(ped, tattoo.collectionHash, tattoo.tattooHash)
-      ambitionsPrint.info('Reapplied tattoo for zone:', zone, 'Collection:', tattoo.collection, 'Hash:', tattoo.tattooHash)
+      ambitionsPrint.success('Applied decoration for zone:', zone)
     end
   end
+
+  ambitionsPrint.info('========== ReapplyAllTattoos END ==========')
 end
 
 local function ApplyHeadTattoo(data)
