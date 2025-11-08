@@ -141,3 +141,144 @@ RegisterNetEvent('ambitions-multicharacter:server:checkPlayerData', function()
   ambitionsPrint.info('Received checkPlayerData event from client')
   CheckPlayerData()
 end)
+
+--- Generate a unique character ID
+---@return string uniqueId The unique character ID in format AMCXXXXXXXXXXXX
+local function GenerateUniqueCharacterId()
+  local charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  local uniqueId = 'AMC'
+
+  for i = 1, 12 do
+    local randomIndex = math.random(1, #charset)
+    uniqueId = uniqueId .. charset:sub(randomIndex, randomIndex)
+  end
+
+  local exists = MySQL.scalar.await('SELECT id FROM characters WHERE unique_id = ?', { uniqueId })
+
+  if exists then
+    return GenerateUniqueCharacterId()
+  end
+
+  return uniqueId
+end
+
+--- Create a new character in the database
+---@param sessionId number The session id of the player
+---@param data table The character data containing identity, appearance and slot
+local function CreateCharacter(sessionId, data)
+  ambitionsPrint.success('========== CREATE CHARACTER START ==========')
+  ambitionsPrint.info('Session ID:', sessionId)
+  ambitionsPrint.info('Slot:', data.slot)
+
+  local PLAYER_IDENTIFIERS <const> = identifiers.get(sessionId)
+  local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
+
+  if not PLAYER_LICENSE then
+    ambitionsPrint.error('Failed to get player license for session:', sessionId)
+    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+      success = false,
+      error = 'Failed to retrieve player identifiers'
+    })
+    return
+  end
+
+  ambitionsPrint.info('Getting user ID for license:', PLAYER_LICENSE)
+  local userId = MySQL.scalar.await('SELECT id FROM users WHERE license = ?', { PLAYER_LICENSE })
+
+  if not userId then
+    ambitionsPrint.error('User not found for license:', PLAYER_LICENSE)
+    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+      success = false,
+      error = 'User not found in database'
+    })
+    return
+  end
+
+  ambitionsPrint.success('User ID found:', userId)
+
+  local characterCount = MySQL.scalar.await('SELECT COUNT(*) FROM characters WHERE user_id = ?', { userId })
+
+  if characterCount >= spawnConfig.characterSlots then
+    ambitionsPrint.error('Character limit reached for user:', userId)
+    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+      success = false,
+      error = 'Character slot limit reached'
+    })
+    return
+  end
+
+  local uniqueId = GenerateUniqueCharacterId()
+  ambitionsPrint.info('Generated unique ID:', uniqueId)
+
+  local identity = data.identity
+  local appearance = data.appearance
+
+  local pedModel = appearance.ped and appearance.ped.selectedPed or 'mp_m_freemode_01'
+  local appearanceJson = json.encode(appearance)
+
+  local spawnLocation = spawnConfig.spawnLocation
+  local posX = spawnLocation.coords.x
+  local posY = spawnLocation.coords.y
+  local posZ = spawnLocation.coords.z
+  local heading = spawnLocation.coords.h or 0.0
+
+  ambitionsPrint.info('Inserting character into database...')
+  ambitionsPrint.info('  First Name:', identity.firstName)
+  ambitionsPrint.info('  Last Name:', identity.lastName)
+  ambitionsPrint.info('  Date of Birth:', identity.dateOfBirth)
+  ambitionsPrint.info('  Gender:', identity.gender)
+  ambitionsPrint.info('  Nationality:', identity.nationality)
+  ambitionsPrint.info('  Height:', identity.height)
+  ambitionsPrint.info('  Ped Model:', pedModel)
+  ambitionsPrint.info('  Spawn Position:', posX, posY, posZ, heading)
+
+  local insertId = MySQL.insert.await([[
+    INSERT INTO characters
+    (user_id, unique_id, firstname, lastname, dateofbirth, sex, nationality, height, appearance, `group`, ped_model, position_x, position_y, position_z, heading)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  ]], {
+    userId,
+    uniqueId,
+    identity.firstName,
+    identity.lastName,
+    identity.dateOfBirth,
+    identity.gender,
+    identity.nationality,
+    identity.height,
+    appearanceJson,
+    'user',
+    pedModel,
+    posX,
+    posY,
+    posZ,
+    heading
+  })
+
+  if not insertId then
+    ambitionsPrint.error('Failed to insert character into database')
+    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+      success = false,
+      error = 'Database insertion failed'
+    })
+    return
+  end
+
+  ambitionsPrint.success('Character created successfully!')
+  ambitionsPrint.success('  Database ID:', insertId)
+  ambitionsPrint.success('  Unique ID:', uniqueId)
+  ambitionsPrint.success('========== CREATE CHARACTER END ==========')
+
+  TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    success = true,
+    characterId = insertId,
+    uniqueId = uniqueId
+  })
+
+  SetupCharacter(sessionId)
+end
+
+RegisterNetEvent('ambitions-multicharacter:server:createCharacter', function(data)
+  local SESSION_ID <const> = source
+  ambitionsPrint.info('Received createCharacter event from client session:', SESSION_ID)
+  CreateCharacter(SESSION_ID, data)
+end)

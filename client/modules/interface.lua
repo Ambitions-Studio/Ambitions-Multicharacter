@@ -88,7 +88,62 @@ RegisterNUICallback('cameraZoom', function(data, cb)
 end)
 
 RegisterNUICallback('createCharacter', function(data, cb)
-  ambitionsPrint.success('========== CHARACTER CREATION SUCCESS ==========')
+  ambitionsPrint.success('========== CHARACTER CREATION VALIDATION ==========')
+
+  local isValid = true
+  local errors = {}
+
+  if not data.identity then
+    isValid = false
+    table.insert(errors, 'Identity data missing')
+  else
+    if not data.identity.firstName or data.identity.firstName == '' then
+      isValid = false
+      table.insert(errors, 'First name is required')
+    end
+    if not data.identity.lastName or data.identity.lastName == '' then
+      isValid = false
+      table.insert(errors, 'Last name is required')
+    end
+    if not data.identity.dateOfBirth or data.identity.dateOfBirth == '' then
+      isValid = false
+      table.insert(errors, 'Date of birth is required')
+    end
+    if not data.identity.gender or (data.identity.gender ~= 'm' and data.identity.gender ~= 'f') then
+      isValid = false
+      table.insert(errors, 'Valid gender is required (m or f)')
+    end
+    if not data.identity.nationality or data.identity.nationality == '' then
+      isValid = false
+      table.insert(errors, 'Nationality is required')
+    end
+    if not data.identity.height or data.identity.height < 140 or data.identity.height > 220 then
+      isValid = false
+      table.insert(errors, 'Height must be between 140 and 220')
+    end
+  end
+
+  if not data.appearance then
+    isValid = false
+    table.insert(errors, 'Appearance data missing')
+  end
+
+  if not data.slot or data.slot < 1 then
+    isValid = false
+    table.insert(errors, 'Invalid slot number')
+  end
+
+  if not isValid then
+    ambitionsPrint.error('Validation FAILED:')
+    for i, error in ipairs(errors) do
+      ambitionsPrint.error('  ' .. i .. '. ' .. error)
+    end
+    ambitionsPrint.error('========== END VALIDATION (FAILED) ==========')
+    cb({ success = false, errors = errors })
+    return
+  end
+
+  ambitionsPrint.success('Validation PASSED')
   ambitionsPrint.info('Slot:', data.slot)
   ambitionsPrint.info('Identity:')
   ambitionsPrint.info('  First Name:', data.identity.firstName)
@@ -97,20 +152,15 @@ RegisterNUICallback('createCharacter', function(data, cb)
   ambitionsPrint.info('  Gender:', data.identity.gender)
   ambitionsPrint.info('  Nationality:', data.identity.nationality)
   ambitionsPrint.info('  Height:', data.identity.height)
-  ambitionsPrint.info('Appearance:')
-  ambitionsPrint.info('  Ped:', data.appearance.ped and data.appearance.ped.selectedPed or 'None')
-  ambitionsPrint.info('  Heritage - Father:', data.appearance.heritage and data.appearance.heritage.father or 'None')
-  ambitionsPrint.info('  Heritage - Mother:', data.appearance.heritage and data.appearance.heritage.mother or 'None')
-  ambitionsPrint.info('  Physical - Hair Style:', data.appearance.physical and data.appearance.physical.hairStyle or 'None')
-  ambitionsPrint.info('  Physical - Hair Color:', data.appearance.physical and data.appearance.physical.hairColor or 'None')
-  ambitionsPrint.info('  Clothing - Torso:', data.appearance.clothing and data.appearance.clothing.torsoDrawable or 'None')
-  ambitionsPrint.info('  Accessories - Hat:', data.appearance.accessories and data.appearance.accessories.hatDrawable or 'None')
-  ambitionsPrint.info('  Tattoos - Head:', data.appearance.tattoos and data.appearance.tattoos.headTattooIndex or 'None')
-  ambitionsPrint.info('  Tattoos - Torso:', data.appearance.tattoos and data.appearance.tattoos.torsoTattooIndex or 'None')
-  ambitionsPrint.success('========== COMPLETE CHARACTER DATA ==========')
-  ambitionsPrint.info(json.encode(data, { indent = true }))
-  ambitionsPrint.success('========== END CHARACTER CREATION ==========')
-  cb('ok')
+  ambitionsPrint.success('========== SENDING TO SERVER ==========')
+
+  TriggerServerEvent('ambitions-multicharacter:server:createCharacter', {
+    slot = data.slot,
+    identity = data.identity,
+    appearance = data.appearance
+  })
+
+  cb({ success = true })
 end)
 
 RegisterNUICallback('characterCreationError', function(data, cb)
