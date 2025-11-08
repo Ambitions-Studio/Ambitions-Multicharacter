@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -23,6 +24,22 @@ const emit = defineEmits<{
 
 const localAgeingStyle = ref(props.ageingStyle)
 const localAgeingOpacity = ref(props.ageingOpacity)
+const maxAgeingStyles = ref(14) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxAgeingStyles.value = limits.ageingStyles
+  }
+})
+
+watch([localAgeingStyle, localAgeingOpacity], ([style, opacity]) => {
+  sendNuiEvent('applyAgeingCustomization', {
+    style,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -52,7 +69,7 @@ const localAgeingOpacity = ref(props.ageingOpacity)
         <VSlider
           v-model="localAgeingStyle"
           :min="0"
-          :max="14"
+          :max="maxAgeingStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"

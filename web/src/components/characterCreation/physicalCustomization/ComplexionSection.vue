@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -23,6 +24,22 @@ const emit = defineEmits<{
 
 const localComplexionStyle = ref(props.complexionStyle)
 const localComplexionOpacity = ref(props.complexionOpacity)
+const maxComplexionStyles = ref(11) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxComplexionStyles.value = limits.complexionStyles
+  }
+})
+
+watch([localComplexionStyle, localComplexionOpacity], ([style, opacity]) => {
+  sendNuiEvent('applyComplexionCustomization', {
+    style,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -52,7 +69,7 @@ const localComplexionOpacity = ref(props.complexionOpacity)
         <VSlider
           v-model="localComplexionStyle"
           :min="0"
-          :max="11"
+          :max="maxComplexionStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -23,6 +24,13 @@ const emit = defineEmits<{
 
 const localJawWidth = ref(props.jawWidth)
 const localJawHeight = ref(props.jawHeight)
+
+watch([localJawWidth, localJawHeight], ([width, height]) => {
+  sendNuiEvent('applyJawCustomization', {
+    width,
+    height,
+  })
+})
 </script>
 
 <template>

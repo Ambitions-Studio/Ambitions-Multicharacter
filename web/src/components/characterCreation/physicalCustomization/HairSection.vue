@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import HAIR_COLORS from '@/data/hairColors'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -27,6 +29,24 @@ const emit = defineEmits<{
 const localHairStyle = ref(props.hairStyle)
 const localHairColor = ref(props.hairColor)
 const localHairHighlight = ref(props.hairHighlight)
+const maxHairStyles = ref(78) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number }>('getCustomizationLimits')
+  if (limits) {
+    maxHairStyles.value = limits.hairStyles
+  }
+})
+
+// Watch for hair changes and apply in real-time
+watch([localHairStyle, localHairColor, localHairHighlight], ([style, color, highlight]) => {
+  sendNuiEvent('applyHairStyle', {
+    style,
+    color,
+    highlight,
+  })
+})
 </script>
 
 <template>
@@ -57,7 +77,7 @@ const localHairHighlight = ref(props.hairHighlight)
         <VSlider
           v-model="localHairStyle"
           :min="0"
-          :max="78"
+          :max="maxHairStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"
@@ -82,18 +102,14 @@ const localHairHighlight = ref(props.hairHighlight)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localHairColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:hairColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in HAIR_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localHairColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localHairColor = index; emit('update:hairColor', index)"
         />
       </div>
     </div>
@@ -111,18 +127,14 @@ const localHairHighlight = ref(props.hairHighlight)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localHairHighlight"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:hairHighlight', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in HAIR_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localHairHighlight === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localHairHighlight = index; emit('update:hairHighlight', index)"
         />
       </div>
     </div>

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import MAKEUP_COLORS from '@/data/makeupColors'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -31,6 +33,24 @@ const localLipThickness = ref(props.lipThickness)
 const localLipstickStyle = ref(props.lipstickStyle)
 const localLipstickColor = ref(props.lipstickColor)
 const localLipstickOpacity = ref(props.lipstickOpacity)
+const maxLipstickStyles = ref(9) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxLipstickStyles.value = limits.lipstickStyles
+  }
+})
+
+watch([localLipThickness, localLipstickStyle, localLipstickColor, localLipstickOpacity], ([thickness, style, color, opacity]) => {
+  sendNuiEvent('applyLipsCustomization', {
+    thickness,
+    style,
+    color,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -97,7 +117,7 @@ const localLipstickOpacity = ref(props.lipstickOpacity)
         <VSlider
           v-model="localLipstickStyle"
           :min="0"
-          :max="9"
+          :max="maxLipstickStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"
@@ -122,18 +142,14 @@ const localLipstickOpacity = ref(props.lipstickOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localLipstickColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:lipstickColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in MAKEUP_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localLipstickColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localLipstickColor = index; emit('update:lipstickColor', index)"
         />
       </div>
     </div>

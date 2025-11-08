@@ -10,8 +10,8 @@ export type CharacterAppearance = {
   heritage?: {
     father: number
     mother: number
-    resemblance: number
-    skinTone: number
+    faceResemblance: number
+    skinResemblance: number
   }
   physical?: {
     hairStyle: number
@@ -106,22 +106,14 @@ export type CharacterAppearance = {
     neckAccessoryTexture: number
   }
   tattoos?: {
-    headTattooCollection: number
-    headTattooHash: number
-    neckTattooCollection: number
-    neckTattooHash: number
-    torsoTattooCollection: number
-    torsoTattooHash: number
-    backTattooCollection: number
-    backTattooHash: number
-    leftArmTattooCollection: number
-    leftArmTattooHash: number
-    rightArmTattooCollection: number
-    rightArmTattooHash: number
-    leftLegTattooCollection: number
-    leftLegTattooHash: number
-    rightLegTattooCollection: number
-    rightLegTattooHash: number
+    headTattooIndex: number
+    neckTattooIndex: number
+    torsoTattooIndex: number
+    backTattooIndex: number
+    leftArmTattooIndex: number
+    rightArmTattooIndex: number
+    leftLegTattooIndex: number
+    rightLegTattooIndex: number
   }
 }
 
@@ -196,8 +188,8 @@ export const useCharacterStore = defineStore('character', () => {
       heritage: {
         father: heritageData.father,
         mother: heritageData.mother,
-        resemblance: heritageData.faceResemblance,
-        skinTone: heritageData.skinResemblance,
+        faceResemblance: heritageData.faceResemblance,
+        skinResemblance: heritageData.skinResemblance,
       },
     }
   }

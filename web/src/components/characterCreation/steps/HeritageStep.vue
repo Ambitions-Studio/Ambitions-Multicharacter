@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { mdiFaceMan, mdiPalette } from '@/icons'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
+import { sendNuiCallback } from '@/utils/nui'
 
 const { t } = useI18n()
 const appearanceStore = useAppearanceStore()
@@ -41,21 +42,56 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props
-const localSelectedFather = ref(
-  appearanceStore.selectedFather ?? props.selectedFather
-)
-const localSelectedMother = ref(
-  appearanceStore.selectedMother ?? props.selectedMother
-)
-const localFaceResemblance = ref(
-  appearanceStore.faceResemblance ?? props.faceResemblance
-)
-const localSkinResemblance = ref(
-  appearanceStore.skinResemblance ?? props.skinResemblance
+// Use computed with getter/setter for reactive updates
+const localSelectedFather = computed({
+  get: () => props.selectedFather || props.fatherOptions[0]?.id || 0,
+  set: (val) => emit('update:selectedFather', val),
+})
+
+const localSelectedMother = computed({
+  get: () => props.selectedMother || props.motherOptions[0]?.id || 21,
+  set: (val) => emit('update:selectedMother', val),
+})
+
+const localFaceResemblance = computed({
+  get: () => props.faceResemblance,
+  set: (val) => emit('update:faceResemblance', val),
+})
+
+const localSkinResemblance = computed({
+  get: () => props.skinResemblance,
+  set: (val) => emit('update:skinResemblance', val),
+})
+
+// Get portrait image URL from public directory (no hashing)
+const getPortraitUrl = (photoFilename: string) => {
+  return `images/parent_portrait/${photoFilename}`
+}
+
+// Computed refs for selected parents to avoid multiple .find() calls
+const selectedFatherData = computed(() =>
+  props.fatherOptions.find((f) => f.id === localSelectedFather.value)
 )
 
-const isDev = import.meta.env.DEV
+const selectedMotherData = computed(() =>
+  props.motherOptions.find((m) => m.id === localSelectedMother.value)
+)
+
+// Watch for heritage changes and apply in real-time
+watch(
+  [localSelectedFather, localSelectedMother, localFaceResemblance, localSkinResemblance],
+  ([father, mother, faceResemblance, skinResemblance]) => {
+    // Only apply if we have valid IDs (not 0)
+    if (father && mother) {
+      sendNuiCallback('applyHeritage', {
+        father,
+        mother,
+        faceResemblance,
+        skinResemblance,
+      })
+    }
+  }
+)
 
 const handleContinue = () => {
   // Save to AppearanceStore
@@ -109,26 +145,15 @@ const handleContinue = () => {
         <!-- Father Selection -->
         <div class="space-y-4">
           <div class="text-center">
-            <!-- Development Mode: Gender Icon -->
+            <!-- Father Portrait -->
             <div
-              v-if="isDev"
-              class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 border-2 border-blue-400/50 flex items-center justify-center"
-            >
-              <span class="text-white text-3xl font-bold">♂</span>
-            </div>
-
-            <!-- Production Mode: Father Photo Placeholder -->
-            <div
-              v-else
-              class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-blue-400/50 overflow-hidden bg-slate-700/50"
+              class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-blue-400/50 overflow-hidden bg-slate-700/50 flex items-center justify-center"
             >
               <img
-                v-if="
-                  localSelectedFather !== null && fatherOptions[localSelectedFather]?.photo
-                "
-                :src="fatherOptions[localSelectedFather].photo"
-                :alt="fatherOptions[localSelectedFather]?.name"
-                class="w-full h-full object-cover"
+                v-if="selectedFatherData?.photo"
+                :src="getPortraitUrl(selectedFatherData.photo)"
+                :alt="selectedFatherData.name"
+                class="w-full h-full object-cover object-center"
               />
               <div
                 v-else
@@ -160,26 +185,15 @@ const handleContinue = () => {
         <!-- Mother Selection -->
         <div class="space-y-4">
           <div class="text-center">
-            <!-- Development Mode: Gender Icon -->
+            <!-- Mother Portrait -->
             <div
-              v-if="isDev"
-              class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-pink-600 to-pink-800 border-2 border-pink-400/50 flex items-center justify-center"
-            >
-              <span class="text-white text-3xl font-bold">♀</span>
-            </div>
-
-            <!-- Production Mode: Mother Photo Placeholder -->
-            <div
-              v-else
-              class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-pink-400/50 overflow-hidden bg-slate-700/50"
+              class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-pink-400/50 overflow-hidden bg-slate-700/50 flex items-center justify-center"
             >
               <img
-                v-if="
-                  localSelectedMother !== null && motherOptions[localSelectedMother]?.photo
-                "
-                :src="motherOptions[localSelectedMother].photo"
-                :alt="motherOptions[localSelectedMother]?.name"
-                class="w-full h-full object-cover"
+                v-if="selectedMotherData?.photo"
+                :src="getPortraitUrl(selectedMotherData.photo)"
+                :alt="selectedMotherData.name"
+                class="w-full h-full object-cover object-center"
               />
               <div
                 v-else
