@@ -29,9 +29,8 @@ const emit = defineEmits<{
 const localChestHairStyle = ref(props.chestHairStyle)
 const localChestHairColor = ref(props.chestHairColor)
 const localChestHairOpacity = ref(props.chestHairOpacity)
-const maxChestHairStyles = ref(16) // Default fallback
+const maxChestHairStyles = ref(16)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number; sunDamageStyles: number; molesFrecklesStyles: number; chestHairStyles: number }>('getCustomizationLimits')
   if (limits) {

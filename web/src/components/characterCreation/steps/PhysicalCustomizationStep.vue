@@ -225,7 +225,6 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props
 const localHairStyle = ref(appearanceStore.hairStyle ?? props.hairStyle)
 const localHairColor = ref(appearanceStore.hairColor ?? props.hairColor)
 const localHairHighlight = ref(appearanceStore.hairHighlight ?? props.hairHighlight)
@@ -281,7 +280,6 @@ const localChestHairOpacity = ref(appearanceStore.chestHairOpacity ?? props.ches
 const localBodyBlemishesStyle = ref(appearanceStore.bodyBlemishesStyle ?? props.bodyBlemishesStyle)
 const localBodyBlemishesOpacity = ref(appearanceStore.bodyBlemishesOpacity ?? props.bodyBlemishesOpacity)
 
-// Save current section when switching categories
 const saveSectionData = (categoryIndex: number) => {
   switch (categoryIndex) {
     case 0: // Hair
@@ -413,17 +411,14 @@ const saveSectionData = (categoryIndex: number) => {
   }
 }
 
-// Watch for category changes and save previous section
 watch(currentCategory, (newCategory, oldCategory) => {
   saveSectionData(oldCategory)
   previousCategory.value = oldCategory
 })
 
 const handleContinue = () => {
-  // Save current section before validating
   saveSectionData(currentCategory.value)
 
-  // Save ALL physical data to AppearanceStore (to be sure)
   const physicalData = {
     hairStyle: localHairStyle.value,
     hairColor: localHairColor.value,
@@ -483,7 +478,6 @@ const handleContinue = () => {
 
   appearanceStore.setPhysicalCustomization(physicalData)
 
-  // Update ONLY physical section in character store
   characterStore.setPhysicalCustomization(physicalData)
 
   emit('update:hairStyle', localHairStyle.value)

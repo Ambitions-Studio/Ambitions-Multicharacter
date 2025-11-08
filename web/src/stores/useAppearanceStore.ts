@@ -116,16 +116,13 @@ export type AppearanceData = {
 }
 
 export const useAppearanceStore = defineStore('appearance', () => {
-  // State - Ped Selection
   const selectedPed = ref<string | null>(null)
 
-  // State - Heritage
   const selectedFather = ref<number>(0)
   const selectedMother = ref<number>(0)
   const faceResemblance = ref<number>(0.5)
   const skinResemblance = ref<number>(0.5)
 
-  // State - Physical Customization
   const hairStyle = ref<number>(0)
   const hairColor = ref<number>(0)
   const hairHighlight = ref<number>(0)
@@ -181,7 +178,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
   const bodyBlemishesStyle = ref<number>(0)
   const bodyBlemishesOpacity = ref<number>(0)
 
-  // State - Clothing
   const maskDrawable = ref<number>(0)
   const maskTexture = ref<number>(0)
   const torsoDrawable = ref<number>(0)
@@ -203,7 +199,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
   const backpackDrawable = ref<number>(0)
   const backpackTexture = ref<number>(0)
 
-  // State - Accessories
   const hatDrawable = ref<number>(0)
   const hatTexture = ref<number>(0)
   const glassesDrawable = ref<number>(0)
@@ -217,7 +212,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
   const neckAccessoryDrawable = ref<number>(0)
   const neckAccessoryTexture = ref<number>(0)
 
-  // State - Tattoos
   const headTattooIndex = ref<number>(0)
   const neckTattooIndex = ref<number>(0)
   const torsoTattooIndex = ref<number>(0)
@@ -229,12 +223,10 @@ export const useAppearanceStore = defineStore('appearance', () => {
 
   const isAppearanceComplete = ref(false)
 
-  // Setters - Ped Selection
   const setSelectedPed = (value: string | null) => {
     selectedPed.value = value
   }
 
-  // Setters - Heritage
   const setSelectedFather = (value: number) => {
     selectedFather.value = value
   }
@@ -251,7 +243,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     skinResemblance.value = value
   }
 
-  // Setters - Physical Customization (Global)
   const setPhysicalCustomization = (data: AppearanceData['physical']) => {
     hairStyle.value = data.hairStyle
     hairColor.value = data.hairColor
@@ -309,7 +300,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     bodyBlemishesOpacity.value = data.bodyBlemishesOpacity
   }
 
-  // Setters - Physical Customization (Per Section)
   const setHairSection = (data: {
     hairStyle: number
     hairColor: number
@@ -479,7 +469,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     bodyBlemishesOpacity.value = data.bodyBlemishesOpacity
   }
 
-  // Setters - Clothing (Global)
   const setClothing = (data: AppearanceData['clothing']) => {
     maskDrawable.value = data.maskDrawable
     maskTexture.value = data.maskTexture
@@ -503,7 +492,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     backpackTexture.value = data.backpackTexture
   }
 
-  // Setters - Clothing (Per Section)
   const setMaskSection = (data: { maskDrawable: number; maskTexture: number }) => {
     maskDrawable.value = data.maskDrawable
     maskTexture.value = data.maskTexture
@@ -560,7 +548,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     backpackTexture.value = data.backpackTexture
   }
 
-  // Setters - Accessories (Global)
   const setAccessories = (data: AppearanceData['accessories']) => {
     hatDrawable.value = data.hatDrawable
     hatTexture.value = data.hatTexture
@@ -576,7 +563,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     neckAccessoryTexture.value = data.neckAccessoryTexture
   }
 
-  // Setters - Accessories (Per Section)
   const setHatSection = (data: { hatDrawable: number; hatTexture: number }) => {
     hatDrawable.value = data.hatDrawable
     hatTexture.value = data.hatTexture
@@ -610,7 +596,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     neckAccessoryTexture.value = data.neckAccessoryTexture
   }
 
-  // Setters - Tattoos (Global)
   const setTattoos = (data: AppearanceData['tattoos']) => {
     headTattooIndex.value = data.headTattooIndex
     neckTattooIndex.value = data.neckTattooIndex
@@ -622,7 +607,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     rightLegTattooIndex.value = data.rightLegTattooIndex
   }
 
-  // Setters - Tattoos (Per Section)
   const setHeadTattooSection = (data: {
     headTattooIndex: number
   }) => {
@@ -671,7 +655,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     rightLegTattooIndex.value = data.rightLegTattooIndex
   }
 
-  // Getters
   const getAppearanceData = (): AppearanceData => {
     return {
       ped: {
@@ -788,7 +771,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     }
   }
 
-  // Actions
   const setAppearanceData = (data: AppearanceData) => {
     selectedPed.value = data.ped.selectedPed
     selectedFather.value = data.heritage.father
@@ -910,14 +892,11 @@ export const useAppearanceStore = defineStore('appearance', () => {
   }
 
   return {
-    // State - Ped
     selectedPed,
-    // State - Heritage
     selectedFather,
     selectedMother,
     faceResemblance,
     skinResemblance,
-    // State - Physical
     hairStyle,
     hairColor,
     hairHighlight,
@@ -972,7 +951,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     chestHairOpacity,
     bodyBlemishesStyle,
     bodyBlemishesOpacity,
-    // State - Clothing
     maskDrawable,
     maskTexture,
     torsoDrawable,
@@ -993,7 +971,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     shoesTexture,
     backpackDrawable,
     backpackTexture,
-    // State - Accessories
     hatDrawable,
     hatTexture,
     glassesDrawable,
@@ -1006,7 +983,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     braceletTexture,
     neckAccessoryDrawable,
     neckAccessoryTexture,
-    // State - Tattoos
     headTattooIndex,
     neckTattooIndex,
     torsoTattooIndex,
@@ -1016,15 +992,12 @@ export const useAppearanceStore = defineStore('appearance', () => {
     leftLegTattooIndex,
     rightLegTattooIndex,
     isAppearanceComplete,
-    // Setters - Ped & Heritage
     setSelectedPed,
     setSelectedFather,
     setSelectedMother,
     setFaceResemblance,
     setSkinResemblance,
-    // Setters - Physical (Global)
     setPhysicalCustomization,
-    // Setters - Physical (Per Section)
     setHairSection,
     setEyesSection,
     setEyebrowsSection,
@@ -1043,9 +1016,7 @@ export const useAppearanceStore = defineStore('appearance', () => {
     setMolesFrecklesSection,
     setChestHairSection,
     setBodyBlemishesSection,
-    // Setters - Clothing (Global)
     setClothing,
-    // Setters - Clothing (Per Section)
     setMaskSection,
     setTorsoSection,
     setUndershirtSection,
@@ -1056,18 +1027,14 @@ export const useAppearanceStore = defineStore('appearance', () => {
     setPantsSection,
     setShoesSection,
     setBackpackSection,
-    // Setters - Accessories (Global)
     setAccessories,
-    // Setters - Accessories (Per Section)
     setHatSection,
     setGlassesSection,
     setEarringsSection,
     setWatchSection,
     setBraceletSection,
     setNeckAccessorySection,
-    // Setters - Tattoos (Global)
     setTattoos,
-    // Setters - Tattoos (Per Section)
     setHeadTattooSection,
     setNeckTattooSection,
     setTorsoTattooSection,
@@ -1076,7 +1043,6 @@ export const useAppearanceStore = defineStore('appearance', () => {
     setRightArmTattooSection,
     setLeftLegTattooSection,
     setRightLegTattooSection,
-    // Getters
     getAppearanceData,
     setAppearanceData,
     submitAppearance,

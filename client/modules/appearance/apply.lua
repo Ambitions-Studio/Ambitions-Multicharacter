@@ -1,7 +1,4 @@
 local characterDefaults = require('config.character_default')
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-
-ambitionsPrint.info('Client appearance module loaded')
 
 local currentPed = nil
 local currentGender = 'm'
@@ -31,9 +28,6 @@ end
 --- Apply ped model in real-time
 ---@param pedModel string The ped model to apply
 local function ApplyPedModel(pedModel)
-  local playerPed = PlayerPedId()
-
-  -- Check if it's a freemode ped
   if pedModel == 'mp_m_freemode_01' or pedModel == 'mp_f_freemode_01' then
     currentGender = pedModel == 'mp_m_freemode_01' and 'm' or 'f'
 
@@ -49,12 +43,8 @@ local function ApplyPedModel(pedModel)
 
     currentPed = PlayerPedId()
 
-    -- Apply default appearance for freemode peds
     ApplyDefaultAppearance(currentPed, currentGender)
-
-    ambitionsPrint.success('Applied freemode ped model:', pedModel)
   else
-    -- Non-freemode ped, just spawn the model
     local modelHash = GetHashKey(pedModel)
     RequestModel(modelHash)
 
@@ -66,8 +56,6 @@ local function ApplyPedModel(pedModel)
     SetModelAsNoLongerNeeded(modelHash)
 
     currentPed = PlayerPedId()
-
-    ambitionsPrint.success('Applied ped model:', pedModel)
   end
 end
 
@@ -78,14 +66,11 @@ function ApplyDefaultAppearance(ped, gender)
   local defaults = characterDefaults.defaultCharacter[gender]
 
   if not defaults then
-    ambitionsPrint.error('No default appearance found for gender:', gender)
     return
   end
 
-  -- Head blend data (heritage)
   SetPedHeadBlendData(ped, defaults.mom, defaults.dad, 0, defaults.mom, defaults.dad, 0, defaults.face_md_weight / 100.0, defaults.skin_md_weight / 100.0, 0.0, false)
 
-  -- Face features
   SetPedFaceFeature(ped, 0, defaults.nose_1 / 10.0)
   SetPedFaceFeature(ped, 1, defaults.nose_2 / 10.0)
   SetPedFaceFeature(ped, 2, defaults.nose_3 / 10.0)
@@ -107,11 +92,9 @@ function ApplyDefaultAppearance(ped, gender)
   SetPedFaceFeature(ped, 18, defaults.chin_4 / 10.0)
   SetPedFaceFeature(ped, 19, defaults.neck_thickness / 10.0)
 
-  -- Hair
   SetPedComponentVariation(ped, 2, defaults.hair_1, defaults.hair_2, 0)
   SetPedHairTint(ped, defaults.hair_color_1, defaults.hair_color_2)
 
-  -- Clothing
   SetPedComponentVariation(ped, 8, defaults.tshirt_1, defaults.tshirt_2, 0)
   SetPedComponentVariation(ped, 3, defaults.torso_1, defaults.torso_2, 0)
   SetPedComponentVariation(ped, 10, defaults.decals_1, defaults.decals_2, 0)
@@ -123,12 +106,10 @@ function ApplyDefaultAppearance(ped, gender)
   SetPedComponentVariation(ped, 7, defaults.chain_1, defaults.chain_2, 0)
   SetPedComponentVariation(ped, 5, defaults.bags_1, defaults.bags_2, 0)
 
-  -- Clear all props first
   for i = 0, 7 do
     ClearPedProp(ped, i)
   end
 
-  -- Apply props
   if defaults.helmet_1 ~= -1 then
     SetPedPropIndex(ped, 0, defaults.helmet_1, defaults.helmet_2, true)
   end
@@ -145,10 +126,8 @@ function ApplyDefaultAppearance(ped, gender)
     SetPedPropIndex(ped, 7, defaults.bracelets_1, defaults.bracelets_2, true)
   end
 
-  -- Eyes
   SetPedEyeColor(ped, defaults.eye_color)
 
-  -- Head overlays (makeup, facial hair, etc)
   SetPedHeadOverlay(ped, 0, defaults.blemishes_1, defaults.blemishes_2 / 10.0)
   SetPedHeadOverlay(ped, 1, defaults.beard_1, defaults.beard_2 / 10.0)
   SetPedHeadOverlayColor(ped, 1, 1, defaults.beard_3, defaults.beard_4)
@@ -173,8 +152,6 @@ function ApplyDefaultAppearance(ped, gender)
   if defaults.bodyb_3 ~= -1 then
     SetPedHeadOverlay(ped, 12, defaults.bodyb_3, defaults.bodyb_4 / 10.0)
   end
-
-  ambitionsPrint.success('Applied default appearance for gender:', gender)
 end
 
 --- Apply heritage in real-time
@@ -182,7 +159,6 @@ end
 local function ApplyHeritage(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply head blend with parent IDs and resemblance values
   SetPedHeadBlendData(
     ped,
     data.mother,      -- Shape first ID (mother)
@@ -196,8 +172,6 @@ local function ApplyHeritage(data)
     0.0,              -- Third mix (not used)
     false             -- Is parent
   )
-
-  ambitionsPrint.info('Applied heritage - Father:', data.father, 'Mother:', data.mother, 'Face:', data.faceResemblance, 'Skin:', data.skinResemblance)
 end
 
 --- Apply hair style in real-time
@@ -205,13 +179,9 @@ end
 local function ApplyHairStyle(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply hair style (component 2 = hair)
   SetPedComponentVariation(ped, 2, data.style, 0, 0)
 
-  -- Apply hair colors (primary and highlight)
   SetPedHairTint(ped, data.color, data.highlight)
-
-  ambitionsPrint.info('Applied hair - Style:', data.style, 'Color:', data.color, 'Highlight:', data.highlight)
 end
 
 --- Apply face feature in real-time
@@ -227,15 +197,10 @@ end
 local function ApplyEyesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply eye opening (face feature index 11)
-  -- Invert the value: slider -1 (narrow) should be 1 in game, slider 1 (wide) should be -1 in game
   local invertedOpening = -data.opening
   SetPedFaceFeature(ped, 11, invertedOpening)
 
-  -- Apply eye color
   SetPedEyeColor(ped, data.color)
-
-  ambitionsPrint.info('Applied eyes - Opening:', invertedOpening, 'Color:', data.color)
 end
 
 --- Apply eyebrows customization in real-time (height, depth, style, color, opacity)
@@ -243,20 +208,14 @@ end
 local function ApplyEyebrowsCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply eyebrow height (face feature index 6) - Inverted
   local invertedHeight = -data.height
   SetPedFaceFeature(ped, 6, invertedHeight)
 
-  -- Apply eyebrow depth (face feature index 7)
   SetPedFaceFeature(ped, 7, data.depth)
 
-  -- Apply eyebrow style (head overlay index 2)
   SetPedHeadOverlay(ped, 2, data.style, data.opacity)
 
-  -- Apply eyebrow color (overlay color type 1 = hair color)
   SetPedHeadOverlayColor(ped, 2, 1, data.color, data.color)
-
-  ambitionsPrint.info('Applied eyebrows - Height:', invertedHeight, 'Depth:', data.depth, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply nose customization in real-time (width, height, length, bridge, bridgeTwist, tipHeight)
@@ -264,28 +223,20 @@ end
 local function ApplyNoseCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply nose width (face feature index 0)
   SetPedFaceFeature(ped, 0, data.width)
 
-  -- Apply nose height (face feature index 1)
   SetPedFaceFeature(ped, 1, data.height)
 
-  -- Apply nose length (face feature index 2) - Inverted
   local invertedLength = -data.length
   SetPedFaceFeature(ped, 2, invertedLength)
 
-  -- Apply nose bridge (face feature index 3) - Inverted
   local invertedBridge = -data.bridge
   SetPedFaceFeature(ped, 3, invertedBridge)
 
-  -- Apply nose bridge twist (face feature index 4) - SWITCHED with tipHeight AND inverted
   local invertedTipHeight = -data.tipHeight
   SetPedFaceFeature(ped, 4, invertedTipHeight)
 
-  -- Apply nose tip height (face feature index 5) - SWITCHED with bridgeTwist
   SetPedFaceFeature(ped, 5, data.bridgeTwist)
-
-  ambitionsPrint.info('Applied nose - Width:', data.width, 'Height:', data.height, 'Length:', invertedLength, 'Bridge:', invertedBridge, 'BridgeTwist:', data.bridgeTwist, 'TipHeight:', data.tipHeight)
 end
 
 --- Apply cheeks customization in real-time (boneHeight, boneWidth, width)
@@ -293,18 +244,13 @@ end
 local function ApplyCheeksCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply cheekbone height (face feature index 8) - Inverted
   local invertedBoneHeight = -data.boneHeight
   SetPedFaceFeature(ped, 8, invertedBoneHeight)
 
-  -- Apply cheekbone width (face feature index 9)
   SetPedFaceFeature(ped, 9, data.boneWidth)
 
-  -- Apply cheek width (face feature index 10) - Inverted
   local invertedWidth = -data.width
   SetPedFaceFeature(ped, 10, invertedWidth)
-
-  ambitionsPrint.info('Applied cheeks - BoneHeight:', invertedBoneHeight, 'BoneWidth:', data.boneWidth, 'Width:', invertedWidth)
 end
 
 --- Apply beard customization in real-time (style, color, opacity)
@@ -312,13 +258,9 @@ end
 local function ApplyBeardCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply beard style and opacity (head overlay index 1)
   SetPedHeadOverlay(ped, 1, data.style, data.opacity)
 
-  -- Apply beard color (overlay color type 1 = hair color)
   SetPedHeadOverlayColor(ped, 1, 1, data.color, data.color)
-
-  ambitionsPrint.info('Applied beard - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply jaw customization in real-time (width, height)
@@ -326,13 +268,9 @@ end
 local function ApplyJawCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply jaw width (face feature index 13)
   SetPedFaceFeature(ped, 13, data.width)
 
-  -- Apply jaw height (face feature index 14)
   SetPedFaceFeature(ped, 14, data.height)
-
-  ambitionsPrint.info('Applied jaw - Width:', data.width, 'Height:', data.height)
 end
 
 --- Apply lips customization in real-time (thickness + lipstick style, color, opacity)
@@ -340,17 +278,12 @@ end
 local function ApplyLipsCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply lip thickness (face feature index 12) - Inverted
   local invertedThickness = -data.thickness
   SetPedFaceFeature(ped, 12, invertedThickness)
 
-  -- Apply lipstick overlay (index 8 = lipstick)
   SetPedHeadOverlay(ped, 8, data.style, data.opacity)
 
-  -- Apply lipstick color (type 2 = makeup color)
   SetPedHeadOverlayColor(ped, 8, 2, data.color, data.color)
-
-  ambitionsPrint.info('Applied lips - Thickness:', invertedThickness, 'Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply chin customization in real-time (lowering, length, width, cleft)
@@ -358,20 +291,14 @@ end
 local function ApplyChinCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply chin lowering (face feature index 15) - Inverted
   local invertedLowering = -data.lowering
   SetPedFaceFeature(ped, 15, invertedLowering)
 
-  -- Apply chin length (face feature index 16)
   SetPedFaceFeature(ped, 16, data.length)
 
-  -- Apply chin width (face feature index 17)
   SetPedFaceFeature(ped, 17, data.width)
 
-  -- Apply chin cleft (face feature index 18)
   SetPedFaceFeature(ped, 18, data.cleft)
-
-  ambitionsPrint.info('Applied chin - Lowering:', invertedLowering, 'Length:', data.length, 'Width:', data.width, 'Cleft:', data.cleft)
 end
 
 --- Apply neck customization in real-time (thickness)
@@ -379,10 +306,7 @@ end
 local function ApplyNeckCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply neck thickness (face feature index 19)
   SetPedFaceFeature(ped, 19, data.thickness)
-
-  ambitionsPrint.info('Applied neck - Thickness:', data.thickness)
 end
 
 --- Apply ageing customization in real-time (style, opacity)
@@ -390,10 +314,7 @@ end
 local function ApplyAgeingCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply ageing overlay (index 3 = ageing)
   SetPedHeadOverlay(ped, 3, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied ageing - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply makeup customization in real-time (style, primary color, secondary color, opacity)
@@ -401,13 +322,9 @@ end
 local function ApplyMakeupCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply makeup overlay (index 4 = makeup)
   SetPedHeadOverlay(ped, 4, data.style, data.opacity)
 
-  -- Apply makeup colors (type 2 = makeup color)
   SetPedHeadOverlayColor(ped, 4, 2, data.primaryColor, data.secondaryColor)
-
-  ambitionsPrint.info('Applied makeup - Style:', data.style, 'PrimaryColor:', data.primaryColor, 'SecondaryColor:', data.secondaryColor, 'Opacity:', data.opacity)
 end
 
 --- Apply blush customization in real-time (style, color, opacity)
@@ -415,13 +332,9 @@ end
 local function ApplyBlushCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply blush overlay (index 5 = blush)
   SetPedHeadOverlay(ped, 5, data.style, data.opacity)
 
-  -- Apply blush color (type 2 = makeup color)
   SetPedHeadOverlayColor(ped, 5, 2, data.color, data.color)
-
-  ambitionsPrint.info('Applied blush - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply complexion customization in real-time (style, opacity)
@@ -429,10 +342,7 @@ end
 local function ApplyComplexionCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply complexion overlay (index 6 = complexion)
   SetPedHeadOverlay(ped, 6, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied complexion - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply sun damage customization in real-time (style, opacity)
@@ -440,10 +350,7 @@ end
 local function ApplySunDamageCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply sun damage overlay (index 7 = sun damage)
   SetPedHeadOverlay(ped, 7, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied sun damage - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply moles/freckles customization in real-time (style, opacity)
@@ -451,10 +358,7 @@ end
 local function ApplyMolesFrecklesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply moles/freckles overlay (index 9 = moles/freckles)
   SetPedHeadOverlay(ped, 9, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied moles/freckles - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply chest hair customization in real-time (style, color, opacity)
@@ -462,13 +366,9 @@ end
 local function ApplyChestHairCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply chest hair overlay (index 10 = chest hair)
   SetPedHeadOverlay(ped, 10, data.style, data.opacity)
 
-  -- Apply chest hair color (type 1 = hair color)
   SetPedHeadOverlayColor(ped, 10, 1, data.color, data.color)
-
-  ambitionsPrint.info('Applied chest hair - Style:', data.style, 'Color:', data.color, 'Opacity:', data.opacity)
 end
 
 --- Apply body blemishes customization in real-time (style, opacity)
@@ -476,10 +376,7 @@ end
 local function ApplyBodyBlemishesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
-  -- Apply body blemishes overlay (index 11 = body blemishes)
   SetPedHeadOverlay(ped, 11, data.style, data.opacity)
-
-  ambitionsPrint.info('Applied body blemishes - Style:', data.style, 'Opacity:', data.opacity)
 end
 
 --- Apply head overlay (beard, makeup, etc) in real-time

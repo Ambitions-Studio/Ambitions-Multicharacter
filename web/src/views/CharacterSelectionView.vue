@@ -80,9 +80,14 @@ const allSlots = computed(() => {
 
 const selectSlot = (slotId: number, isEmpty: boolean) => {
   const wasSlotSelected = selectedSlot.value !== null
+  const previousSlotEmpty = isSlotEmpty.value
 
   if (wasSlotSelected) {
-    sendNuiEvent('deselectSlot')
+    if (previousSlotEmpty) {
+      sendNuiEvent('deselectSlot')
+    } else {
+      sendNuiEvent('deselectExistingCharacter')
+    }
   }
 
   selectedSlot.value = slotId
@@ -90,6 +95,11 @@ const selectSlot = (slotId: number, isEmpty: boolean) => {
 
   if (isEmpty) {
     sendNuiEvent('selectEmptySlot', { slotIndex: slotId })
+  } else {
+    const character = characterData.value[slotId]
+    if (character) {
+      sendNuiEvent('selectExistingCharacter', { character })
+    }
   }
 }
 
@@ -101,16 +111,20 @@ const createCharacter = () => {
   isVisible.value = false
 
   window.postMessage({ action: 'showIdentityCreator', slotId: selectedSlot.value }, '*')
-
-  console.log('Créer un personnage pour le slot:', selectedSlot.value)
 }
 
 const playCharacter = () => {
-  console.log('Jouer le personnage du slot:', selectedSlot.value)
 }
 
 const deleteCharacter = () => {
-  console.log('Supprimer le personnage du slot:', selectedSlot.value)
+  if (selectedSlot.value === null) return
+
+  const character = characterData.value[selectedSlot.value]
+  if (!character || !character.uniqueId) {
+    return
+  }
+
+  sendNuiEvent('deleteCharacter', { uniqueId: character.uniqueId })
 }
 
 const closeInterface = () => {
@@ -158,16 +172,9 @@ onMounted(() => {
         for (let i = 0; i < maxCharsToDisplay; i++) {
           const char = event.data.characters[i]
           receivedCharacters[i + 1] = {
-            firstName: char.firstname || '',
-            lastName: char.lastname || '',
-            job: null,
-            jobGrade: null,
-            crew: null,
-            crewGrade: null,
-            cash: 0,
-            bank: 0,
-            dirtyMoney: 0,
-            licenses: [],
+            ...char,
+            firstName: char.firstName || '',
+            lastName: char.lastName || '',
             totalPlaytime: formatPlaytime(char.playtime || 0),
             lastPlayed: formatLastPlayed(char.lastPlayed || char.createdAt),
           }

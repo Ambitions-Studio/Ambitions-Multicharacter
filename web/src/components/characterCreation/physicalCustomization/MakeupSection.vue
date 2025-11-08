@@ -33,9 +33,8 @@ const localMakeupStyle = ref(props.makeupStyle)
 const localMakeupPrimaryColor = ref(props.makeupPrimaryColor)
 const localMakeupSecondaryColor = ref(props.makeupSecondaryColor)
 const localMakeupOpacity = ref(props.makeupOpacity)
-const maxMakeupStyles = ref(74) // Default fallback
+const maxMakeupStyles = ref(74)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number }>('getCustomizationLimits')
   if (limits) {

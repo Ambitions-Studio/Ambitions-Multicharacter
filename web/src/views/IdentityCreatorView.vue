@@ -70,20 +70,6 @@ const submitForm = () => {
 
   characterStore.setIdentity(identityData)
 
-  console.log('=== ' + t('identityCreation.debug.identityDataCreated') + ' ===')
-  console.log(`${t('identityCreation.debug.lastName')}: ${identityData.lastName}`)
-  console.log(`${t('identityCreation.debug.firstName')}: ${identityData.firstName}`)
-  console.log(`${t('identityCreation.debug.dateOfBirth')}: ${identityData.dateOfBirth}`)
-  console.log(
-    `${t('identityCreation.debug.gender')}: ${identityData.gender === 'M' ? t('identityCreation.debug.genderMale') : t('identityCreation.debug.genderFemale')}`,
-  )
-  console.log(`${t('identityCreation.debug.nationality')}: ${identityData.nationality}`)
-  console.log(`${t('identityCreation.debug.height')}: ${identityData.height} cm`)
-  console.log('===================================')
-  console.log(t('identityCreation.debug.completeObject') + ':', identityData)
-  console.log('✅ Character Store Identity:', characterStore.identity)
-  console.log('✅ Identity Store (backup):', identityStore.getIdentityData())
-
   isVisible.value = false
 
   sendNuiEvent('requestPedsConfig')
