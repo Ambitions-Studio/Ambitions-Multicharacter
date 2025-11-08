@@ -106,8 +106,16 @@ local function ReapplyAllTattoos()
 
   for zone, tattoo in pairs(activeTattoos) do
     if tattoo then
-      SetPedDecoration(ped, tattoo.collectionHash, tattoo.tattooHash)
-      ambitionsPrint.info('Reapplied tattoo for zone:', zone, 'Collection:', tattoo.collectionHash, 'Tattoo:', tattoo.tattooHash)
+      if not HasStreamedTextureDictLoaded(tattoo.collection) then
+        RequestStreamedTextureDict(tattoo.collection, true)
+        while not HasStreamedTextureDictLoaded(tattoo.collection) do
+          Wait(0)
+        end
+        ambitionsPrint.info('Loaded texture dict:', tattoo.collection)
+      end
+
+      AddPedDecorationFromHashes(ped, tattoo.collectionHash, tattoo.tattooHash)
+      ambitionsPrint.info('Reapplied tattoo for zone:', zone, 'Collection:', tattoo.collection, 'Hash:', tattoo.tattooHash)
     end
   end
 end
@@ -125,7 +133,11 @@ local function ApplyHeadTattoo(data)
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
 
-    activeTattoos.head = { collectionHash = collectionHash, tattooHash = tattooHash }
+    activeTattoos.head = {
+      collection = tattoo.collection,
+      collectionHash = collectionHash,
+      tattooHash = tattooHash
+    }
     ambitionsPrint.info('Set head tattoo - Collection:', tattoo.collection, 'Name:', tattoo.name, 'Label:', tattoo.label)
   else
     activeTattoos.head = nil
@@ -146,7 +158,11 @@ local function ApplyNeckTattoo(data)
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
 
-    activeTattoos.neck = { collectionHash = collectionHash, tattooHash = tattooHash }
+    activeTattoos.neck = {
+      collection = tattoo.collection,
+      collectionHash = collectionHash,
+      tattooHash = tattooHash
+    }
     ambitionsPrint.info('Set neck tattoo:', tattoo.label)
   else
     activeTattoos.neck = nil
@@ -167,7 +183,11 @@ local function ApplyTorsoTattoo(data)
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
 
-    activeTattoos.torso = { collectionHash = collectionHash, tattooHash = tattooHash }
+    activeTattoos.torso = {
+      collection = tattoo.collection,
+      collectionHash = collectionHash,
+      tattooHash = tattooHash
+    }
     ambitionsPrint.info('Set torso tattoo:', tattoo.label)
   else
     activeTattoos.torso = nil
@@ -188,7 +208,11 @@ local function ApplyBackTattoo(data)
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
 
-    activeTattoos.back = { collectionHash = collectionHash, tattooHash = tattooHash }
+    activeTattoos.back = {
+      collection = tattoo.collection,
+      collectionHash = collectionHash,
+      tattooHash = tattooHash
+    }
     ambitionsPrint.info('Set back tattoo:', tattoo.label)
   else
     activeTattoos.back = nil
@@ -209,7 +233,11 @@ local function ApplyLeftArmTattoo(data)
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
 
-    activeTattoos.leftArm = { collectionHash = collectionHash, tattooHash = tattooHash }
+    activeTattoos.leftArm = {
+      collection = tattoo.collection,
+      collectionHash = collectionHash,
+      tattooHash = tattooHash
+    }
     ambitionsPrint.info('Set left arm tattoo:', tattoo.label)
   else
     activeTattoos.leftArm = nil
@@ -230,7 +258,11 @@ local function ApplyRightArmTattoo(data)
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
 
-    activeTattoos.rightArm = { collectionHash = collectionHash, tattooHash = tattooHash }
+    activeTattoos.rightArm = {
+      collection = tattoo.collection,
+      collectionHash = collectionHash,
+      tattooHash = tattooHash
+    }
     ambitionsPrint.info('Set right arm tattoo:', tattoo.label)
   else
     activeTattoos.rightArm = nil
@@ -251,7 +283,11 @@ local function ApplyLeftLegTattoo(data)
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
 
-    activeTattoos.leftLeg = { collectionHash = collectionHash, tattooHash = tattooHash }
+    activeTattoos.leftLeg = {
+      collection = tattoo.collection,
+      collectionHash = collectionHash,
+      tattooHash = tattooHash
+    }
     ambitionsPrint.info('Set left leg tattoo:', tattoo.label)
   else
     activeTattoos.leftLeg = nil
@@ -272,7 +308,11 @@ local function ApplyRightLegTattoo(data)
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
 
-    activeTattoos.rightLeg = { collectionHash = collectionHash, tattooHash = tattooHash }
+    activeTattoos.rightLeg = {
+      collection = tattoo.collection,
+      collectionHash = collectionHash,
+      tattooHash = tattooHash
+    }
     ambitionsPrint.info('Set right leg tattoo:', tattoo.label)
   else
     activeTattoos.rightLeg = nil
