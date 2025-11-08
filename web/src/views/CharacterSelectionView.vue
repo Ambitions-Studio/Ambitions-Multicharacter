@@ -80,9 +80,14 @@ const allSlots = computed(() => {
 
 const selectSlot = (slotId: number, isEmpty: boolean) => {
   const wasSlotSelected = selectedSlot.value !== null
+  const previousSlotEmpty = isSlotEmpty.value
 
   if (wasSlotSelected) {
-    sendNuiEvent('deselectSlot')
+    if (previousSlotEmpty) {
+      sendNuiEvent('deselectSlot')
+    } else {
+      sendNuiEvent('deselectExistingCharacter')
+    }
   }
 
   selectedSlot.value = slotId
@@ -90,6 +95,11 @@ const selectSlot = (slotId: number, isEmpty: boolean) => {
 
   if (isEmpty) {
     sendNuiEvent('selectEmptySlot', { slotIndex: slotId })
+  } else {
+    const character = characterData.value[slotId]
+    if (character) {
+      sendNuiEvent('selectExistingCharacter', { character })
+    }
   }
 }
 
