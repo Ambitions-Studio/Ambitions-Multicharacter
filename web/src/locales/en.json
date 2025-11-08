@@ -864,125 +864,69 @@
           "label": "Variant"
         }
       }
-    }
-  },
-  "tattoos": {
-    "validateButton": "Validate Tattoos",
-    "goToRecap": "Go to Summary",
-    "categories": {
-      "head": "Head",
-      "neck": "Neck",
-      "torso": "Torso",
-      "back": "Back",
-      "leftArm": "Left Arm",
-      "rightArm": "Right Arm",
-      "leftLeg": "Left Leg",
-      "rightLeg": "Right Leg"
-    },
-    "head": {
-      "category": "Head Tattoos",
-      "collection": {
-        "title": "Tattoo Collection",
-        "description": "Choose the tattoo collection for the head",
-        "label": "Collection"
-      },
-      "hash": {
-        "title": "Specific Tattoo",
-        "description": "Select the exact tattoo",
-        "label": "Tattoo"
       }
     },
-    "neck": {
-      "category": "Neck Tattoos",
-      "collection": {
-        "title": "Tattoo Collection",
-        "description": "Choose the tattoo collection for the neck",
-        "label": "Collection"
+    "tattoos": {
+      "continue": "Continue",
+      "validateButton": "Validate Tattoos",
+      "categories": {
+        "head": "Head",
+        "neck": "Neck",
+        "torso": "Torso",
+        "back": "Back",
+        "leftArm": "Left Arm",
+        "rightArm": "Right Arm",
+        "leftLeg": "Left Leg",
+        "rightLeg": "Right Leg"
       },
-      "hash": {
-        "title": "Specific Tattoo",
-        "description": "Select the exact tattoo",
-        "label": "Tattoo"
-      }
-    },
-    "torso": {
-      "category": "Torso Tattoos",
-      "collection": {
-        "title": "Tattoo Collection",
-        "description": "Choose the tattoo collection for the torso",
-        "label": "Collection"
+      "head": {
+        "tattoo": {
+          "title": "Head Tattoo",
+          "description": "Select a tattoo for the head area"
+        }
       },
-      "hash": {
-        "title": "Specific Tattoo",
-        "description": "Select the exact tattoo",
-        "label": "Tattoo"
-      }
-    },
-    "back": {
-      "category": "Back Tattoos",
-      "collection": {
-        "title": "Tattoo Collection",
-        "description": "Choose the tattoo collection for the back",
-        "label": "Collection"
+      "neck": {
+        "tattoo": {
+          "title": "Neck Tattoo",
+          "description": "Select a tattoo for the neck area"
+        }
       },
-      "hash": {
-        "title": "Specific Tattoo",
-        "description": "Select the exact tattoo",
-        "label": "Tattoo"
-      }
-    },
-    "leftArm": {
-      "category": "Left Arm Tattoos",
-      "collection": {
-        "title": "Tattoo Collection",
-        "description": "Choose the tattoo collection for the left arm",
-        "label": "Collection"
+      "torso": {
+        "tattoo": {
+          "title": "Torso Tattoo",
+          "description": "Select a tattoo for the torso area"
+        }
       },
-      "hash": {
-        "title": "Specific Tattoo",
-        "description": "Select the exact tattoo",
-        "label": "Tattoo"
-      }
-    },
-    "rightArm": {
-      "category": "Right Arm Tattoos",
-      "collection": {
-        "title": "Tattoo Collection",
-        "description": "Choose the tattoo collection for the right arm",
-        "label": "Collection"
+      "back": {
+        "tattoo": {
+          "title": "Back Tattoo",
+          "description": "Select a tattoo for the back area"
+        }
       },
-      "hash": {
-        "title": "Specific Tattoo",
-        "description": "Select the exact tattoo",
-        "label": "Tattoo"
-      }
-    },
-    "leftLeg": {
-      "category": "Left Leg Tattoos",
-      "collection": {
-        "title": "Tattoo Collection",
-        "description": "Choose the tattoo collection for the left leg",
-        "label": "Collection"
+      "leftArm": {
+        "tattoo": {
+          "title": "Left Arm Tattoo",
+          "description": "Select a tattoo for the left arm"
+        }
       },
-      "hash": {
-        "title": "Specific Tattoo",
-        "description": "Select the exact tattoo",
-        "label": "Tattoo"
-      }
-    },
-    "rightLeg": {
-      "category": "Right Leg Tattoos",
-      "collection": {
-        "title": "Tattoo Collection",
-        "description": "Choose the tattoo collection for the right leg",
-        "label": "Collection"
+      "rightArm": {
+        "tattoo": {
+          "title": "Right Arm Tattoo",
+          "description": "Select a tattoo for the right arm"
+        }
       },
-      "hash": {
-        "title": "Specific Tattoo",
-        "description": "Select the exact tattoo",
-        "label": "Tattoo"
-      }
-    },
+      "leftLeg": {
+        "tattoo": {
+          "title": "Left Leg Tattoo",
+          "description": "Select a tattoo for the left leg"
+        }
+      },
+      "rightLeg": {
+        "tattoo": {
+          "title": "Right Leg Tattoo",
+          "description": "Select a tattoo for the right leg"
+        }
+      },
     "recap": {
       "title": "Summary",
       "subtitle": "Review all your information before finalizing",
