@@ -198,6 +198,9 @@ RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', func
     SetEntityCoords(playerPed, playerSpawn.x, playerSpawn.y, playerSpawn.z, false, false, false, true)
     SetEntityHeading(playerPed, playerSpawn.w)
 
+    SetEntityAlpha(playerPed, 255, false)
+    SetPedAoBlobRendering(playerPed, true)
+
     FreezeEntityPosition(playerPed, false)
 
     SetEntityVisible(playerPed, true, false)
@@ -211,6 +214,10 @@ RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', func
     SetEveryoneIgnorePlayer(PlayerId(), false)
 
     SetPoliceIgnorePlayer(PlayerId(), false)
+
+    SetPlayerControl(PlayerId(), true, 0)
+
+    DisplayRadar(true)
 
     ambitionsPrint.success('Player spawned at:', playerSpawn.x, playerSpawn.y, playerSpawn.z)
     ambitionsPrint.success('Player controls restored')
