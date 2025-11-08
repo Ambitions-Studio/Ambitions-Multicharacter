@@ -126,49 +126,64 @@ local function ApplyHeadTattoo(data)
 
   ambitionsPrint.info('ApplyHeadTattoo - Ped ID:', ped, 'Model:', GetEntityModel(ped), 'Tattoo Index:', tattooIndex)
 
-  ClearPedDecorations(ped)
-
   if tattooIndex > 0 and tattooIndex <= #allTattoos then
     local tattoo = allTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
+
+    if not HasStreamedTextureDictLoaded(tattoo.collection) then
+      RequestStreamedTextureDict(tattoo.collection, true)
+      while not HasStreamedTextureDictLoaded(tattoo.collection) do
+        Wait(0)
+      end
+      ambitionsPrint.info('Loaded texture dict:', tattoo.collection)
+    end
 
     activeTattoos.head = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-    ambitionsPrint.info('Set head tattoo - Collection:', tattoo.collection, 'Name:', tattoo.name, 'Label:', tattoo.label)
+
+    ClearPedDecorations(ped)
+    ReapplyAllTattoos()
+
+    ambitionsPrint.success('Applied head tattoo - Collection:', tattoo.collection, 'Name:', tattoo.name, 'Label:', tattoo.label)
   else
     activeTattoos.head = nil
     ambitionsPrint.info('Cleared head tattoo')
-  end
 
-  ReapplyAllTattoos()
+    ClearPedDecorations(ped)
+    ReapplyAllTattoos()
+  end
 end
 
 local function ApplyNeckTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
 
-  ClearPedDecorations(ped)
-
   if tattooIndex > 0 and tattooIndex <= #allTattoos then
     local tattoo = allTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
+
+    if not HasStreamedTextureDictLoaded(tattoo.collection) then
+      RequestStreamedTextureDict(tattoo.collection, true)
+      while not HasStreamedTextureDictLoaded(tattoo.collection) do
+        Wait(0)
+      end
+    end
 
     activeTattoos.neck = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-    ambitionsPrint.info('Set neck tattoo:', tattoo.label)
   else
     activeTattoos.neck = nil
-    ambitionsPrint.info('Cleared neck tattoo')
   end
 
+  ClearPedDecorations(ped)
   ReapplyAllTattoos()
 end
 
@@ -176,24 +191,28 @@ local function ApplyTorsoTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
 
-  ClearPedDecorations(ped)
-
   if tattooIndex > 0 and tattooIndex <= #allTattoos then
     local tattoo = allTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
+
+    if not HasStreamedTextureDictLoaded(tattoo.collection) then
+      RequestStreamedTextureDict(tattoo.collection, true)
+      while not HasStreamedTextureDictLoaded(tattoo.collection) do
+        Wait(0)
+      end
+    end
 
     activeTattoos.torso = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-    ambitionsPrint.info('Set torso tattoo:', tattoo.label)
   else
     activeTattoos.torso = nil
-    ambitionsPrint.info('Cleared torso tattoo')
   end
 
+  ClearPedDecorations(ped)
   ReapplyAllTattoos()
 end
 
@@ -201,24 +220,28 @@ local function ApplyBackTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
 
-  ClearPedDecorations(ped)
-
   if tattooIndex > 0 and tattooIndex <= #allTattoos then
     local tattoo = allTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
+
+    if not HasStreamedTextureDictLoaded(tattoo.collection) then
+      RequestStreamedTextureDict(tattoo.collection, true)
+      while not HasStreamedTextureDictLoaded(tattoo.collection) do
+        Wait(0)
+      end
+    end
 
     activeTattoos.back = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-    ambitionsPrint.info('Set back tattoo:', tattoo.label)
   else
     activeTattoos.back = nil
-    ambitionsPrint.info('Cleared back tattoo')
   end
 
+  ClearPedDecorations(ped)
   ReapplyAllTattoos()
 end
 
@@ -226,24 +249,28 @@ local function ApplyLeftArmTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
 
-  ClearPedDecorations(ped)
-
   if tattooIndex > 0 and tattooIndex <= #allTattoos then
     local tattoo = allTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
+
+    if not HasStreamedTextureDictLoaded(tattoo.collection) then
+      RequestStreamedTextureDict(tattoo.collection, true)
+      while not HasStreamedTextureDictLoaded(tattoo.collection) do
+        Wait(0)
+      end
+    end
 
     activeTattoos.leftArm = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-    ambitionsPrint.info('Set left arm tattoo:', tattoo.label)
   else
     activeTattoos.leftArm = nil
-    ambitionsPrint.info('Cleared left arm tattoo')
   end
 
+  ClearPedDecorations(ped)
   ReapplyAllTattoos()
 end
 
@@ -251,24 +278,28 @@ local function ApplyRightArmTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
 
-  ClearPedDecorations(ped)
-
   if tattooIndex > 0 and tattooIndex <= #allTattoos then
     local tattoo = allTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
+
+    if not HasStreamedTextureDictLoaded(tattoo.collection) then
+      RequestStreamedTextureDict(tattoo.collection, true)
+      while not HasStreamedTextureDictLoaded(tattoo.collection) do
+        Wait(0)
+      end
+    end
 
     activeTattoos.rightArm = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-    ambitionsPrint.info('Set right arm tattoo:', tattoo.label)
   else
     activeTattoos.rightArm = nil
-    ambitionsPrint.info('Cleared right arm tattoo')
   end
 
+  ClearPedDecorations(ped)
   ReapplyAllTattoos()
 end
 
@@ -276,24 +307,28 @@ local function ApplyLeftLegTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
 
-  ClearPedDecorations(ped)
-
   if tattooIndex > 0 and tattooIndex <= #allTattoos then
     local tattoo = allTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
+
+    if not HasStreamedTextureDictLoaded(tattoo.collection) then
+      RequestStreamedTextureDict(tattoo.collection, true)
+      while not HasStreamedTextureDictLoaded(tattoo.collection) do
+        Wait(0)
+      end
+    end
 
     activeTattoos.leftLeg = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-    ambitionsPrint.info('Set left leg tattoo:', tattoo.label)
   else
     activeTattoos.leftLeg = nil
-    ambitionsPrint.info('Cleared left leg tattoo')
   end
 
+  ClearPedDecorations(ped)
   ReapplyAllTattoos()
 end
 
@@ -301,24 +336,28 @@ local function ApplyRightLegTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
 
-  ClearPedDecorations(ped)
-
   if tattooIndex > 0 and tattooIndex <= #allTattoos then
     local tattoo = allTattoos[tattooIndex]
     local collectionHash = GetHashKey(tattoo.collection)
     local tattooHash = GetHashKey(tattoo.name)
+
+    if not HasStreamedTextureDictLoaded(tattoo.collection) then
+      RequestStreamedTextureDict(tattoo.collection, true)
+      while not HasStreamedTextureDictLoaded(tattoo.collection) do
+        Wait(0)
+      end
+    end
 
     activeTattoos.rightLeg = {
       collection = tattoo.collection,
       collectionHash = collectionHash,
       tattooHash = tattooHash
     }
-    ambitionsPrint.info('Set right leg tattoo:', tattoo.label)
   else
     activeTattoos.rightLeg = nil
-    ambitionsPrint.info('Cleared right leg tattoo')
   end
 
+  ClearPedDecorations(ped)
   ReapplyAllTattoos()
 end
 
