@@ -120,7 +120,17 @@ const playCharacter = () => {
 }
 
 const deleteCharacter = () => {
-  console.log('Supprimer le personnage du slot:', selectedSlot.value)
+  if (selectedSlot.value === null) return
+
+  const character = characterData.value[selectedSlot.value]
+  if (!character || !character.uniqueId) {
+    console.error('No character or uniqueId found for slot:', selectedSlot.value)
+    return
+  }
+
+  console.log('Deleting character:', character.firstName, character.lastName, 'UniqueID:', character.uniqueId)
+
+  sendNuiEvent('deleteCharacter', { uniqueId: character.uniqueId })
 }
 
 const closeInterface = () => {

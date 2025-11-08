@@ -212,6 +212,41 @@ RegisterNUICallback('characterCreationError', function(data, cb)
   cb('ok')
 end)
 
+--- NUI callback to delete an existing character
+---@param data table Contains uniqueId string of the character to delete
+---@param cb function Callback function to acknowledge the request
+RegisterNUICallback('deleteCharacter', function(data, cb)
+  ambitionsPrint.warning('========== DELETE CHARACTER REQUEST ==========')
+
+  if not data.uniqueId then
+    ambitionsPrint.error('No uniqueId provided in deleteCharacter callback')
+    cb({ success = false, error = 'No uniqueId provided' })
+    return
+  end
+
+  ambitionsPrint.warning('Character Unique ID:', data.uniqueId)
+  ambitionsPrint.warning('Sending delete request to server...')
+
+  TriggerServerEvent('ambitions-multicharacter:server:deleteCharacter', data.uniqueId)
+
+  cb({ success = true })
+end)
+
+RegisterNetEvent('ambitions-multicharacter:client:characterDeleteResult', function(result)
+  if result.success then
+    ambitionsPrint.success('========== CHARACTER DELETED SUCCESSFULLY ==========')
+    ambitionsPrint.info('Interface will reload with updated character list')
+  else
+    ambitionsPrint.error('========== CHARACTER DELETE FAILED ==========')
+    ambitionsPrint.error('Error:', result.error or 'Unknown error')
+
+    SendNUIMessage({
+      action = 'characterDeleteFailed',
+      error = result.error or 'Failed to delete character'
+    })
+  end
+end)
+
 RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', function(result)
   if result.success then
     ambitionsPrint.success('========== CHARACTER CREATED SUCCESSFULLY ==========')

@@ -96,6 +96,56 @@ RegisterNetEvent('ambitions-multicharacter:server:setupCharacter', function()
   ambitionsPrint.info('Received setupCharacter event from client session:', SESSION_ID)
   SetupCharacter(SESSION_ID)
 end)
+
+--- Delete a character by unique ID
+---@param sessionId number The session id of the player
+---@param uniqueId string The unique ID of the character to delete
+---@return nil
+local function DeleteCharacter(sessionId, uniqueId)
+  ambitionsPrint.warning('========== DELETE CHARACTER REQUEST ==========')
+  ambitionsPrint.warning('Session ID:', sessionId)
+  ambitionsPrint.warning('Character Unique ID:', uniqueId)
+
+  if not uniqueId or uniqueId == '' then
+    ambitionsPrint.error('Invalid uniqueId provided to DeleteCharacter')
+    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
+      success = false,
+      error = 'Invalid unique ID'
+    })
+    return
+  end
+
+  ambitionsPrint.info('Deleting character from database...')
+  local affectedRows = MySQL.query.await('DELETE FROM characters WHERE unique_id = ?', { uniqueId })
+
+  if affectedRows and affectedRows > 0 then
+    ambitionsPrint.success('Character deleted successfully from database')
+    ambitionsPrint.info('Affected rows:', affectedRows)
+
+    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
+      success = true
+    })
+
+    Wait(500)
+
+    ambitionsPrint.info('Reloading character selection interface...')
+    SetupCharacter(sessionId)
+  else
+    ambitionsPrint.error('Failed to delete character - no rows affected')
+    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
+      success = false,
+      error = 'Character not found or already deleted'
+    })
+  end
+
+  ambitionsPrint.warning('========== END DELETE CHARACTER ==========')
+end
+
+RegisterNetEvent('ambitions-multicharacter:server:deleteCharacter', function(uniqueId)
+  local sessionId <const> = source
+  DeleteCharacter(sessionId, uniqueId)
+end)
+
 --- Create a new user in the database
 ---@param sessionId number The session id of the player
 ---@param identifiers table The identifiers of the player
