@@ -1,5 +1,5 @@
 
-Config.Tattoos = {
+return {
     ZONE_TORSO = {
         {
             name = "TAT_AR_000",

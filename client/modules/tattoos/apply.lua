@@ -1,5 +1,5 @@
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-local Config = require('config.tattoo')
+local ConfigTattoos = require('config.tattoo')
 
 ambitionsPrint.info('Client tattoos module loaded')
 
@@ -15,8 +15,8 @@ local function BuildTattoosByZone()
     rightLeg = {},
   }
 
-  if Config.Tattoos.ZONE_HEAD then
-    for _, tattoo in ipairs(Config.Tattoos.ZONE_HEAD) do
+  if ConfigTattoos.ZONE_HEAD then
+    for _, tattoo in ipairs(ConfigTattoos.ZONE_HEAD) do
       table.insert(tattoosByZone.head, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -27,8 +27,8 @@ local function BuildTattoosByZone()
 
   tattoosByZone.neck = tattoosByZone.head
 
-  if Config.Tattoos.ZONE_TORSO then
-    for _, tattoo in ipairs(Config.Tattoos.ZONE_TORSO) do
+  if ConfigTattoos.ZONE_TORSO then
+    for _, tattoo in ipairs(ConfigTattoos.ZONE_TORSO) do
       table.insert(tattoosByZone.torso, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -39,8 +39,8 @@ local function BuildTattoosByZone()
 
   tattoosByZone.back = tattoosByZone.torso
 
-  if Config.Tattoos.ZONE_LEFT_ARM then
-    for _, tattoo in ipairs(Config.Tattoos.ZONE_LEFT_ARM) do
+  if ConfigTattoos.ZONE_LEFT_ARM then
+    for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_ARM) do
       table.insert(tattoosByZone.leftArm, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -49,8 +49,8 @@ local function BuildTattoosByZone()
     end
   end
 
-  if Config.Tattoos.ZONE_RIGHT_ARM then
-    for _, tattoo in ipairs(Config.Tattoos.ZONE_RIGHT_ARM) do
+  if ConfigTattoos.ZONE_RIGHT_ARM then
+    for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_ARM) do
       table.insert(tattoosByZone.rightArm, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -59,8 +59,8 @@ local function BuildTattoosByZone()
     end
   end
 
-  if Config.Tattoos.ZONE_LEFT_LEG then
-    for _, tattoo in ipairs(Config.Tattoos.ZONE_LEFT_LEG) do
+  if ConfigTattoos.ZONE_LEFT_LEG then
+    for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_LEG) do
       table.insert(tattoosByZone.leftLeg, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -69,8 +69,8 @@ local function BuildTattoosByZone()
     end
   end
 
-  if Config.Tattoos.ZONE_RIGHT_LEG then
-    for _, tattoo in ipairs(Config.Tattoos.ZONE_RIGHT_LEG) do
+  if ConfigTattoos.ZONE_RIGHT_LEG then
+    for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_LEG) do
       table.insert(tattoosByZone.rightLeg, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
