@@ -46,8 +46,16 @@ local function SetupCharacter(sessionId)
         nationality = char.nationality,
         height = char.height,
         appearance = appearanceData,
-        job = char.group or 'Unemployed',
-        crew = 'None',
+        job = nil,
+        jobGrade = nil,
+        crew = nil,
+        crewGrade = nil,
+        cash = 0,
+        bank = 0,
+        dirtyMoney = 0,
+        licenses = {},
+        totalPlaytime = '0h 0m',
+        lastPlayed = nil,
         pedModel = char.ped_model,
         position = {
           x = char.position_x,
@@ -56,8 +64,7 @@ local function SetupCharacter(sessionId)
           heading = char.heading
         },
         playtime = char.playtime or 0,
-        createdAt = char.created_at,
-        lastPlayed = char.last_played
+        createdAt = char.created_at
       }
     end
   end
