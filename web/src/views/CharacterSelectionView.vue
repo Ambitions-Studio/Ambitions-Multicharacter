@@ -168,16 +168,9 @@ onMounted(() => {
         for (let i = 0; i < maxCharsToDisplay; i++) {
           const char = event.data.characters[i]
           receivedCharacters[i + 1] = {
-            firstName: char.firstname || '',
-            lastName: char.lastname || '',
-            job: null,
-            jobGrade: null,
-            crew: null,
-            crewGrade: null,
-            cash: 0,
-            bank: 0,
-            dirtyMoney: 0,
-            licenses: [],
+            ...char,
+            firstName: char.firstName || '',
+            lastName: char.lastName || '',
             totalPlaytime: formatPlaytime(char.playtime || 0),
             lastPlayed: formatLastPlayed(char.lastPlayed || char.createdAt),
           }
