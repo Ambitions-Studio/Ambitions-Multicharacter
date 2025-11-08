@@ -114,10 +114,10 @@ RegisterNUICallback('createCharacter', function(data, cb)
 end)
 
 RegisterNUICallback('characterCreationError', function(data, cb)
-  ambitionsPrint.error('========== CHARACTER CREATION ERROR ==========')
+  ambitionsPrint.error('CHARACTER CREATION ERROR')
   ambitionsPrint.error('Error Type:', data.error)
   ambitionsPrint.error('Error Message:', data.message)
-  ambitionsPrint.error('========== END ERROR ==========')
+  ambitionsPrint.error('END ERROR')
   cb('ok')
 end)
 

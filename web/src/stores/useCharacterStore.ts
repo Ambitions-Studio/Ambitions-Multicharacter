@@ -10,8 +10,8 @@ export type CharacterAppearance = {
   heritage?: {
     father: number
     mother: number
-    resemblance: number
-    skinTone: number
+    faceResemblance: number
+    skinResemblance: number
   }
   physical?: {
     hairStyle: number
@@ -188,8 +188,8 @@ export const useCharacterStore = defineStore('character', () => {
       heritage: {
         father: heritageData.father,
         mother: heritageData.mother,
-        resemblance: heritageData.faceResemblance,
-        skinTone: heritageData.skinResemblance,
+        faceResemblance: heritageData.faceResemblance,
+        skinResemblance: heritageData.skinResemblance,
       },
     }
   }
