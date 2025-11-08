@@ -117,7 +117,6 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props
 const localMaskDrawable = ref(appearanceStore.maskDrawable ?? props.maskDrawable)
 const localMaskTexture = ref(appearanceStore.maskTexture ?? props.maskTexture)
 const localTorsoDrawable = ref(appearanceStore.torsoDrawable ?? props.torsoDrawable)
@@ -139,58 +138,57 @@ const localShoesTexture = ref(appearanceStore.shoesTexture ?? props.shoesTexture
 const localBackpackDrawable = ref(appearanceStore.backpackDrawable ?? props.backpackDrawable)
 const localBackpackTexture = ref(appearanceStore.backpackTexture ?? props.backpackTexture)
 
-// Save current section when switching categories
 const saveSectionData = (categoryIndex: number) => {
   switch (categoryIndex) {
-    case 0: // Mask
+    case 0:
       appearanceStore.setMaskSection({
         maskDrawable: localMaskDrawable.value,
         maskTexture: localMaskTexture.value,
       })
       break
-    case 1: // Torso
+    case 1:
       appearanceStore.setTorsoSection({
         torsoDrawable: localTorsoDrawable.value,
         torsoTexture: localTorsoTexture.value,
       })
       break
-    case 2: // Undershirt
+    case 2:
       appearanceStore.setUndershirtSection({
         undershirtDrawable: localUndershirtDrawable.value,
         undershirtTexture: localUndershirtTexture.value,
       })
       break
-    case 3: // Arms
+    case 3:
       appearanceStore.setArmsSection({
         armsDrawable: localArmsDrawable.value,
         armsTexture: localArmsTexture.value,
       })
       break
-    case 4: // Body Armor
+    case 4:
       appearanceStore.setBodyArmorSection({
         bodyArmorDrawable: localBodyArmorDrawable.value,
         bodyArmorTexture: localBodyArmorTexture.value,
       })
       break
-    case 5: // Decals
+    case 5:
       appearanceStore.setDecalsSection({
         decalsDrawable: localDecalsDrawable.value,
         decalsTexture: localDecalsTexture.value,
       })
       break
-    case 6: // Pants
+    case 6:
       appearanceStore.setPantsSection({
         pantsDrawable: localPantsDrawable.value,
         pantsTexture: localPantsTexture.value,
       })
       break
-    case 7: // Shoes
+    case 7:
       appearanceStore.setShoesSection({
         shoesDrawable: localShoesDrawable.value,
         shoesTexture: localShoesTexture.value,
       })
       break
-    case 8: // Backpack
+    case 8:
       appearanceStore.setBackpackSection({
         backpackDrawable: localBackpackDrawable.value,
         backpackTexture: localBackpackTexture.value,
@@ -199,7 +197,6 @@ const saveSectionData = (categoryIndex: number) => {
   }
 }
 
-// Watch for category changes and save previous section
 watch(selectedCategory, (newCategory, oldCategory) => {
   saveSectionData(oldCategory)
   previousCategory.value = oldCategory
@@ -215,7 +212,7 @@ const updateMaskTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get mask texture limit:', error)
+    // removed
   }
 }
 
@@ -230,7 +227,7 @@ watch(localMaskDrawable, async (newVal) => {
 
     await updateMaskTypeLimit()
   } catch (error) {
-    console.error('Failed to apply mask drawable:', error)
+    // removed
   }
 })
 
@@ -243,7 +240,7 @@ watch(localMaskTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply mask texture:', error)
+    // removed
   }
 })
 
@@ -257,7 +254,7 @@ const updateTorsoTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get torso texture limit:', error)
+    // removed
   }
 }
 
@@ -267,7 +264,7 @@ watch(localTorsoDrawable, async (newVal) => {
     await sendNuiCallback('applyTorsoCustomization', { type: newVal, variant: localTorsoTexture.value })
     await updateTorsoTypeLimit()
   } catch (error) {
-    console.error('Failed to apply torso drawable:', error)
+    // removed
   }
 })
 
@@ -276,7 +273,7 @@ watch(localTorsoTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyTorsoCustomization', { type: localTorsoDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply torso texture:', error)
+    // removed
   }
 })
 
@@ -290,7 +287,7 @@ const updateUndershirtTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get undershirt texture limit:', error)
+    // removed
   }
 }
 
@@ -300,7 +297,7 @@ watch(localUndershirtDrawable, async (newVal) => {
     await sendNuiCallback('applyUndershirtsCustomization', { type: newVal, variant: localUndershirtTexture.value })
     await updateUndershirtTypeLimit()
   } catch (error) {
-    console.error('Failed to apply undershirt drawable:', error)
+    // removed
   }
 })
 
@@ -309,7 +306,7 @@ watch(localUndershirtTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyUndershirtsCustomization', { type: localUndershirtDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply undershirt texture:', error)
+    // removed
   }
 })
 
@@ -323,7 +320,7 @@ const updateArmsTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get arms texture limit:', error)
+    // removed
   }
 }
 
@@ -333,7 +330,7 @@ watch(localArmsDrawable, async (newVal) => {
     await sendNuiCallback('applyTopsCustomization', { type: newVal, variant: localArmsTexture.value })
     await updateArmsTypeLimit()
   } catch (error) {
-    console.error('Failed to apply arms drawable:', error)
+    // removed
   }
 })
 
@@ -342,7 +339,7 @@ watch(localArmsTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyTopsCustomization', { type: localArmsDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply arms texture:', error)
+    // removed
   }
 })
 
@@ -356,7 +353,7 @@ const updateBodyArmorTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get body armor texture limit:', error)
+    // removed
   }
 }
 
@@ -366,7 +363,7 @@ watch(localBodyArmorDrawable, async (newVal) => {
     await sendNuiCallback('applyArmorCustomization', { type: newVal, variant: localBodyArmorTexture.value })
     await updateBodyArmorTypeLimit()
   } catch (error) {
-    console.error('Failed to apply body armor drawable:', error)
+    // removed
   }
 })
 
@@ -375,7 +372,7 @@ watch(localBodyArmorTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyArmorCustomization', { type: localBodyArmorDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply body armor texture:', error)
+    // removed
   }
 })
 
@@ -389,7 +386,7 @@ const updateDecalsTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get decals texture limit:', error)
+    // removed
   }
 }
 
@@ -399,7 +396,7 @@ watch(localDecalsDrawable, async (newVal) => {
     await sendNuiCallback('applyDecalsCustomization', { type: newVal, variant: localDecalsTexture.value })
     await updateDecalsTypeLimit()
   } catch (error) {
-    console.error('Failed to apply decals drawable:', error)
+    // removed
   }
 })
 
@@ -408,7 +405,7 @@ watch(localDecalsTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyDecalsCustomization', { type: localDecalsDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply decals texture:', error)
+    // removed
   }
 })
 
@@ -422,7 +419,7 @@ const updatePantsTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get pants texture limit:', error)
+    // removed
   }
 }
 
@@ -432,7 +429,7 @@ watch(localPantsDrawable, async (newVal) => {
     await sendNuiCallback('applyLegsCustomization', { type: newVal, variant: localPantsTexture.value })
     await updatePantsTypeLimit()
   } catch (error) {
-    console.error('Failed to apply pants drawable:', error)
+    // removed
   }
 })
 
@@ -441,7 +438,7 @@ watch(localPantsTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyLegsCustomization', { type: localPantsDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply pants texture:', error)
+    // removed
   }
 })
 
@@ -455,7 +452,7 @@ const updateShoesTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get shoes texture limit:', error)
+    // removed
   }
 }
 
@@ -465,7 +462,7 @@ watch(localShoesDrawable, async (newVal) => {
     await sendNuiCallback('applyShoesCustomization', { type: newVal, variant: localShoesTexture.value })
     await updateShoesTypeLimit()
   } catch (error) {
-    console.error('Failed to apply shoes drawable:', error)
+    // removed
   }
 })
 
@@ -474,7 +471,7 @@ watch(localShoesTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyShoesCustomization', { type: localShoesDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply shoes texture:', error)
+    // removed
   }
 })
 
@@ -488,7 +485,7 @@ const updateBackpackTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get backpack texture limit:', error)
+    // removed
   }
 }
 
@@ -498,7 +495,7 @@ watch(localBackpackDrawable, async (newVal) => {
     await sendNuiCallback('applyBagsCustomization', { type: newVal, variant: localBackpackTexture.value })
     await updateBackpackTypeLimit()
   } catch (error) {
-    console.error('Failed to apply backpack drawable:', error)
+    // removed
   }
 })
 
@@ -507,7 +504,7 @@ watch(localBackpackTexture, async (newVal) => {
   try {
     await sendNuiCallback('applyBagsCustomization', { type: localBackpackDrawable.value, variant: newVal })
   } catch (error) {
-    console.error('Failed to apply backpack texture:', error)
+    // removed
   }
 })
 
@@ -536,15 +533,13 @@ onMounted(async () => {
     await updateShoesTypeLimit()
     await updateBackpackTypeLimit()
   } catch (error) {
-    console.error('Failed to get clothing limits:', error)
+    // removed
   }
 })
 
 const handleContinue = () => {
-  // Save current section before validating
   saveSectionData(selectedCategory.value)
 
-  // Save ALL clothing data to AppearanceStore (to be sure)
   const clothingData = {
     maskDrawable: localMaskDrawable.value,
     maskTexture: localMaskTexture.value,
@@ -570,7 +565,6 @@ const handleContinue = () => {
 
   appearanceStore.setClothing(clothingData)
 
-  // Update ONLY clothing section in character store
   characterStore.setClothing(clothingData)
 
   emit('update:maskDrawable', localMaskDrawable.value)

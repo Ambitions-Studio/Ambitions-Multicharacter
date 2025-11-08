@@ -27,7 +27,9 @@ server_scripts {
 client_scripts {
   'client/modules/spawn.lua',
   'client/modules/interface.lua',
-  'client/modules/cameraControls.lua'
+  'client/modules/cameraControls.lua',
+  'client/modules/existingCharacter/spawn.lua',
+  'client/modules/existingCharacter/callbacks.lua'
 }
 
 ui_page 'web/dist/index.html'
