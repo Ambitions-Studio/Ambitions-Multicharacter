@@ -10,6 +10,7 @@ import ProfileSection from '@/components/identityCreation/ProfileSection.vue'
 import PhysicalSection from '@/components/identityCreation/PhysicalSection.vue'
 import { useIdentityCreationStore } from '@/stores/useIdentityCreationStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -35,13 +36,7 @@ const physicalSection = ref<InstanceType<typeof PhysicalSection> | null>(null)
 
 const closeInterface = () => {
   isVisible.value = false
-  fetch('https://Ambitions-Multicharacter/closeIdentityCreator', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({}),
-  }).catch(() => {})
+  sendNuiEvent('closeIdentityCreator')
 }
 
 const validateForm = () => {
@@ -89,15 +84,11 @@ const submitForm = () => {
   console.log('✅ Character Store Identity:', characterStore.identity)
   console.log('✅ Identity Store (backup):', identityStore.getIdentityData())
 
-  fetch('https://Ambitions-Multicharacter/createIdentity', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(identityData),
-  }).catch(() => {})
+  isVisible.value = false
 
-  closeInterface()
+  sendNuiEvent('requestPedsConfig')
+
+  window.postMessage({ action: 'showCharacterCreator' }, '*')
 }
 
 onMounted(() => {

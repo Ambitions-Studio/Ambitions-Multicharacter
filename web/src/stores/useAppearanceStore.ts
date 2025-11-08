@@ -104,22 +104,14 @@ export type AppearanceData = {
     neckAccessoryTexture: number
   }
   tattoos: {
-    headTattooCollection: number
-    headTattooHash: number
-    neckTattooCollection: number
-    neckTattooHash: number
-    torsoTattooCollection: number
-    torsoTattooHash: number
-    backTattooCollection: number
-    backTattooHash: number
-    leftArmTattooCollection: number
-    leftArmTattooHash: number
-    rightArmTattooCollection: number
-    rightArmTattooHash: number
-    leftLegTattooCollection: number
-    leftLegTattooHash: number
-    rightLegTattooCollection: number
-    rightLegTattooHash: number
+    headTattooIndex: number
+    neckTattooIndex: number
+    torsoTattooIndex: number
+    backTattooIndex: number
+    leftArmTattooIndex: number
+    rightArmTattooIndex: number
+    leftLegTattooIndex: number
+    rightLegTattooIndex: number
   }
 }
 
@@ -226,22 +218,14 @@ export const useAppearanceStore = defineStore('appearance', () => {
   const neckAccessoryTexture = ref<number>(0)
 
   // State - Tattoos
-  const headTattooCollection = ref<number>(0)
-  const headTattooHash = ref<number>(0)
-  const neckTattooCollection = ref<number>(0)
-  const neckTattooHash = ref<number>(0)
-  const torsoTattooCollection = ref<number>(0)
-  const torsoTattooHash = ref<number>(0)
-  const backTattooCollection = ref<number>(0)
-  const backTattooHash = ref<number>(0)
-  const leftArmTattooCollection = ref<number>(0)
-  const leftArmTattooHash = ref<number>(0)
-  const rightArmTattooCollection = ref<number>(0)
-  const rightArmTattooHash = ref<number>(0)
-  const leftLegTattooCollection = ref<number>(0)
-  const leftLegTattooHash = ref<number>(0)
-  const rightLegTattooCollection = ref<number>(0)
-  const rightLegTattooHash = ref<number>(0)
+  const headTattooIndex = ref<number>(0)
+  const neckTattooIndex = ref<number>(0)
+  const torsoTattooIndex = ref<number>(0)
+  const backTattooIndex = ref<number>(0)
+  const leftArmTattooIndex = ref<number>(0)
+  const rightArmTattooIndex = ref<number>(0)
+  const leftLegTattooIndex = ref<number>(0)
+  const rightLegTattooIndex = ref<number>(0)
 
   const isAppearanceComplete = ref(false)
 
@@ -628,87 +612,63 @@ export const useAppearanceStore = defineStore('appearance', () => {
 
   // Setters - Tattoos (Global)
   const setTattoos = (data: AppearanceData['tattoos']) => {
-    headTattooCollection.value = data.headTattooCollection
-    headTattooHash.value = data.headTattooHash
-    neckTattooCollection.value = data.neckTattooCollection
-    neckTattooHash.value = data.neckTattooHash
-    torsoTattooCollection.value = data.torsoTattooCollection
-    torsoTattooHash.value = data.torsoTattooHash
-    backTattooCollection.value = data.backTattooCollection
-    backTattooHash.value = data.backTattooHash
-    leftArmTattooCollection.value = data.leftArmTattooCollection
-    leftArmTattooHash.value = data.leftArmTattooHash
-    rightArmTattooCollection.value = data.rightArmTattooCollection
-    rightArmTattooHash.value = data.rightArmTattooHash
-    leftLegTattooCollection.value = data.leftLegTattooCollection
-    leftLegTattooHash.value = data.leftLegTattooHash
-    rightLegTattooCollection.value = data.rightLegTattooCollection
-    rightLegTattooHash.value = data.rightLegTattooHash
+    headTattooIndex.value = data.headTattooIndex
+    neckTattooIndex.value = data.neckTattooIndex
+    torsoTattooIndex.value = data.torsoTattooIndex
+    backTattooIndex.value = data.backTattooIndex
+    leftArmTattooIndex.value = data.leftArmTattooIndex
+    rightArmTattooIndex.value = data.rightArmTattooIndex
+    leftLegTattooIndex.value = data.leftLegTattooIndex
+    rightLegTattooIndex.value = data.rightLegTattooIndex
   }
 
   // Setters - Tattoos (Per Section)
   const setHeadTattooSection = (data: {
-    headTattooCollection: number
-    headTattooHash: number
+    headTattooIndex: number
   }) => {
-    headTattooCollection.value = data.headTattooCollection
-    headTattooHash.value = data.headTattooHash
+    headTattooIndex.value = data.headTattooIndex
   }
 
   const setNeckTattooSection = (data: {
-    neckTattooCollection: number
-    neckTattooHash: number
+    neckTattooIndex: number
   }) => {
-    neckTattooCollection.value = data.neckTattooCollection
-    neckTattooHash.value = data.neckTattooHash
+    neckTattooIndex.value = data.neckTattooIndex
   }
 
   const setTorsoTattooSection = (data: {
-    torsoTattooCollection: number
-    torsoTattooHash: number
+    torsoTattooIndex: number
   }) => {
-    torsoTattooCollection.value = data.torsoTattooCollection
-    torsoTattooHash.value = data.torsoTattooHash
+    torsoTattooIndex.value = data.torsoTattooIndex
   }
 
   const setBackTattooSection = (data: {
-    backTattooCollection: number
-    backTattooHash: number
+    backTattooIndex: number
   }) => {
-    backTattooCollection.value = data.backTattooCollection
-    backTattooHash.value = data.backTattooHash
+    backTattooIndex.value = data.backTattooIndex
   }
 
   const setLeftArmTattooSection = (data: {
-    leftArmTattooCollection: number
-    leftArmTattooHash: number
+    leftArmTattooIndex: number
   }) => {
-    leftArmTattooCollection.value = data.leftArmTattooCollection
-    leftArmTattooHash.value = data.leftArmTattooHash
+    leftArmTattooIndex.value = data.leftArmTattooIndex
   }
 
   const setRightArmTattooSection = (data: {
-    rightArmTattooCollection: number
-    rightArmTattooHash: number
+    rightArmTattooIndex: number
   }) => {
-    rightArmTattooCollection.value = data.rightArmTattooCollection
-    rightArmTattooHash.value = data.rightArmTattooHash
+    rightArmTattooIndex.value = data.rightArmTattooIndex
   }
 
   const setLeftLegTattooSection = (data: {
-    leftLegTattooCollection: number
-    leftLegTattooHash: number
+    leftLegTattooIndex: number
   }) => {
-    leftLegTattooCollection.value = data.leftLegTattooCollection
-    leftLegTattooHash.value = data.leftLegTattooHash
+    leftLegTattooIndex.value = data.leftLegTattooIndex
   }
 
   const setRightLegTattooSection = (data: {
-    rightLegTattooCollection: number
-    rightLegTattooHash: number
+    rightLegTattooIndex: number
   }) => {
-    rightLegTattooCollection.value = data.rightLegTattooCollection
-    rightLegTattooHash.value = data.rightLegTattooHash
+    rightLegTattooIndex.value = data.rightLegTattooIndex
   }
 
   // Getters
@@ -816,22 +776,14 @@ export const useAppearanceStore = defineStore('appearance', () => {
         neckAccessoryTexture: neckAccessoryTexture.value,
       },
       tattoos: {
-        headTattooCollection: headTattooCollection.value,
-        headTattooHash: headTattooHash.value,
-        neckTattooCollection: neckTattooCollection.value,
-        neckTattooHash: neckTattooHash.value,
-        torsoTattooCollection: torsoTattooCollection.value,
-        torsoTattooHash: torsoTattooHash.value,
-        backTattooCollection: backTattooCollection.value,
-        backTattooHash: backTattooHash.value,
-        leftArmTattooCollection: leftArmTattooCollection.value,
-        leftArmTattooHash: leftArmTattooHash.value,
-        rightArmTattooCollection: rightArmTattooCollection.value,
-        rightArmTattooHash: rightArmTattooHash.value,
-        leftLegTattooCollection: leftLegTattooCollection.value,
-        leftLegTattooHash: leftLegTattooHash.value,
-        rightLegTattooCollection: rightLegTattooCollection.value,
-        rightLegTattooHash: rightLegTattooHash.value,
+        headTattooIndex: headTattooIndex.value,
+        neckTattooIndex: neckTattooIndex.value,
+        torsoTattooIndex: torsoTattooIndex.value,
+        backTattooIndex: backTattooIndex.value,
+        leftArmTattooIndex: leftArmTattooIndex.value,
+        rightArmTattooIndex: rightArmTattooIndex.value,
+        leftLegTattooIndex: leftLegTattooIndex.value,
+        rightLegTattooIndex: rightLegTattooIndex.value,
       },
     }
   }
@@ -946,22 +898,14 @@ export const useAppearanceStore = defineStore('appearance', () => {
     braceletTexture.value = 0
     neckAccessoryDrawable.value = 0
     neckAccessoryTexture.value = 0
-    headTattooCollection.value = 0
-    headTattooHash.value = 0
-    neckTattooCollection.value = 0
-    neckTattooHash.value = 0
-    torsoTattooCollection.value = 0
-    torsoTattooHash.value = 0
-    backTattooCollection.value = 0
-    backTattooHash.value = 0
-    leftArmTattooCollection.value = 0
-    leftArmTattooHash.value = 0
-    rightArmTattooCollection.value = 0
-    rightArmTattooHash.value = 0
-    leftLegTattooCollection.value = 0
-    leftLegTattooHash.value = 0
-    rightLegTattooCollection.value = 0
-    rightLegTattooHash.value = 0
+    headTattooIndex.value = 0
+    neckTattooIndex.value = 0
+    torsoTattooIndex.value = 0
+    backTattooIndex.value = 0
+    leftArmTattooIndex.value = 0
+    rightArmTattooIndex.value = 0
+    leftLegTattooIndex.value = 0
+    rightLegTattooIndex.value = 0
     isAppearanceComplete.value = false
   }
 
@@ -1063,22 +1007,14 @@ export const useAppearanceStore = defineStore('appearance', () => {
     neckAccessoryDrawable,
     neckAccessoryTexture,
     // State - Tattoos
-    headTattooCollection,
-    headTattooHash,
-    neckTattooCollection,
-    neckTattooHash,
-    torsoTattooCollection,
-    torsoTattooHash,
-    backTattooCollection,
-    backTattooHash,
-    leftArmTattooCollection,
-    leftArmTattooHash,
-    rightArmTattooCollection,
-    rightArmTattooHash,
-    leftLegTattooCollection,
-    leftLegTattooHash,
-    rightLegTattooCollection,
-    rightLegTattooHash,
+    headTattooIndex,
+    neckTattooIndex,
+    torsoTattooIndex,
+    backTattooIndex,
+    leftArmTattooIndex,
+    rightArmTattooIndex,
+    leftLegTattooIndex,
+    rightLegTattooIndex,
     isAppearanceComplete,
     // Setters - Ped & Heritage
     setSelectedPed,

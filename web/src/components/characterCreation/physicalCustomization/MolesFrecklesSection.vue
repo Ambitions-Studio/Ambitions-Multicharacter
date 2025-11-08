@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -23,6 +24,22 @@ const emit = defineEmits<{
 
 const localMolesFrecklesStyle = ref(props.molesFrecklesStyle)
 const localMolesFrecklesOpacity = ref(props.molesFrecklesOpacity)
+const maxMolesFrecklesStyles = ref(17) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number; sunDamageStyles: number; molesFrecklesStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxMolesFrecklesStyles.value = limits.molesFrecklesStyles
+  }
+})
+
+watch([localMolesFrecklesStyle, localMolesFrecklesOpacity], ([style, opacity]) => {
+  sendNuiEvent('applyMolesFrecklesCustomization', {
+    style,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -52,7 +69,7 @@ const localMolesFrecklesOpacity = ref(props.molesFrecklesOpacity)
         <VSlider
           v-model="localMolesFrecklesStyle"
           :min="0"
-          :max="17"
+          :max="maxMolesFrecklesStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"

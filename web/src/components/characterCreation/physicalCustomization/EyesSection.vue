@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -23,6 +24,13 @@ const emit = defineEmits<{
 
 const localEyeOpening = ref(props.eyeOpening)
 const localEyeColor = ref(props.eyeColor)
+
+watch([localEyeOpening, localEyeColor], ([opening, color]) => {
+  sendNuiEvent('applyEyesCustomization', {
+    opening,
+    color,
+  })
+})
 </script>
 
 <template>
@@ -85,19 +93,24 @@ const localEyeColor = ref(props.eyeColor)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localEyeColor"
-          :min="0"
-          :max="31"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:eyeColor', $event)"
-        />
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="index in 32"
+          :key="index - 1"
+          class="w-16 h-16 rounded-full border-2 transition-all duration-200 hover:scale-110 overflow-hidden relative"
+          :class="localEyeColor === index - 1 ? 'border-white shadow-lg shadow-white/50 ring-2 ring-blue-500' : 'border-slate-600 hover:border-slate-400'"
+          @click="localEyeColor = index - 1; emit('update:eyeColor', index - 1)"
+        >
+          <div
+            class="w-full h-full"
+            :style="{
+              backgroundImage: 'url(images/eyes_textures/mp_eye_colour.png)',
+              backgroundSize: '800% 400%',
+              backgroundPosition: `${((index - 1) % 8) / 7 * 100}% ${Math.floor((index - 1) / 8) / 3 * 100}%`,
+              backgroundRepeat: 'no-repeat'
+            }"
+          />
+        </button>
       </div>
     </div>
   </div>
