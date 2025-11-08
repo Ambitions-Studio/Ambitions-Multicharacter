@@ -1,4 +1,3 @@
-// Import all MDI icons used in the application
 export {
   mdiArrowLeft,
   mdiAccount,

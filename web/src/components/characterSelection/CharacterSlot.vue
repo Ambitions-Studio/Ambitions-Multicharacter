@@ -5,8 +5,15 @@ import { mdiPlus, mdiAccount } from '@/icons'
 const { t } = useI18n()
 
 export type Character = {
+  id?: number
+  uniqueId?: string
   firstName: string
   lastName: string
+  gender?: string
+  dateOfBirth?: string
+  nationality?: string
+  height?: number
+  appearance?: any
   job: string | null
   jobGrade: string | null
   crew: string | null
@@ -17,6 +24,15 @@ export type Character = {
   licenses: string[]
   totalPlaytime: string
   lastPlayed: string
+  playtime?: number
+  createdAt?: string
+  pedModel?: string
+  position?: {
+    x: number
+    y: number
+    z: number
+    heading: number
+  }
 }
 
 const props = defineProps<{

@@ -24,9 +24,8 @@ const emit = defineEmits<{
 
 const localAgeingStyle = ref(props.ageingStyle)
 const localAgeingOpacity = ref(props.ageingOpacity)
-const maxAgeingStyles = ref(14) // Default fallback
+const maxAgeingStyles = ref(14)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number }>('getCustomizationLimits')
   if (limits) {

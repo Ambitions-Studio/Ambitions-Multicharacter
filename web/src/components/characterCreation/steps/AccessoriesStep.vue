@@ -83,7 +83,6 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props
 const localHatDrawable = ref(appearanceStore.hatDrawable ?? props.hatDrawable)
 const localHatTexture = ref(appearanceStore.hatTexture ?? props.hatTexture)
 const localGlassesDrawable = ref(appearanceStore.glassesDrawable ?? props.glassesDrawable)
@@ -101,40 +100,39 @@ const localNeckAccessoryTexture = ref(
   appearanceStore.neckAccessoryTexture ?? props.neckAccessoryTexture
 )
 
-// Save current section when switching categories
 const saveSectionData = (categoryIndex: number) => {
   switch (categoryIndex) {
-    case 0: // Hat
+    case 0:
       appearanceStore.setHatSection({
         hatDrawable: localHatDrawable.value,
         hatTexture: localHatTexture.value,
       })
       break
-    case 1: // Glasses
+    case 1:
       appearanceStore.setGlassesSection({
         glassesDrawable: localGlassesDrawable.value,
         glassesTexture: localGlassesTexture.value,
       })
       break
-    case 2: // Earrings
+    case 2:
       appearanceStore.setEarringsSection({
         earringsDrawable: localEarringsDrawable.value,
         earringsTexture: localEarringsTexture.value,
       })
       break
-    case 3: // Watch
+    case 3:
       appearanceStore.setWatchSection({
         watchDrawable: localWatchDrawable.value,
         watchTexture: localWatchTexture.value,
       })
       break
-    case 4: // Bracelet
+    case 4:
       appearanceStore.setBraceletSection({
         braceletDrawable: localBraceletDrawable.value,
         braceletTexture: localBraceletTexture.value,
       })
       break
-    case 5: // Neck Accessory
+    case 5:
       appearanceStore.setNeckAccessorySection({
         neckAccessoryDrawable: localNeckAccessoryDrawable.value,
         neckAccessoryTexture: localNeckAccessoryTexture.value,
@@ -143,7 +141,6 @@ const saveSectionData = (categoryIndex: number) => {
   }
 }
 
-// Watch for category changes and save previous section
 watch(selectedCategory, (newCategory, oldCategory) => {
   saveSectionData(oldCategory)
   previousCategory.value = oldCategory
@@ -162,7 +159,6 @@ const updateHatTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get hat texture limit:', error)
   }
 }
 
@@ -179,7 +175,6 @@ const updateGlassesTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get glasses texture limit:', error)
   }
 }
 
@@ -196,7 +191,6 @@ const updateEarringsTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get earrings texture limit:', error)
   }
 }
 
@@ -213,7 +207,6 @@ const updateWatchTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get watch texture limit:', error)
   }
 }
 
@@ -230,7 +223,6 @@ const updateBraceletTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get bracelet texture limit:', error)
   }
 }
 
@@ -247,7 +239,6 @@ const updateNeckAccessoryTypeLimit = async () => {
       }
     }
   } catch (error) {
-    console.error('Failed to get neck accessory texture limit:', error)
   }
 }
 
@@ -260,7 +251,6 @@ watch(localHatDrawable, async (newVal) => {
     })
     await updateHatTypeLimit()
   } catch (error) {
-    console.error('Failed to apply hat drawable:', error)
   }
 })
 
@@ -272,7 +262,6 @@ watch(localHatTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply hat texture:', error)
   }
 })
 
@@ -285,7 +274,6 @@ watch(localGlassesDrawable, async (newVal) => {
     })
     await updateGlassesTypeLimit()
   } catch (error) {
-    console.error('Failed to apply glasses drawable:', error)
   }
 })
 
@@ -297,7 +285,6 @@ watch(localGlassesTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply glasses texture:', error)
   }
 })
 
@@ -310,7 +297,6 @@ watch(localEarringsDrawable, async (newVal) => {
     })
     await updateEarringsTypeLimit()
   } catch (error) {
-    console.error('Failed to apply earrings drawable:', error)
   }
 })
 
@@ -322,7 +308,6 @@ watch(localEarringsTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply earrings texture:', error)
   }
 })
 
@@ -335,7 +320,6 @@ watch(localWatchDrawable, async (newVal) => {
     })
     await updateWatchTypeLimit()
   } catch (error) {
-    console.error('Failed to apply watch drawable:', error)
   }
 })
 
@@ -347,7 +331,6 @@ watch(localWatchTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply watch texture:', error)
   }
 })
 
@@ -360,7 +343,6 @@ watch(localBraceletDrawable, async (newVal) => {
     })
     await updateBraceletTypeLimit()
   } catch (error) {
-    console.error('Failed to apply bracelet drawable:', error)
   }
 })
 
@@ -372,7 +354,6 @@ watch(localBraceletTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply bracelet texture:', error)
   }
 })
 
@@ -385,7 +366,6 @@ watch(localNeckAccessoryDrawable, async (newVal) => {
     })
     await updateNeckAccessoryTypeLimit()
   } catch (error) {
-    console.error('Failed to apply neck accessory drawable:', error)
   }
 })
 
@@ -397,7 +377,6 @@ watch(localNeckAccessoryTexture, async (newVal) => {
       variant: newVal
     })
   } catch (error) {
-    console.error('Failed to apply neck accessory texture:', error)
   }
 })
 
@@ -428,15 +407,12 @@ onMounted(async () => {
     await updateBraceletTypeLimit()
     await updateNeckAccessoryTypeLimit()
   } catch (error) {
-    console.error('Failed to get accessories limits:', error)
   }
 })
 
 const handleContinue = () => {
-  // Save current section before validating
   saveSectionData(selectedCategory.value)
 
-  // Save ALL accessories data to AppearanceStore (to be sure)
   const accessoriesData = {
     hatDrawable: localHatDrawable.value,
     hatTexture: localHatTexture.value,
@@ -454,7 +430,6 @@ const handleContinue = () => {
 
   appearanceStore.setAccessories(accessoriesData)
 
-  // Update ONLY accessories section in character store
   characterStore.setAccessories(accessoriesData)
 
   emit('update:hatDrawable', localHatDrawable.value)
@@ -482,7 +457,6 @@ const handleContinue = () => {
     />
 
     <div class="h-[60vh] overflow-y-scroll pr-2 pb-32">
-      <!-- Hat -->
       <div v-if="selectedCategory === 0" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -523,7 +497,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Glasses -->
       <div v-if="selectedCategory === 1" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -564,7 +537,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Earrings -->
       <div v-if="selectedCategory === 2" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -605,7 +577,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Watch -->
       <div v-if="selectedCategory === 3" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -646,7 +617,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Bracelet -->
       <div v-if="selectedCategory === 4" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -687,7 +657,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Neck Accessory -->
       <div v-if="selectedCategory === 5" class="space-y-6">
         <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
           <div>
@@ -728,7 +697,6 @@ const handleContinue = () => {
         </div>
       </div>
 
-      <!-- Continue Button for Accessories -->
       <div class="mt-6 flex justify-center">
       <VBtn
         variant="outlined"

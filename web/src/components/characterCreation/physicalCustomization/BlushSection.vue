@@ -29,9 +29,8 @@ const emit = defineEmits<{
 const localBlushStyle = ref(props.blushStyle)
 const localBlushColor = ref(props.blushColor)
 const localBlushOpacity = ref(props.blushOpacity)
-const maxBlushStyles = ref(6) // Default fallback
+const maxBlushStyles = ref(6)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number }>('getCustomizationLimits')
   if (limits) {

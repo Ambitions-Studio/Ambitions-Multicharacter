@@ -21,7 +21,6 @@ const characterStore = useCharacterStore()
 const identityStore = useIdentityCreationStore()
 const appearanceStore = useAppearanceStore()
 
-// Camera controls state
 const isLeftMouseDown = ref(false)
 const isRightMouseDown = ref(false)
 
@@ -46,39 +45,27 @@ const authorizePedwhileInCreator = ref(false)
 
 const pedModels = ref<PedModel[]>([])
 
-// Identity step data - Disabled for now (will be used in RecapStep later)
-// const firstName = ref<string>('')
-// const lastName = ref<string>('')
-// const dateOfBirth = ref<string>('')
-// const gender = ref<string>('male')
-
-// Heritage step data
 const selectedFather = ref<number>(0)
 const selectedMother = ref<number>(0)
-const faceResemblance = ref<number>(0.5) // 0 = father, 1 = mother
-const skinResemblance = ref<number>(0.5) // 0 = father, 1 = mother
+const faceResemblance = ref<number>(0.5)
+const skinResemblance = ref<number>(0.5)
 
-// Heritage options
 const fatherOptions = ref<{ id: number; name: string; photo?: string }[]>([])
 const motherOptions = ref<{ id: number; name: string; photo?: string }[]>([])
 
-// Physical Customization - Hair
 const hairStyle = ref<number>(0)
 const hairColor = ref<number>(0)
 const hairHighlight = ref<number>(0)
 
-// Physical Customization - Eyes
 const eyeOpening = ref<number>(0)
 const eyeColor = ref<number>(0)
 
-// Physical Customization - Eyebrows
 const eyebrowHeight = ref<number>(0)
 const eyebrowDepth = ref<number>(0)
 const eyebrowsStyle = ref<number>(0)
 const eyebrowsColor = ref<number>(0)
 const eyebrowsOpacity = ref<number>(1)
 
-// Physical Customization - Nose
 const noseWidth = ref<number>(0)
 const noseHeight = ref<number>(0)
 const noseLength = ref<number>(0)
@@ -86,75 +73,59 @@ const noseBridge = ref<number>(0)
 const noseBridgeTwist = ref<number>(0)
 const noseTipHeight = ref<number>(0)
 
-// Physical Customization - Cheeks
 const cheekBoneHeight = ref<number>(0)
 const cheekBoneWidth = ref<number>(0)
 const cheekWidth = ref<number>(0)
 
-// Physical Customization - Jaw
 const jawWidth = ref<number>(0)
 const jawHeight = ref<number>(0)
 
-// Physical Customization - Lips
 const lipThickness = ref<number>(0)
 
-// Physical Customization - Chin
 const chinLowering = ref<number>(0)
 const chinLength = ref<number>(0)
 const chinWidth = ref<number>(0)
 const chinCleft = ref<number>(0)
 
-// Physical Customization - Neck
 const neckThickness = ref<number>(0)
 
-// Physical Customization - Beard
 const beardStyle = ref<number>(0)
 const beardColor = ref<number>(0)
 const beardSecondaryColor = ref<number>(0)
 const beardOpacity = ref<number>(1)
 
-// Physical Customization - Ageing
 const ageingStyle = ref<number>(0)
 const ageingOpacity = ref<number>(0)
 
-// Physical Customization - Makeup
 const makeupStyle = ref<number>(0)
 const makeupPrimaryColor = ref<number>(0)
 const makeupSecondaryColor = ref<number>(0)
 const makeupOpacity = ref<number>(0)
 
-// Physical Customization - Blush
 const blushStyle = ref<number>(0)
 const blushColor = ref<number>(0)
 const blushOpacity = ref<number>(0)
 
-// Physical Customization - Complexion
 const complexionStyle = ref<number>(0)
 const complexionOpacity = ref<number>(0)
 
-// Physical Customization - Sun Damage
 const sunDamageStyle = ref<number>(0)
 const sunDamageOpacity = ref<number>(0)
 
-// Physical Customization - Lipstick
 const lipstickStyle = ref<number>(0)
 const lipstickColor = ref<number>(0)
 const lipstickOpacity = ref<number>(0)
 
-// Physical Customization - Moles & Freckles
 const molesFrecklesStyle = ref<number>(0)
 const molesFrecklesOpacity = ref<number>(0)
 
-// Physical Customization - Chest Hair
 const chestHairStyle = ref<number>(0)
 const chestHairColor = ref<number>(0)
 const chestHairOpacity = ref<number>(0)
 
-// Physical Customization - Body Blemishes
 const bodyBlemishesStyle = ref<number>(0)
 const bodyBlemishesOpacity = ref<number>(0)
 
-// Clothing - Each item has drawable (style) and texture (variant)
 const maskDrawable = ref<number>(0)
 const maskTexture = ref<number>(0)
 
@@ -201,7 +172,6 @@ const braceletTexture = ref<number>(0)
 const neckAccessoryDrawable = ref<number>(0)
 const neckAccessoryTexture = ref<number>(0)
 
-// Tattoos - Each zone has collection (style) and hash (specific tattoo)
 const headTattooCollection = ref<number>(0)
 const headTattooHash = ref<number>(0)
 
@@ -257,20 +227,16 @@ const closeInterface = () => {
   sendNuiEvent('closeCharacterCreator')
 }
 
-// Camera controls - Mouse handlers
 const handleMouseDown = (event: MouseEvent) => {
   if (!isVisible.value) return
 
-  // Check if click is on the UI area (left side ~33% of screen)
   const uiWidth = window.innerWidth * 0.33
   if (event.clientX < uiWidth) return
 
   if (event.button === 0) {
-    // Left click
     isLeftMouseDown.value = true
     sendNuiEvent('cameraControlStart', { type: 'pan' })
   } else if (event.button === 2) {
-    // Right click
     isRightMouseDown.value = true
     sendNuiEvent('cameraControlStart', { type: 'rotate' })
   }
@@ -298,29 +264,22 @@ const handleMouseMove = (event: MouseEvent) => {
   })
 }
 
-// Prevent context menu on right click
 const handleContextMenu = (event: MouseEvent) => {
   if (isVisible.value) {
     event.preventDefault()
   }
 }
 
-// Camera zoom - Mouse wheel
 const handleMouseWheel = (event: WheelEvent) => {
   if (!isVisible.value) return
 
-  // Check if mouse is outside UI area
   const uiWidth = window.innerWidth * 0.33
   if (event.clientX < uiWidth) return
 
-  // Prevent page scroll
   event.preventDefault()
-
-  // Calculate normalized mouse position (0 to 1)
   const mouseX = event.clientX / window.innerWidth
   const mouseY = event.clientY / window.innerHeight
 
-  // Determine zoom direction
   const zoomIn = event.deltaY < 0
 
   sendNuiEvent('cameraZoom', {
@@ -347,19 +306,12 @@ const handleValidateCharacter = async () => {
   const appearanceMatch = JSON.stringify(characterAppearance) === JSON.stringify(storeAppearance)
 
   if (!identityMatch || !appearanceMatch) {
-    console.error('❌ VALIDATION ERROR: Data mismatch between stores!')
-    console.error('Character Store Identity:', JSON.stringify(characterIdentity, null, 2))
-    console.error('Identity Store:', JSON.stringify(storeIdentity, null, 2))
-    console.error('Character Store Appearance:', JSON.stringify(characterAppearance, null, 2))
-    console.error('Appearance Store:', JSON.stringify(storeAppearance, null, 2))
-
     try {
       await sendNuiCallback('characterCreationError', {
         error: 'DATA_MISMATCH',
         message: 'Les données ne correspondent pas entre les stores'
       })
     } catch (error) {
-      console.error('Failed to send error to Lua:', error)
     }
     return
   }
@@ -370,15 +322,9 @@ const handleValidateCharacter = async () => {
     slot: characterStore.selectedSlot
   }
 
-  console.log('✅ VALIDATION SUCCESS: All data matches!')
-  console.log('📋 Complete Character Data:')
-  console.log(JSON.stringify(completeCharacterData, null, 2))
-
   try {
     await sendNuiCallback('createCharacter', completeCharacterData)
-    console.log('✅ Character data sent to Lua successfully!')
   } catch (error) {
-    console.error('❌ Failed to send character data to Lua:', error)
   }
 }
 

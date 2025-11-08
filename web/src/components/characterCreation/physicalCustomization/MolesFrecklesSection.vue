@@ -24,9 +24,8 @@ const emit = defineEmits<{
 
 const localMolesFrecklesStyle = ref(props.molesFrecklesStyle)
 const localMolesFrecklesOpacity = ref(props.molesFrecklesOpacity)
-const maxMolesFrecklesStyles = ref(17) // Default fallback
+const maxMolesFrecklesStyles = ref(17)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number; sunDamageStyles: number; molesFrecklesStyles: number }>('getCustomizationLimits')
   if (limits) {
