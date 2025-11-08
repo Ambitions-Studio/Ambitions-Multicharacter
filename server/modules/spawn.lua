@@ -45,12 +45,16 @@ local function SetupCharacter(sessionId)
       local char = characters[i]
       local appearanceData = nil
       if char.appearance and char.appearance ~= '' then
+        ambitionsPrint.info('Decoding appearance JSON for character:', char.id)
         local success, decoded = pcall(json.decode, char.appearance)
         if success then
           appearanceData = decoded
+          ambitionsPrint.success('Appearance JSON decoded successfully')
         else
           ambitionsPrint.error('Failed to decode appearance JSON for character:', char.id)
         end
+      else
+        ambitionsPrint.warning('No appearance data in DB for character:', char.id)
       end
 
       characterData[#characterData + 1] = {
