@@ -43,6 +43,16 @@ local function SetupCharacter(sessionId)
     ambitionsPrint.success('Found', #characters, 'character(s) for user')
     for i = 1, #characters do
       local char = characters[i]
+      local appearanceData = nil
+      if char.appearance and char.appearance ~= '' then
+        local success, decoded = pcall(json.decode, char.appearance)
+        if success then
+          appearanceData = decoded
+        else
+          ambitionsPrint.error('Failed to decode appearance JSON for character:', char.id)
+        end
+      end
+
       characterData[#characterData + 1] = {
         id = char.id,
         uniqueId = char.unique_id,
@@ -52,7 +62,7 @@ local function SetupCharacter(sessionId)
         sex = char.sex,
         nationality = char.nationality,
         height = char.height,
-        appearance = char.appearance,
+        appearance = appearanceData,
         group = char.group,
         pedModel = char.ped_model,
         position = {
