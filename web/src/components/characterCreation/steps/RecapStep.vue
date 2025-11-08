@@ -1,15 +1,70 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { VBtn } from 'vuetify/components'
 import { useIdentityCreationStore } from '@/stores/useIdentityCreationStore'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
+import { useCharacterStore } from '@/stores/useCharacterStore'
+import { sendNuiCallback } from '@/utils/nui'
 
 const { t } = useI18n()
 const identityStore = useIdentityCreationStore()
 const appearanceStore = useAppearanceStore()
+const characterStore = useCharacterStore()
 
 const identity = computed(() => identityStore.getIdentityData())
 const appearance = computed(() => appearanceStore.getAppearanceData())
+
+const validateAndCreateCharacter = async () => {
+  const characterIdentity = characterStore.identity
+  const characterAppearance = characterStore.appearance
+  const storeIdentity = identityStore.getIdentityData()
+  const storeAppearance = appearanceStore.getAppearanceData()
+
+  const identityMatch =
+    characterIdentity?.firstName === storeIdentity.firstName &&
+    characterIdentity?.lastName === storeIdentity.lastName &&
+    characterIdentity?.dateOfBirth === storeIdentity.dateOfBirth &&
+    characterIdentity?.gender === storeIdentity.gender &&
+    characterIdentity?.nationality === storeIdentity.nationality &&
+    characterIdentity?.height === storeIdentity.height
+
+  const appearanceMatch = JSON.stringify(characterAppearance) === JSON.stringify(storeAppearance)
+
+  if (!identityMatch || !appearanceMatch) {
+    console.error('❌ VALIDATION ERROR: Data mismatch between stores!')
+    console.error('Character Store Identity:', characterIdentity)
+    console.error('Identity Store:', storeIdentity)
+    console.error('Character Store Appearance:', characterAppearance)
+    console.error('Appearance Store:', storeAppearance)
+
+    try {
+      await sendNuiCallback('characterCreationError', {
+        error: 'DATA_MISMATCH',
+        message: 'Les données ne correspondent pas entre les stores'
+      })
+    } catch (error) {
+      console.error('Failed to send error to Lua:', error)
+    }
+    return
+  }
+
+  const completeCharacterData = {
+    identity: storeIdentity,
+    appearance: storeAppearance,
+    slot: characterStore.selectedSlot
+  }
+
+  console.log('✅ VALIDATION SUCCESS: All data matches!')
+  console.log('📋 Complete Character Data:', JSON.stringify(completeCharacterData, null, 2))
+
+  try {
+    await sendNuiCallback('createCharacter', completeCharacterData)
+    console.log('✅ Character data sent to Lua successfully!')
+  } catch (error) {
+    console.error('❌ Failed to send character data to Lua:', error)
+  }
+}
 </script>
 
 <template>
@@ -387,6 +442,21 @@ const appearance = computed(() => appearanceStore.getAppearanceData())
           <p class="text-white font-semibold">{{ appearance.tattoos.rightLegTattooIndex }}</p>
         </div>
       </div>
+    </div>
+
+    <!-- Validation Button -->
+    <div class="mt-8 flex justify-center pb-8">
+      <VBtn
+        variant="outlined"
+        size="x-large"
+        class="bg-emerald-600 !text-white font-bold !border-2 !border-emerald-400 hover:!border-emerald-300 hover:!bg-emerald-500 rounded-lg hover:scale-105 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300 !flex !items-center !justify-center px-12"
+        elevation="0"
+        @click="validateAndCreateCharacter"
+      >
+        <span class="text-lg tracking-wide uppercase">
+          {{ t('characterCreation.recap.validateButton') }}
+        </span>
+      </VBtn>
     </div>
   </div>
 </template>

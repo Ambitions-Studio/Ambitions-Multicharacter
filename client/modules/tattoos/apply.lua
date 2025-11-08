@@ -39,18 +39,9 @@ local function BuildTattoosByZone()
 
   tattoosByZone.back = tattoosByZone.torso
 
+  -- ZONE_LEFT_ARM dans le config correspond au bras DROIT du point de vue du joueur
   if ConfigTattoos.ZONE_LEFT_ARM then
     for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_ARM) do
-      table.insert(tattoosByZone.leftArm, {
-        collection = tattoo.collection,
-        name = tattoo.hashMale,
-        label = tattoo.label
-      })
-    end
-  end
-
-  if ConfigTattoos.ZONE_RIGHT_ARM then
-    for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_ARM) do
       table.insert(tattoosByZone.rightArm, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -59,9 +50,10 @@ local function BuildTattoosByZone()
     end
   end
 
-  if ConfigTattoos.ZONE_LEFT_LEG then
-    for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_LEG) do
-      table.insert(tattoosByZone.leftLeg, {
+  -- ZONE_RIGHT_ARM dans le config correspond au bras GAUCHE du point de vue du joueur
+  if ConfigTattoos.ZONE_RIGHT_ARM then
+    for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_ARM) do
+      table.insert(tattoosByZone.leftArm, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
         label = tattoo.label
@@ -69,9 +61,21 @@ local function BuildTattoosByZone()
     end
   end
 
+  -- ZONE_LEFT_LEG dans le config correspond à la jambe DROITE du point de vue du joueur
+  if ConfigTattoos.ZONE_LEFT_LEG then
+    for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_LEG) do
+      table.insert(tattoosByZone.rightLeg, {
+        collection = tattoo.collection,
+        name = tattoo.hashMale,
+        label = tattoo.label
+      })
+    end
+  end
+
+  -- ZONE_RIGHT_LEG dans le config correspond à la jambe GAUCHE du point de vue du joueur
   if ConfigTattoos.ZONE_RIGHT_LEG then
     for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_LEG) do
-      table.insert(tattoosByZone.rightLeg, {
+      table.insert(tattoosByZone.leftLeg, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
         label = tattoo.label
