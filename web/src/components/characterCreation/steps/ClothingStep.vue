@@ -117,7 +117,6 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props
 const localMaskDrawable = ref(appearanceStore.maskDrawable ?? props.maskDrawable)
 const localMaskTexture = ref(appearanceStore.maskTexture ?? props.maskTexture)
 const localTorsoDrawable = ref(appearanceStore.torsoDrawable ?? props.torsoDrawable)
@@ -139,58 +138,57 @@ const localShoesTexture = ref(appearanceStore.shoesTexture ?? props.shoesTexture
 const localBackpackDrawable = ref(appearanceStore.backpackDrawable ?? props.backpackDrawable)
 const localBackpackTexture = ref(appearanceStore.backpackTexture ?? props.backpackTexture)
 
-// Save current section when switching categories
 const saveSectionData = (categoryIndex: number) => {
   switch (categoryIndex) {
-    case 0: // Mask
+    case 0:
       appearanceStore.setMaskSection({
         maskDrawable: localMaskDrawable.value,
         maskTexture: localMaskTexture.value,
       })
       break
-    case 1: // Torso
+    case 1:
       appearanceStore.setTorsoSection({
         torsoDrawable: localTorsoDrawable.value,
         torsoTexture: localTorsoTexture.value,
       })
       break
-    case 2: // Undershirt
+    case 2:
       appearanceStore.setUndershirtSection({
         undershirtDrawable: localUndershirtDrawable.value,
         undershirtTexture: localUndershirtTexture.value,
       })
       break
-    case 3: // Arms
+    case 3:
       appearanceStore.setArmsSection({
         armsDrawable: localArmsDrawable.value,
         armsTexture: localArmsTexture.value,
       })
       break
-    case 4: // Body Armor
+    case 4:
       appearanceStore.setBodyArmorSection({
         bodyArmorDrawable: localBodyArmorDrawable.value,
         bodyArmorTexture: localBodyArmorTexture.value,
       })
       break
-    case 5: // Decals
+    case 5:
       appearanceStore.setDecalsSection({
         decalsDrawable: localDecalsDrawable.value,
         decalsTexture: localDecalsTexture.value,
       })
       break
-    case 6: // Pants
+    case 6:
       appearanceStore.setPantsSection({
         pantsDrawable: localPantsDrawable.value,
         pantsTexture: localPantsTexture.value,
       })
       break
-    case 7: // Shoes
+    case 7:
       appearanceStore.setShoesSection({
         shoesDrawable: localShoesDrawable.value,
         shoesTexture: localShoesTexture.value,
       })
       break
-    case 8: // Backpack
+    case 8:
       appearanceStore.setBackpackSection({
         backpackDrawable: localBackpackDrawable.value,
         backpackTexture: localBackpackTexture.value,
@@ -199,7 +197,6 @@ const saveSectionData = (categoryIndex: number) => {
   }
 }
 
-// Watch for category changes and save previous section
 watch(selectedCategory, (newCategory, oldCategory) => {
   saveSectionData(oldCategory)
   previousCategory.value = oldCategory
@@ -541,10 +538,8 @@ onMounted(async () => {
 })
 
 const handleContinue = () => {
-  // Save current section before validating
   saveSectionData(selectedCategory.value)
 
-  // Save ALL clothing data to AppearanceStore (to be sure)
   const clothingData = {
     maskDrawable: localMaskDrawable.value,
     maskTexture: localMaskTexture.value,
@@ -570,7 +565,6 @@ const handleContinue = () => {
 
   appearanceStore.setClothing(clothingData)
 
-  // Update ONLY clothing section in character store
   characterStore.setClothing(clothingData)
 
   emit('update:maskDrawable', localMaskDrawable.value)

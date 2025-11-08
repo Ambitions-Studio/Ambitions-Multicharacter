@@ -29,13 +29,11 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props or null
 const selectedPed = ref<string | null>(
   appearanceStore.selectedPed ?? props.modelValue ?? null
 )
 const pedSelectionError = ref('')
 
-// Auto-select first ped when component mounts if no ped is already selected
 onMounted(() => {
   if (!selectedPed.value && props.pedModels.length > 0) {
     const defaultPed = props.pedModels.find(p => p.value === 'mp_m_freemode_01') || props.pedModels[0]
@@ -46,7 +44,6 @@ onMounted(() => {
   }
 })
 
-// Watch for pedModels changes (when config arrives from Lua)
 watch(() => props.pedModels, (newPedModels) => {
   if (!selectedPed.value && newPedModels.length > 0) {
     const defaultPed = newPedModels.find(p => p.value === 'mp_m_freemode_01') || newPedModels[0]
@@ -71,10 +68,8 @@ const handleContinue = () => {
     return
   }
 
-  // Save to appearance store
   appearanceStore.setSelectedPed(selectedPed.value)
 
-  // Update ONLY ped selection in character store
   characterStore.setPedSelection({ selectedPed: selectedPed.value })
 
   emit('update:modelValue', selectedPed.value)

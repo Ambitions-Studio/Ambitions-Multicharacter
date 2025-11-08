@@ -41,7 +41,6 @@ local function BuildTattoosByZone()
 
   tattoosByZone.back = tattoosByZone.torso
 
-  -- ZONE_LEFT_ARM dans le config correspond au bras DROIT du point de vue du joueur
   if ConfigTattoos.ZONE_LEFT_ARM then
     for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_ARM) do
       table.insert(tattoosByZone.rightArm, {
@@ -52,7 +51,6 @@ local function BuildTattoosByZone()
     end
   end
 
-  -- ZONE_RIGHT_ARM dans le config correspond au bras GAUCHE du point de vue du joueur
   if ConfigTattoos.ZONE_RIGHT_ARM then
     for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_ARM) do
       table.insert(tattoosByZone.leftArm, {
@@ -63,7 +61,6 @@ local function BuildTattoosByZone()
     end
   end
 
-  -- ZONE_LEFT_LEG dans le config correspond à la jambe DROITE du point de vue du joueur
   if ConfigTattoos.ZONE_LEFT_LEG then
     for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_LEG) do
       table.insert(tattoosByZone.rightLeg, {
@@ -74,7 +71,6 @@ local function BuildTattoosByZone()
     end
   end
 
-  -- ZONE_RIGHT_LEG dans le config correspond à la jambe GAUCHE du point de vue du joueur
   if ConfigTattoos.ZONE_RIGHT_LEG then
     for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_LEG) do
       table.insert(tattoosByZone.leftLeg, {
@@ -148,7 +144,6 @@ local function ReapplyAllTattoos()
   ambitionsPrint.info('========== ReapplyAllTattoos START ==========')
   ambitionsPrint.info('Ped ID:', ped, 'Model:', pedModel)
 
-  -- IMPORTANT: Refresh le component du torse pour forcer l'affichage des overlays
   local currentTorso = GetPedDrawableVariation(ped, 3)
   local currentTorsoTexture = GetPedTextureVariation(ped, 3)
 
@@ -159,18 +154,14 @@ local function ReapplyAllTattoos()
       ambitionsPrint.info('  Collection Hash:', tattoo.collectionHash)
       ambitionsPrint.info('  Tattoo Hash:', tattoo.tattooHash)
 
-      -- Les overlays ne nécessitent PAS de RequestStreamedTextureDict
-      -- Appliquer directement la decoration
       AddPedDecorationFromHashes(ped, tattoo.collectionHash, tattoo.tattooHash)
       ambitionsPrint.success('Applied decoration for zone:', zone)
     end
   end
 
-  -- FORCER le refresh du component pour afficher les overlays
   Wait(50)
   SetPedComponentVariation(ped, 3, currentTorso, currentTorsoTexture, 0)
 
-  -- Aussi refresh les bras (component 11)
   local currentArms = GetPedDrawableVariation(ped, 11)
   local currentArmsTexture = GetPedTextureVariation(ped, 11)
   SetPedComponentVariation(ped, 11, currentArms, currentArmsTexture, 0)

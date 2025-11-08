@@ -24,9 +24,8 @@ const emit = defineEmits<{
 
 const localBodyBlemishesStyle = ref(props.bodyBlemishesStyle)
 const localBodyBlemishesOpacity = ref(props.bodyBlemishesOpacity)
-const maxBodyBlemishesStyles = ref(11) // Default fallback
+const maxBodyBlemishesStyles = ref(11)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number; sunDamageStyles: number; molesFrecklesStyles: number; chestHairStyles: number; bodyBlemishesStyles: number }>('getCustomizationLimits')
   if (limits) {

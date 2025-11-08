@@ -24,9 +24,8 @@ const emit = defineEmits<{
 
 const localComplexionStyle = ref(props.complexionStyle)
 const localComplexionOpacity = ref(props.complexionOpacity)
-const maxComplexionStyles = ref(11) // Default fallback
+const maxComplexionStyles = ref(11)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number }>('getCustomizationLimits')
   if (limits) {

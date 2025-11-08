@@ -109,7 +109,6 @@ const saveSectionData = (categoryIndex: number) => {
   }
 }
 
-// Watch for category changes and save previous section
 watch(selectedCategory, (newCategory, oldCategory) => {
   saveSectionData(oldCategory)
   previousCategory.value = oldCategory

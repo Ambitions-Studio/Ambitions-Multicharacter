@@ -17,7 +17,6 @@ local function CreateCharacterSelectionCamera(ped, offsetX, offsetY, offsetZ, tr
 
   SetCamCoord(cam, camOffset.x, camOffset.y, camOffset.z)
 
-  -- Set camera rotation (200 degrees to the right)
   local pedHeading = GetEntityHeading(ped)
   local camRotation = pedHeading + 200.0
   SetCamRot(cam, 0.0, 0.0, camRotation, 2)

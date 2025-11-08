@@ -29,9 +29,8 @@ const emit = defineEmits<{
 const localHairStyle = ref(props.hairStyle)
 const localHairColor = ref(props.hairColor)
 const localHairHighlight = ref(props.hairHighlight)
-const maxHairStyles = ref(78) // Default fallback
+const maxHairStyles = ref(78)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number }>('getCustomizationLimits')
   if (limits) {
@@ -39,7 +38,6 @@ onMounted(async () => {
   }
 })
 
-// Watch for hair changes and apply in real-time
 watch([localHairStyle, localHairColor, localHairHighlight], ([style, color, highlight]) => {
   sendNuiEvent('applyHairStyle', {
     style,

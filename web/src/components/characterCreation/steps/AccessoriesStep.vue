@@ -83,7 +83,6 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Initialize from store if available, otherwise use props
 const localHatDrawable = ref(appearanceStore.hatDrawable ?? props.hatDrawable)
 const localHatTexture = ref(appearanceStore.hatTexture ?? props.hatTexture)
 const localGlassesDrawable = ref(appearanceStore.glassesDrawable ?? props.glassesDrawable)
@@ -101,40 +100,39 @@ const localNeckAccessoryTexture = ref(
   appearanceStore.neckAccessoryTexture ?? props.neckAccessoryTexture
 )
 
-// Save current section when switching categories
 const saveSectionData = (categoryIndex: number) => {
   switch (categoryIndex) {
-    case 0: // Hat
+    case 0:
       appearanceStore.setHatSection({
         hatDrawable: localHatDrawable.value,
         hatTexture: localHatTexture.value,
       })
       break
-    case 1: // Glasses
+    case 1:
       appearanceStore.setGlassesSection({
         glassesDrawable: localGlassesDrawable.value,
         glassesTexture: localGlassesTexture.value,
       })
       break
-    case 2: // Earrings
+    case 2:
       appearanceStore.setEarringsSection({
         earringsDrawable: localEarringsDrawable.value,
         earringsTexture: localEarringsTexture.value,
       })
       break
-    case 3: // Watch
+    case 3:
       appearanceStore.setWatchSection({
         watchDrawable: localWatchDrawable.value,
         watchTexture: localWatchTexture.value,
       })
       break
-    case 4: // Bracelet
+    case 4:
       appearanceStore.setBraceletSection({
         braceletDrawable: localBraceletDrawable.value,
         braceletTexture: localBraceletTexture.value,
       })
       break
-    case 5: // Neck Accessory
+    case 5:
       appearanceStore.setNeckAccessorySection({
         neckAccessoryDrawable: localNeckAccessoryDrawable.value,
         neckAccessoryTexture: localNeckAccessoryTexture.value,
@@ -143,7 +141,6 @@ const saveSectionData = (categoryIndex: number) => {
   }
 }
 
-// Watch for category changes and save previous section
 watch(selectedCategory, (newCategory, oldCategory) => {
   saveSectionData(oldCategory)
   previousCategory.value = oldCategory
@@ -433,10 +430,8 @@ onMounted(async () => {
 })
 
 const handleContinue = () => {
-  // Save current section before validating
   saveSectionData(selectedCategory.value)
 
-  // Save ALL accessories data to AppearanceStore (to be sure)
   const accessoriesData = {
     hatDrawable: localHatDrawable.value,
     hatTexture: localHatTexture.value,
@@ -454,7 +449,6 @@ const handleContinue = () => {
 
   appearanceStore.setAccessories(accessoriesData)
 
-  // Update ONLY accessories section in character store
   characterStore.setAccessories(accessoriesData)
 
   emit('update:hatDrawable', localHatDrawable.value)

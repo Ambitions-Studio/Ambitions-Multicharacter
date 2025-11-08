@@ -42,7 +42,6 @@ const emit = defineEmits<{
   continue: []
 }>()
 
-// Use computed with getter/setter for reactive updates
 const localSelectedFather = computed({
   get: () => props.selectedFather || props.fatherOptions[0]?.id || 0,
   set: (val) => emit('update:selectedFather', val),
@@ -63,12 +62,10 @@ const localSkinResemblance = computed({
   set: (val) => emit('update:skinResemblance', val),
 })
 
-// Get portrait image URL from public directory (no hashing)
 const getPortraitUrl = (photoFilename: string) => {
   return `images/parent_portrait/${photoFilename}`
 }
 
-// Computed refs for selected parents to avoid multiple .find() calls
 const selectedFatherData = computed(() =>
   props.fatherOptions.find((f) => f.id === localSelectedFather.value)
 )
@@ -77,11 +74,9 @@ const selectedMotherData = computed(() =>
   props.motherOptions.find((m) => m.id === localSelectedMother.value)
 )
 
-// Watch for heritage changes and apply in real-time
 watch(
   [localSelectedFather, localSelectedMother, localFaceResemblance, localSkinResemblance],
   ([father, mother, faceResemblance, skinResemblance]) => {
-    // Only apply if we have valid IDs (not 0)
     if (father && mother) {
       sendNuiCallback('applyHeritage', {
         father,
@@ -94,13 +89,11 @@ watch(
 )
 
 const handleContinue = () => {
-  // Save to AppearanceStore
   appearanceStore.setSelectedFather(localSelectedFather.value)
   appearanceStore.setSelectedMother(localSelectedMother.value)
   appearanceStore.setFaceResemblance(localFaceResemblance.value)
   appearanceStore.setSkinResemblance(localSkinResemblance.value)
 
-  // Update ONLY heritage in character store
   characterStore.setHeritage({
     father: localSelectedFather.value,
     mother: localSelectedMother.value,

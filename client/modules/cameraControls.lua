@@ -44,20 +44,15 @@ local function HandleCameraMove(controlType, movementX, movementY)
   end
 
   if controlType == 'pan' and isPanning then
-    -- Pan camera (move left/right, up/down without rotating)
     local camPos = GetCamCoord(activeCam)
     local camRot = GetCamRot(activeCam, 2)
 
-    -- Sensitivity for panning
     local sensitivity = 0.002
 
-    -- Calculate camera's right vector (perpendicular to forward)
     local heading = math.rad(camRot.z)
     local rightX = math.cos(heading)
     local rightY = math.sin(heading)
 
-    -- Move camera along its right axis (left/right) and up/down (Z axis)
-    -- Inverted: mouse right = camera left, mouse left = camera right
     local newX = camPos.x - (rightX * movementX * sensitivity)
     local newY = camPos.y - (rightY * movementX * sensitivity)
     local newZ = camPos.z + (movementY * sensitivity)
@@ -65,21 +60,17 @@ local function HandleCameraMove(controlType, movementX, movementY)
     SetCamCoord(activeCam, newX, newY, newZ)
 
   elseif controlType == 'rotate' and isRotating then
-    -- Rotate ped on himself
     local ped = PlayerPedId()
     local currentHeading = GetEntityHeading(ped)
 
-    -- Sensitivity for rotation
     local sensitivity = 0.5
 
-    -- Rotate based on horizontal mouse movement
     local newHeading = currentHeading - (movementX * sensitivity)
 
     SetEntityHeading(ped, newHeading)
   end
 end
 
--- Register events
 RegisterNetEvent('ambitions-multicharacter:client:cameraControlStart', function(controlType)
   StartCameraControl(controlType)
 end)
@@ -97,7 +88,6 @@ local function ToggleArmsUp()
   local ped = PlayerPedId()
 
   if not armsUpActive then
-    -- Play arms up animation
     RequestAnimDict('random@mugging3')
     while not HasAnimDictLoaded('random@mugging3') do
       Wait(100)
@@ -107,7 +97,6 @@ local function ToggleArmsUp()
     armsUpActive = true
     ambitionsPrint.success('Arms up animation started')
   else
-    -- Stop animation
     ClearPedTasks(ped)
     armsUpActive = false
     ambitionsPrint.success('Arms up animation stopped')
@@ -131,7 +120,6 @@ local function HandleCameraZoom(zoomIn, mouseX, mouseY)
   local camPos = GetCamCoord(activeCam)
   local camRot = GetCamRot(activeCam, 2)
 
-  -- Calculate forward vector from camera rotation
   local pitch = math.rad(camRot.x)
   local yaw = math.rad(camRot.z)
 
@@ -139,10 +127,8 @@ local function HandleCameraZoom(zoomIn, mouseX, mouseY)
   local forwardY = math.cos(yaw) * math.cos(pitch)
   local forwardZ = math.sin(pitch)
 
-  -- Zoom amount
   local zoomAmount = zoomIn and 0.1 or -0.1
 
-  -- Move camera forward/backward along its direction
   local newX = camPos.x + (forwardX * zoomAmount)
   local newY = camPos.y + (forwardY * zoomAmount)
   local newZ = camPos.z + (forwardZ * zoomAmount)
