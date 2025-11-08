@@ -172,6 +172,42 @@ RegisterNUICallback('characterCreationError', function(data, cb)
   cb('ok')
 end)
 
+RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', function(result)
+  if result.success then
+    ambitionsPrint.success('========== CHARACTER CREATED SUCCESSFULLY ==========')
+    ambitionsPrint.success('Character ID:', result.characterId)
+    ambitionsPrint.success('Unique ID:', result.uniqueId)
+    ambitionsPrint.success('========== SPAWNING PLAYER ==========')
+
+    SetNuiFocus(false, false)
+
+    SendNUIMessage({
+      action = 'hideCharacterCreator'
+    })
+
+    DoScreenFadeOut(500)
+
+    Wait(500)
+
+    local playerSpawn = spawnConfig.playerSpawn
+    local playerPed = PlayerPedId()
+
+    SetEntityCoords(playerPed, playerSpawn.x, playerSpawn.y, playerSpawn.z, false, false, false, true)
+    SetEntityHeading(playerPed, playerSpawn.w)
+
+    ambitionsPrint.success('Player spawned at:', playerSpawn.x, playerSpawn.y, playerSpawn.z)
+
+    DoScreenFadeIn(500)
+  else
+    ambitionsPrint.error('CHARACTER CREATION FAILED:', result.error)
+
+    SendNUIMessage({
+      action = 'characterCreationFailed',
+      error = result.error
+    })
+  end
+end)
+
 return {
   OpenInterface = OpenInterface,
 }
