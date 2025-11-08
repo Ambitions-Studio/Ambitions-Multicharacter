@@ -18,6 +18,16 @@ tattoosCallbacks.RegisterTattoosCallbacks()
 ---@param data table The data containing characters and configuration
 local function OpenInterface(data)
   ambitionsPrint.info('OpenInterface called with', #data.characters, 'character(s)')
+
+  for i, char in ipairs(data.characters) do
+    ambitionsPrint.info('Character', i, '- ID:', char.id, 'Name:', char.firstName, char.lastName)
+    if char.appearance then
+      ambitionsPrint.success('Character', i, 'has appearance data')
+    else
+      ambitionsPrint.warning('Character', i, 'has NO appearance data')
+    end
+  end
+
   ambitionsPrint.info('Setting NUI focus to true')
   SetNuiFocus(true, true)
 
