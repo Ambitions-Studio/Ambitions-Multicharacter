@@ -4,6 +4,7 @@ local appearanceCallbacks = require('client.modules.appearance.callbacks')
 local clothingCallbacks = require('client.modules.clothing.callbacks')
 local accessoriesCallbacks = require('client.modules.accessories.callbacks')
 local tattoosCallbacks = require('client.modules.tattoos.callbacks')
+local cameraModule = require('client.modules.camera')
 local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client interface module loaded')
@@ -184,6 +185,8 @@ RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', func
     SendNUIMessage({
       action = 'hideCharacterCreator'
     })
+
+    cameraModule.DestroyActiveCamera(500)
 
     DoScreenFadeOut(500)
 

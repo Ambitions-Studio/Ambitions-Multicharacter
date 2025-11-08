@@ -292,8 +292,6 @@ local function CreateCharacter(sessionId, data)
     characterId = insertId,
     uniqueId = uniqueId
   })
-
-  SetupCharacter(sessionId)
 end
 
 RegisterNetEvent('ambitions-multicharacter:server:createCharacter', function(data)
