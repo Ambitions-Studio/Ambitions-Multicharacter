@@ -198,7 +198,22 @@ RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', func
     SetEntityCoords(playerPed, playerSpawn.x, playerSpawn.y, playerSpawn.z, false, false, false, true)
     SetEntityHeading(playerPed, playerSpawn.w)
 
+    FreezeEntityPosition(playerPed, false)
+
+    SetEntityVisible(playerPed, true, false)
+
+    SetEntityInvincible(playerPed, false)
+
+    SetEntityCollision(playerPed, true, true)
+
+    NetworkSetEntityInvisibleToNetwork(playerPed, false)
+
+    SetEveryoneIgnorePlayer(PlayerId(), false)
+
+    SetPoliceIgnorePlayer(PlayerId(), false)
+
     ambitionsPrint.success('Player spawned at:', playerSpawn.x, playerSpawn.y, playerSpawn.z)
+    ambitionsPrint.success('Player controls restored')
 
     DoScreenFadeIn(500)
   else
