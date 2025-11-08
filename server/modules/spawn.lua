@@ -216,6 +216,8 @@ local function CreateCharacter(sessionId, data)
   local pedModel = appearance.ped and appearance.ped.selectedPed or 'mp_m_freemode_01'
   local appearanceJson = json.encode(appearance)
 
+  local gender = identity.gender and string.lower(identity.gender) or 'm'
+
   local spawnLocation = spawnConfig.spawnLocation
   local posX = spawnLocation.coords.x
   local posY = spawnLocation.coords.y
@@ -226,7 +228,7 @@ local function CreateCharacter(sessionId, data)
   ambitionsPrint.info('  First Name:', identity.firstName)
   ambitionsPrint.info('  Last Name:', identity.lastName)
   ambitionsPrint.info('  Date of Birth:', identity.dateOfBirth)
-  ambitionsPrint.info('  Gender:', identity.gender)
+  ambitionsPrint.info('  Gender:', gender)
   ambitionsPrint.info('  Nationality:', identity.nationality)
   ambitionsPrint.info('  Height:', identity.height)
   ambitionsPrint.info('  Ped Model:', pedModel)
@@ -242,7 +244,7 @@ local function CreateCharacter(sessionId, data)
     identity.firstName,
     identity.lastName,
     identity.dateOfBirth,
-    identity.gender,
+    gender,
     identity.nationality,
     identity.height,
     appearanceJson,

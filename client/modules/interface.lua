@@ -109,7 +109,8 @@ RegisterNUICallback('createCharacter', function(data, cb)
       isValid = false
       table.insert(errors, 'Date of birth is required')
     end
-    if not data.identity.gender or (data.identity.gender ~= 'm' and data.identity.gender ~= 'f') then
+    local gender = data.identity.gender and string.lower(data.identity.gender) or ''
+    if gender == '' or (gender ~= 'm' and gender ~= 'f') then
       isValid = false
       table.insert(errors, 'Valid gender is required (m or f)')
     end
