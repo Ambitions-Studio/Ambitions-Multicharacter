@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
@@ -34,6 +34,28 @@ const selectedPed = ref<string | null>(
   appearanceStore.selectedPed ?? props.modelValue ?? null
 )
 const pedSelectionError = ref('')
+
+// Auto-select first ped when component mounts if no ped is already selected
+onMounted(() => {
+  if (!selectedPed.value && props.pedModels.length > 0) {
+    const defaultPed = props.pedModels.find(p => p.value === 'mp_m_freemode_01') || props.pedModels[0]
+    if (defaultPed) {
+      selectedPed.value = defaultPed.value
+      handlePedChange(defaultPed.value)
+    }
+  }
+})
+
+// Watch for pedModels changes (when config arrives from Lua)
+watch(() => props.pedModels, (newPedModels) => {
+  if (!selectedPed.value && newPedModels.length > 0) {
+    const defaultPed = newPedModels.find(p => p.value === 'mp_m_freemode_01') || newPedModels[0]
+    if (defaultPed) {
+      selectedPed.value = defaultPed.value
+      handlePedChange(defaultPed.value)
+    }
+  }
+}, { immediate: true })
 
 const validatePedSelection = (): boolean => {
   pedSelectionError.value = ''
