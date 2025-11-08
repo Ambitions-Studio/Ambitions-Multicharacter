@@ -106,22 +106,14 @@ export type CharacterAppearance = {
     neckAccessoryTexture: number
   }
   tattoos?: {
-    headTattooCollection: number
-    headTattooHash: number
-    neckTattooCollection: number
-    neckTattooHash: number
-    torsoTattooCollection: number
-    torsoTattooHash: number
-    backTattooCollection: number
-    backTattooHash: number
-    leftArmTattooCollection: number
-    leftArmTattooHash: number
-    rightArmTattooCollection: number
-    rightArmTattooHash: number
-    leftLegTattooCollection: number
-    leftLegTattooHash: number
-    rightLegTattooCollection: number
-    rightLegTattooHash: number
+    headTattooIndex: number
+    neckTattooIndex: number
+    torsoTattooIndex: number
+    backTattooIndex: number
+    leftArmTattooIndex: number
+    rightArmTattooIndex: number
+    leftLegTattooIndex: number
+    rightLegTattooIndex: number
   }
 }
 

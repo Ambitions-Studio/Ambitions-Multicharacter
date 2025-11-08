@@ -356,35 +356,35 @@ const appearance = computed(() => appearanceStore.getAppearanceData())
       <div class="grid grid-cols-2 gap-3 text-xs">
         <div class="bg-slate-900/50 p-3 rounded">
           <p class="text-slate-400 mb-1">{{ t('characterCreation.tattoos.head.category') }}</p>
-          <p class="text-white font-semibold">{{ appearance.tattoos.headTattooCollection }} / {{ appearance.tattoos.headTattooHash }}</p>
+          <p class="text-white font-semibold">{{ appearance.tattoos.headTattooIndex }}</p>
         </div>
         <div class="bg-slate-900/50 p-3 rounded">
           <p class="text-slate-400 mb-1">{{ t('characterCreation.tattoos.neck.category') }}</p>
-          <p class="text-white font-semibold">{{ appearance.tattoos.neckTattooCollection }} / {{ appearance.tattoos.neckTattooHash }}</p>
+          <p class="text-white font-semibold">{{ appearance.tattoos.neckTattooIndex }}</p>
         </div>
         <div class="bg-slate-900/50 p-3 rounded">
           <p class="text-slate-400 mb-1">{{ t('characterCreation.tattoos.torso.category') }}</p>
-          <p class="text-white font-semibold">{{ appearance.tattoos.torsoTattooCollection }} / {{ appearance.tattoos.torsoTattooHash }}</p>
+          <p class="text-white font-semibold">{{ appearance.tattoos.torsoTattooIndex }}</p>
         </div>
         <div class="bg-slate-900/50 p-3 rounded">
           <p class="text-slate-400 mb-1">{{ t('characterCreation.tattoos.back.category') }}</p>
-          <p class="text-white font-semibold">{{ appearance.tattoos.backTattooCollection }} / {{ appearance.tattoos.backTattooHash }}</p>
+          <p class="text-white font-semibold">{{ appearance.tattoos.backTattooIndex }}</p>
         </div>
         <div class="bg-slate-900/50 p-3 rounded">
           <p class="text-slate-400 mb-1">{{ t('characterCreation.tattoos.leftArm.category') }}</p>
-          <p class="text-white font-semibold">{{ appearance.tattoos.leftArmTattooCollection }} / {{ appearance.tattoos.leftArmTattooHash }}</p>
+          <p class="text-white font-semibold">{{ appearance.tattoos.leftArmTattooIndex }}</p>
         </div>
         <div class="bg-slate-900/50 p-3 rounded">
           <p class="text-slate-400 mb-1">{{ t('characterCreation.tattoos.rightArm.category') }}</p>
-          <p class="text-white font-semibold">{{ appearance.tattoos.rightArmTattooCollection }} / {{ appearance.tattoos.rightArmTattooHash }}</p>
+          <p class="text-white font-semibold">{{ appearance.tattoos.rightArmTattooIndex }}</p>
         </div>
         <div class="bg-slate-900/50 p-3 rounded">
           <p class="text-slate-400 mb-1">{{ t('characterCreation.tattoos.leftLeg.category') }}</p>
-          <p class="text-white font-semibold">{{ appearance.tattoos.leftLegTattooCollection }} / {{ appearance.tattoos.leftLegTattooHash }}</p>
+          <p class="text-white font-semibold">{{ appearance.tattoos.leftLegTattooIndex }}</p>
         </div>
         <div class="bg-slate-900/50 p-3 rounded">
           <p class="text-slate-400 mb-1">{{ t('characterCreation.tattoos.rightLeg.category') }}</p>
-          <p class="text-white font-semibold">{{ appearance.tattoos.rightLegTattooCollection }} / {{ appearance.tattoos.rightLegTattooHash }}</p>
+          <p class="text-white font-semibold">{{ appearance.tattoos.rightLegTattooIndex }}</p>
         </div>
       </div>
     </div>
