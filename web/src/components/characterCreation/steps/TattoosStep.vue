@@ -14,15 +14,7 @@ const characterStore = useCharacterStore()
 const selectedCategory = ref(0)
 const previousCategory = ref(0)
 
-const collectionsLimit = ref(100)
-const headTattooHashLimit = ref(50)
-const neckTattooHashLimit = ref(50)
-const torsoTattooHashLimit = ref(50)
-const backTattooHashLimit = ref(50)
-const leftArmTattooHashLimit = ref(50)
-const rightArmTattooHashLimit = ref(50)
-const leftLegTattooHashLimit = ref(50)
-const rightLegTattooHashLimit = ref(50)
+const tattooLimit = ref(60)
 
 const tattoosCategories = ref([
   { titleKey: 'characterCreation.tattoos.categories.head', key: 'head' },
@@ -37,150 +29,73 @@ const tattoosCategories = ref([
 
 const props = withDefaults(
   defineProps<{
-    headTattooCollection?: number
-    headTattooHash?: number
-    neckTattooCollection?: number
-    neckTattooHash?: number
-    torsoTattooCollection?: number
-    torsoTattooHash?: number
-    backTattooCollection?: number
-    backTattooHash?: number
-    leftArmTattooCollection?: number
-    leftArmTattooHash?: number
-    rightArmTattooCollection?: number
-    rightArmTattooHash?: number
-    leftLegTattooCollection?: number
-    leftLegTattooHash?: number
-    rightLegTattooCollection?: number
-    rightLegTattooHash?: number
+    headTattooIndex?: number
+    neckTattooIndex?: number
+    torsoTattooIndex?: number
+    backTattooIndex?: number
+    leftArmTattooIndex?: number
+    rightArmTattooIndex?: number
+    leftLegTattooIndex?: number
+    rightLegTattooIndex?: number
   }>(),
   {
-    headTattooCollection: 0,
-    headTattooHash: 0,
-    neckTattooCollection: 0,
-    neckTattooHash: 0,
-    torsoTattooCollection: 0,
-    torsoTattooHash: 0,
-    backTattooCollection: 0,
-    backTattooHash: 0,
-    leftArmTattooCollection: 0,
-    leftArmTattooHash: 0,
-    rightArmTattooCollection: 0,
-    rightArmTattooHash: 0,
-    leftLegTattooCollection: 0,
-    leftLegTattooHash: 0,
-    rightLegTattooCollection: 0,
-    rightLegTattooHash: 0,
+    headTattooIndex: 0,
+    neckTattooIndex: 0,
+    torsoTattooIndex: 0,
+    backTattooIndex: 0,
+    leftArmTattooIndex: 0,
+    rightArmTattooIndex: 0,
+    leftLegTattooIndex: 0,
+    rightLegTattooIndex: 0,
   },
 )
 
 const emit = defineEmits<{
-  'update:headTattooCollection': [value: number]
-  'update:headTattooHash': [value: number]
-  'update:neckTattooCollection': [value: number]
-  'update:neckTattooHash': [value: number]
-  'update:torsoTattooCollection': [value: number]
-  'update:torsoTattooHash': [value: number]
-  'update:backTattooCollection': [value: number]
-  'update:backTattooHash': [value: number]
-  'update:leftArmTattooCollection': [value: number]
-  'update:leftArmTattooHash': [value: number]
-  'update:rightArmTattooCollection': [value: number]
-  'update:rightArmTattooHash': [value: number]
-  'update:leftLegTattooCollection': [value: number]
-  'update:leftLegTattooHash': [value: number]
-  'update:rightLegTattooCollection': [value: number]
-  'update:rightLegTattooHash': [value: number]
+  'update:headTattooIndex': [value: number]
+  'update:neckTattooIndex': [value: number]
+  'update:torsoTattooIndex': [value: number]
+  'update:backTattooIndex': [value: number]
+  'update:leftArmTattooIndex': [value: number]
+  'update:rightArmTattooIndex': [value: number]
+  'update:leftLegTattooIndex': [value: number]
+  'update:rightLegTattooIndex': [value: number]
   continue: []
 }>()
 
-const localHeadTattooCollection = ref(
-  appearanceStore.headTattooCollection ?? props.headTattooCollection
-)
-const localHeadTattooHash = ref(appearanceStore.headTattooHash ?? props.headTattooHash)
-const localNeckTattooCollection = ref(
-  appearanceStore.neckTattooCollection ?? props.neckTattooCollection
-)
-const localNeckTattooHash = ref(appearanceStore.neckTattooHash ?? props.neckTattooHash)
-const localTorsoTattooCollection = ref(
-  appearanceStore.torsoTattooCollection ?? props.torsoTattooCollection
-)
-const localTorsoTattooHash = ref(appearanceStore.torsoTattooHash ?? props.torsoTattooHash)
-const localBackTattooCollection = ref(
-  appearanceStore.backTattooCollection ?? props.backTattooCollection
-)
-const localBackTattooHash = ref(appearanceStore.backTattooHash ?? props.backTattooHash)
-const localLeftArmTattooCollection = ref(
-  appearanceStore.leftArmTattooCollection ?? props.leftArmTattooCollection
-)
-const localLeftArmTattooHash = ref(appearanceStore.leftArmTattooHash ?? props.leftArmTattooHash)
-const localRightArmTattooCollection = ref(
-  appearanceStore.rightArmTattooCollection ?? props.rightArmTattooCollection
-)
-const localRightArmTattooHash = ref(
-  appearanceStore.rightArmTattooHash ?? props.rightArmTattooHash
-)
-const localLeftLegTattooCollection = ref(
-  appearanceStore.leftLegTattooCollection ?? props.leftLegTattooCollection
-)
-const localLeftLegTattooHash = ref(appearanceStore.leftLegTattooHash ?? props.leftLegTattooHash)
-const localRightLegTattooCollection = ref(
-  appearanceStore.rightLegTattooCollection ?? props.rightLegTattooCollection
-)
-const localRightLegTattooHash = ref(
-  appearanceStore.rightLegTattooHash ?? props.rightLegTattooHash
-)
+const localHeadTattooIndex = ref(appearanceStore.headTattooIndex ?? props.headTattooIndex)
+const localNeckTattooIndex = ref(appearanceStore.neckTattooIndex ?? props.neckTattooIndex)
+const localTorsoTattooIndex = ref(appearanceStore.torsoTattooIndex ?? props.torsoTattooIndex)
+const localBackTattooIndex = ref(appearanceStore.backTattooIndex ?? props.backTattooIndex)
+const localLeftArmTattooIndex = ref(appearanceStore.leftArmTattooIndex ?? props.leftArmTattooIndex)
+const localRightArmTattooIndex = ref(appearanceStore.rightArmTattooIndex ?? props.rightArmTattooIndex)
+const localLeftLegTattooIndex = ref(appearanceStore.leftLegTattooIndex ?? props.leftLegTattooIndex)
+const localRightLegTattooIndex = ref(appearanceStore.rightLegTattooIndex ?? props.rightLegTattooIndex)
 
-// Save current section when switching categories
 const saveSectionData = (categoryIndex: number) => {
   switch (categoryIndex) {
-    case 0: // Head
-      appearanceStore.setHeadTattooSection({
-        headTattooCollection: localHeadTattooCollection.value,
-        headTattooHash: localHeadTattooHash.value,
-      })
+    case 0:
+      appearanceStore.setHeadTattooSection({ headTattooIndex: localHeadTattooIndex.value })
       break
-    case 1: // Neck
-      appearanceStore.setNeckTattooSection({
-        neckTattooCollection: localNeckTattooCollection.value,
-        neckTattooHash: localNeckTattooHash.value,
-      })
+    case 1:
+      appearanceStore.setNeckTattooSection({ neckTattooIndex: localNeckTattooIndex.value })
       break
-    case 2: // Torso
-      appearanceStore.setTorsoTattooSection({
-        torsoTattooCollection: localTorsoTattooCollection.value,
-        torsoTattooHash: localTorsoTattooHash.value,
-      })
+    case 2:
+      appearanceStore.setTorsoTattooSection({ torsoTattooIndex: localTorsoTattooIndex.value })
       break
-    case 3: // Back
-      appearanceStore.setBackTattooSection({
-        backTattooCollection: localBackTattooCollection.value,
-        backTattooHash: localBackTattooHash.value,
-      })
+    case 3:
+      appearanceStore.setBackTattooSection({ backTattooIndex: localBackTattooIndex.value })
       break
-    case 4: // Left Arm
-      appearanceStore.setLeftArmTattooSection({
-        leftArmTattooCollection: localLeftArmTattooCollection.value,
-        leftArmTattooHash: localLeftArmTattooHash.value,
-      })
+    case 4:
+      appearanceStore.setLeftArmTattooSection({ leftArmTattooIndex: localLeftArmTattooIndex.value })
       break
-    case 5: // Right Arm
-      appearanceStore.setRightArmTattooSection({
-        rightArmTattooCollection: localRightArmTattooCollection.value,
-        rightArmTattooHash: localRightArmTattooHash.value,
-      })
+    case 5:
+      appearanceStore.setRightArmTattooSection({ rightArmTattooIndex: localRightArmTattooIndex.value })
       break
-    case 6: // Left Leg
-      appearanceStore.setLeftLegTattooSection({
-        leftLegTattooCollection: localLeftLegTattooCollection.value,
-        leftLegTattooHash: localLeftLegTattooHash.value,
-      })
+    case 6:
+      appearanceStore.setLeftLegTattooSection({ leftLegTattooIndex: localLeftLegTattooIndex.value })
       break
-    case 7: // Right Leg
-      appearanceStore.setRightLegTattooSection({
-        rightLegTattooCollection: localRightLegTattooCollection.value,
-        rightLegTattooHash: localRightLegTattooHash.value,
-      })
+    case 7:
+      appearanceStore.setRightLegTattooSection({ rightLegTattooIndex: localRightLegTattooIndex.value })
       break
   }
 }
@@ -191,425 +106,117 @@ watch(selectedCategory, (newCategory, oldCategory) => {
   previousCategory.value = oldCategory
 })
 
-const updateHeadTattooHashLimit = async () => {
+watch(localHeadTattooIndex, async (newVal) => {
+  appearanceStore.setHeadTattooSection({ headTattooIndex: newVal })
   try {
-    const response = (await sendNuiCallback('getTattooHashLimit', {
-      collection: localHeadTattooCollection.value,
-      zone: 'head'
-    })) as { limit: number }
-    if (response?.limit !== undefined) {
-      headTattooHashLimit.value = response.limit
-      if (localHeadTattooHash.value > response.limit) {
-        localHeadTattooHash.value = response.limit
-      }
-    }
+    await sendNuiCallback('applyHeadTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to get head tattoo hash limit:', error)
-  }
-}
-
-const updateNeckTattooHashLimit = async () => {
-  try {
-    const response = (await sendNuiCallback('getTattooHashLimit', {
-      collection: localNeckTattooCollection.value,
-      zone: 'neck'
-    })) as { limit: number }
-    if (response?.limit !== undefined) {
-      neckTattooHashLimit.value = response.limit
-      if (localNeckTattooHash.value > response.limit) {
-        localNeckTattooHash.value = response.limit
-      }
-    }
-  } catch (error) {
-    console.error('Failed to get neck tattoo hash limit:', error)
-  }
-}
-
-const updateTorsoTattooHashLimit = async () => {
-  try {
-    const response = (await sendNuiCallback('getTattooHashLimit', {
-      collection: localTorsoTattooCollection.value,
-      zone: 'torso'
-    })) as { limit: number }
-    if (response?.limit !== undefined) {
-      torsoTattooHashLimit.value = response.limit
-      if (localTorsoTattooHash.value > response.limit) {
-        localTorsoTattooHash.value = response.limit
-      }
-    }
-  } catch (error) {
-    console.error('Failed to get torso tattoo hash limit:', error)
-  }
-}
-
-const updateBackTattooHashLimit = async () => {
-  try {
-    const response = (await sendNuiCallback('getTattooHashLimit', {
-      collection: localBackTattooCollection.value,
-      zone: 'back'
-    })) as { limit: number }
-    if (response?.limit !== undefined) {
-      backTattooHashLimit.value = response.limit
-      if (localBackTattooHash.value > response.limit) {
-        localBackTattooHash.value = response.limit
-      }
-    }
-  } catch (error) {
-    console.error('Failed to get back tattoo hash limit:', error)
-  }
-}
-
-const updateLeftArmTattooHashLimit = async () => {
-  try {
-    const response = (await sendNuiCallback('getTattooHashLimit', {
-      collection: localLeftArmTattooCollection.value,
-      zone: 'leftArm'
-    })) as { limit: number }
-    if (response?.limit !== undefined) {
-      leftArmTattooHashLimit.value = response.limit
-      if (localLeftArmTattooHash.value > response.limit) {
-        localLeftArmTattooHash.value = response.limit
-      }
-    }
-  } catch (error) {
-    console.error('Failed to get left arm tattoo hash limit:', error)
-  }
-}
-
-const updateRightArmTattooHashLimit = async () => {
-  try {
-    const response = (await sendNuiCallback('getTattooHashLimit', {
-      collection: localRightArmTattooCollection.value,
-      zone: 'rightArm'
-    })) as { limit: number }
-    if (response?.limit !== undefined) {
-      rightArmTattooHashLimit.value = response.limit
-      if (localRightArmTattooHash.value > response.limit) {
-        localRightArmTattooHash.value = response.limit
-      }
-    }
-  } catch (error) {
-    console.error('Failed to get right arm tattoo hash limit:', error)
-  }
-}
-
-const updateLeftLegTattooHashLimit = async () => {
-  try {
-    const response = (await sendNuiCallback('getTattooHashLimit', {
-      collection: localLeftLegTattooCollection.value,
-      zone: 'leftLeg'
-    })) as { limit: number }
-    if (response?.limit !== undefined) {
-      leftLegTattooHashLimit.value = response.limit
-      if (localLeftLegTattooHash.value > response.limit) {
-        localLeftLegTattooHash.value = response.limit
-      }
-    }
-  } catch (error) {
-    console.error('Failed to get left leg tattoo hash limit:', error)
-  }
-}
-
-const updateRightLegTattooHashLimit = async () => {
-  try {
-    const response = (await sendNuiCallback('getTattooHashLimit', {
-      collection: localRightLegTattooCollection.value,
-      zone: 'rightLeg'
-    })) as { limit: number }
-    if (response?.limit !== undefined) {
-      rightLegTattooHashLimit.value = response.limit
-      if (localRightLegTattooHash.value > response.limit) {
-        localRightLegTattooHash.value = response.limit
-      }
-    }
-  } catch (error) {
-    console.error('Failed to get right leg tattoo hash limit:', error)
-  }
-}
-
-watch(localHeadTattooCollection, async (newVal) => {
-  appearanceStore.setHeadTattooSection({ headTattooCollection: newVal, headTattooHash: localHeadTattooHash.value })
-  try {
-    await sendNuiCallback('applyHeadTattoo', {
-      collection: newVal,
-      hash: localHeadTattooHash.value
-    })
-    await updateHeadTattooHashLimit()
-  } catch (error) {
-    console.error('Failed to apply head tattoo collection:', error)
+    console.error('Failed to apply head tattoo:', error)
   }
 })
 
-watch(localHeadTattooHash, async (newVal) => {
-  appearanceStore.setHeadTattooSection({ headTattooCollection: localHeadTattooCollection.value, headTattooHash: newVal })
+watch(localNeckTattooIndex, async (newVal) => {
+  appearanceStore.setNeckTattooSection({ neckTattooIndex: newVal })
   try {
-    await sendNuiCallback('applyHeadTattoo', {
-      collection: localHeadTattooCollection.value,
-      hash: newVal
-    })
+    await sendNuiCallback('applyNeckTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply head tattoo hash:', error)
+    console.error('Failed to apply neck tattoo:', error)
   }
 })
 
-watch(localNeckTattooCollection, async (newVal) => {
-  appearanceStore.setNeckTattooSection({ neckTattooCollection: newVal, neckTattooHash: localNeckTattooHash.value })
+watch(localTorsoTattooIndex, async (newVal) => {
+  appearanceStore.setTorsoTattooSection({ torsoTattooIndex: newVal })
   try {
-    await sendNuiCallback('applyNeckTattoo', {
-      collection: newVal,
-      hash: localNeckTattooHash.value
-    })
-    await updateNeckTattooHashLimit()
+    await sendNuiCallback('applyTorsoTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply neck tattoo collection:', error)
+    console.error('Failed to apply torso tattoo:', error)
   }
 })
 
-watch(localNeckTattooHash, async (newVal) => {
-  appearanceStore.setNeckTattooSection({ neckTattooCollection: localNeckTattooCollection.value, neckTattooHash: newVal })
+watch(localBackTattooIndex, async (newVal) => {
+  appearanceStore.setBackTattooSection({ backTattooIndex: newVal })
   try {
-    await sendNuiCallback('applyNeckTattoo', {
-      collection: localNeckTattooCollection.value,
-      hash: newVal
-    })
+    await sendNuiCallback('applyBackTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply neck tattoo hash:', error)
+    console.error('Failed to apply back tattoo:', error)
   }
 })
 
-watch(localTorsoTattooCollection, async (newVal) => {
-  appearanceStore.setTorsoTattooSection({ torsoTattooCollection: newVal, torsoTattooHash: localTorsoTattooHash.value })
+watch(localLeftArmTattooIndex, async (newVal) => {
+  appearanceStore.setLeftArmTattooSection({ leftArmTattooIndex: newVal })
   try {
-    await sendNuiCallback('applyTorsoTattoo', {
-      collection: newVal,
-      hash: localTorsoTattooHash.value
-    })
-    await updateTorsoTattooHashLimit()
+    await sendNuiCallback('applyLeftArmTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply torso tattoo collection:', error)
+    console.error('Failed to apply left arm tattoo:', error)
   }
 })
 
-watch(localTorsoTattooHash, async (newVal) => {
-  appearanceStore.setTorsoTattooSection({ torsoTattooCollection: localTorsoTattooCollection.value, torsoTattooHash: newVal })
+watch(localRightArmTattooIndex, async (newVal) => {
+  appearanceStore.setRightArmTattooSection({ rightArmTattooIndex: newVal })
   try {
-    await sendNuiCallback('applyTorsoTattoo', {
-      collection: localTorsoTattooCollection.value,
-      hash: newVal
-    })
+    await sendNuiCallback('applyRightArmTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply torso tattoo hash:', error)
+    console.error('Failed to apply right arm tattoo:', error)
   }
 })
 
-watch(localBackTattooCollection, async (newVal) => {
-  appearanceStore.setBackTattooSection({ backTattooCollection: newVal, backTattooHash: localBackTattooHash.value })
+watch(localLeftLegTattooIndex, async (newVal) => {
+  appearanceStore.setLeftLegTattooSection({ leftLegTattooIndex: newVal })
   try {
-    await sendNuiCallback('applyBackTattoo', {
-      collection: newVal,
-      hash: localBackTattooHash.value
-    })
-    await updateBackTattooHashLimit()
+    await sendNuiCallback('applyLeftLegTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply back tattoo collection:', error)
+    console.error('Failed to apply left leg tattoo:', error)
   }
 })
 
-watch(localBackTattooHash, async (newVal) => {
-  appearanceStore.setBackTattooSection({ backTattooCollection: localBackTattooCollection.value, backTattooHash: newVal })
+watch(localRightLegTattooIndex, async (newVal) => {
+  appearanceStore.setRightLegTattooSection({ rightLegTattooIndex: newVal })
   try {
-    await sendNuiCallback('applyBackTattoo', {
-      collection: localBackTattooCollection.value,
-      hash: newVal
-    })
+    await sendNuiCallback('applyRightLegTattoo', { tattooIndex: newVal })
   } catch (error) {
-    console.error('Failed to apply back tattoo hash:', error)
-  }
-})
-
-watch(localLeftArmTattooCollection, async (newVal) => {
-  appearanceStore.setLeftArmTattooSection({ leftArmTattooCollection: newVal, leftArmTattooHash: localLeftArmTattooHash.value })
-  try {
-    await sendNuiCallback('applyLeftArmTattoo', {
-      collection: newVal,
-      hash: localLeftArmTattooHash.value
-    })
-    await updateLeftArmTattooHashLimit()
-  } catch (error) {
-    console.error('Failed to apply left arm tattoo collection:', error)
-  }
-})
-
-watch(localLeftArmTattooHash, async (newVal) => {
-  appearanceStore.setLeftArmTattooSection({ leftArmTattooCollection: localLeftArmTattooCollection.value, leftArmTattooHash: newVal })
-  try {
-    await sendNuiCallback('applyLeftArmTattoo', {
-      collection: localLeftArmTattooCollection.value,
-      hash: newVal
-    })
-  } catch (error) {
-    console.error('Failed to apply left arm tattoo hash:', error)
-  }
-})
-
-watch(localRightArmTattooCollection, async (newVal) => {
-  appearanceStore.setRightArmTattooSection({ rightArmTattooCollection: newVal, rightArmTattooHash: localRightArmTattooHash.value })
-  try {
-    await sendNuiCallback('applyRightArmTattoo', {
-      collection: newVal,
-      hash: localRightArmTattooHash.value
-    })
-    await updateRightArmTattooHashLimit()
-  } catch (error) {
-    console.error('Failed to apply right arm tattoo collection:', error)
-  }
-})
-
-watch(localRightArmTattooHash, async (newVal) => {
-  appearanceStore.setRightArmTattooSection({ rightArmTattooCollection: localRightArmTattooCollection.value, rightArmTattooHash: newVal })
-  try {
-    await sendNuiCallback('applyRightArmTattoo', {
-      collection: localRightArmTattooCollection.value,
-      hash: newVal
-    })
-  } catch (error) {
-    console.error('Failed to apply right arm tattoo hash:', error)
-  }
-})
-
-watch(localLeftLegTattooCollection, async (newVal) => {
-  appearanceStore.setLeftLegTattooSection({ leftLegTattooCollection: newVal, leftLegTattooHash: localLeftLegTattooHash.value })
-  try {
-    await sendNuiCallback('applyLeftLegTattoo', {
-      collection: newVal,
-      hash: localLeftLegTattooHash.value
-    })
-    await updateLeftLegTattooHashLimit()
-  } catch (error) {
-    console.error('Failed to apply left leg tattoo collection:', error)
-  }
-})
-
-watch(localLeftLegTattooHash, async (newVal) => {
-  appearanceStore.setLeftLegTattooSection({ leftLegTattooCollection: localLeftLegTattooCollection.value, leftLegTattooHash: newVal })
-  try {
-    await sendNuiCallback('applyLeftLegTattoo', {
-      collection: localLeftLegTattooCollection.value,
-      hash: newVal
-    })
-  } catch (error) {
-    console.error('Failed to apply left leg tattoo hash:', error)
-  }
-})
-
-watch(localRightLegTattooCollection, async (newVal) => {
-  appearanceStore.setRightLegTattooSection({ rightLegTattooCollection: newVal, rightLegTattooHash: localRightLegTattooHash.value })
-  try {
-    await sendNuiCallback('applyRightLegTattoo', {
-      collection: newVal,
-      hash: localRightLegTattooHash.value
-    })
-    await updateRightLegTattooHashLimit()
-  } catch (error) {
-    console.error('Failed to apply right leg tattoo collection:', error)
-  }
-})
-
-watch(localRightLegTattooHash, async (newVal) => {
-  appearanceStore.setRightLegTattooSection({ rightLegTattooCollection: localRightLegTattooCollection.value, rightLegTattooHash: newVal })
-  try {
-    await sendNuiCallback('applyRightLegTattoo', {
-      collection: localRightLegTattooCollection.value,
-      hash: newVal
-    })
-  } catch (error) {
-    console.error('Failed to apply right leg tattoo hash:', error)
+    console.error('Failed to apply right leg tattoo:', error)
   }
 })
 
 onMounted(async () => {
   try {
     const limitsResponse = (await sendNuiCallback('getTattoosLimits', {})) as {
-      collections: number
-      head: number
-      neck: number
-      torso: number
-      back: number
-      leftArm: number
-      rightArm: number
-      leftLeg: number
-      rightLeg: number
+      totalTattoos: number
     }
 
     if (limitsResponse) {
-      collectionsLimit.value = limitsResponse.collections
-      headTattooHashLimit.value = limitsResponse.head
-      neckTattooHashLimit.value = limitsResponse.neck
-      torsoTattooHashLimit.value = limitsResponse.torso
-      backTattooHashLimit.value = limitsResponse.back
-      leftArmTattooHashLimit.value = limitsResponse.leftArm
-      rightArmTattooHashLimit.value = limitsResponse.rightArm
-      leftLegTattooHashLimit.value = limitsResponse.leftLeg
-      rightLegTattooHashLimit.value = limitsResponse.rightLeg
+      tattooLimit.value = limitsResponse.totalTattoos
     }
-
-    await updateHeadTattooHashLimit()
-    await updateNeckTattooHashLimit()
-    await updateTorsoTattooHashLimit()
-    await updateBackTattooHashLimit()
-    await updateLeftArmTattooHashLimit()
-    await updateRightArmTattooHashLimit()
-    await updateLeftLegTattooHashLimit()
-    await updateRightLegTattooHashLimit()
   } catch (error) {
     console.error('Failed to get tattoos limits:', error)
   }
 })
 
 const handleContinue = () => {
-  // Save current section before validating
   saveSectionData(selectedCategory.value)
 
-  // Save ALL tattoos data to AppearanceStore (to be sure)
   const tattoosData = {
-    headTattooCollection: localHeadTattooCollection.value,
-    headTattooHash: localHeadTattooHash.value,
-    neckTattooCollection: localNeckTattooCollection.value,
-    neckTattooHash: localNeckTattooHash.value,
-    torsoTattooCollection: localTorsoTattooCollection.value,
-    torsoTattooHash: localTorsoTattooHash.value,
-    backTattooCollection: localBackTattooCollection.value,
-    backTattooHash: localBackTattooHash.value,
-    leftArmTattooCollection: localLeftArmTattooCollection.value,
-    leftArmTattooHash: localLeftArmTattooHash.value,
-    rightArmTattooCollection: localRightArmTattooCollection.value,
-    rightArmTattooHash: localRightArmTattooHash.value,
-    leftLegTattooCollection: localLeftLegTattooCollection.value,
-    leftLegTattooHash: localLeftLegTattooHash.value,
-    rightLegTattooCollection: localRightLegTattooCollection.value,
-    rightLegTattooHash: localRightLegTattooHash.value,
+    headTattooIndex: localHeadTattooIndex.value,
+    neckTattooIndex: localNeckTattooIndex.value,
+    torsoTattooIndex: localTorsoTattooIndex.value,
+    backTattooIndex: localBackTattooIndex.value,
+    leftArmTattooIndex: localLeftArmTattooIndex.value,
+    rightArmTattooIndex: localRightArmTattooIndex.value,
+    leftLegTattooIndex: localLeftLegTattooIndex.value,
+    rightLegTattooIndex: localRightLegTattooIndex.value,
   }
 
   appearanceStore.setTattoos(tattoosData)
-
-  // Update ONLY tattoos section in character store
   characterStore.setTattoos(tattoosData)
-  emit('update:headTattooCollection', localHeadTattooCollection.value)
-  emit('update:headTattooHash', localHeadTattooHash.value)
-  emit('update:neckTattooCollection', localNeckTattooCollection.value)
-  emit('update:neckTattooHash', localNeckTattooHash.value)
-  emit('update:torsoTattooCollection', localTorsoTattooCollection.value)
-  emit('update:torsoTattooHash', localTorsoTattooHash.value)
-  emit('update:backTattooCollection', localBackTattooCollection.value)
-  emit('update:backTattooHash', localBackTattooHash.value)
-  emit('update:leftArmTattooCollection', localLeftArmTattooCollection.value)
-  emit('update:leftArmTattooHash', localLeftArmTattooHash.value)
-  emit('update:rightArmTattooCollection', localRightArmTattooCollection.value)
-  emit('update:rightArmTattooHash', localRightArmTattooHash.value)
-  emit('update:leftLegTattooCollection', localLeftLegTattooCollection.value)
-  emit('update:leftLegTattooHash', localLeftLegTattooHash.value)
-  emit('update:rightLegTattooCollection', localRightLegTattooCollection.value)
-  emit('update:rightLegTattooHash', localRightLegTattooHash.value)
+
+  emit('update:headTattooIndex', localHeadTattooIndex.value)
+  emit('update:neckTattooIndex', localNeckTattooIndex.value)
+  emit('update:torsoTattooIndex', localTorsoTattooIndex.value)
+  emit('update:backTattooIndex', localBackTattooIndex.value)
+  emit('update:leftArmTattooIndex', localLeftArmTattooIndex.value)
+  emit('update:rightArmTattooIndex', localRightArmTattooIndex.value)
+  emit('update:leftLegTattooIndex', localLeftLegTattooIndex.value)
+  emit('update:rightLegTattooIndex', localRightLegTattooIndex.value)
 
   emit('continue')
 }
@@ -625,36 +232,18 @@ const handleContinue = () => {
     <div class="h-[60vh] overflow-y-scroll pr-2 pb-32">
       <!-- Head -->
       <div v-if="selectedCategory === 0" class="space-y-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.head.collection.title') }}
+              {{ t('characterCreation.tattoos.head.tattoo.title') }}
             </label>
             <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.head.collection.description') }}
+              {{ t('characterCreation.tattoos.head.tattoo.description') }}
             </p>
             <VSlider
-              v-model="localHeadTattooCollection"
+              v-model="localHeadTattooIndex"
               :min="0"
-              :max="collectionsLimit"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.head.hash.title') }}
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.head.hash.description') }}
-            </p>
-            <VSlider
-              v-model="localHeadTattooHash"
-              :min="0"
-              :max="headTattooHashLimit"
+              :max="tattooLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -666,36 +255,18 @@ const handleContinue = () => {
 
       <!-- Neck -->
       <div v-if="selectedCategory === 1" class="space-y-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.neck.collection.title') }}
+              {{ t('characterCreation.tattoos.neck.tattoo.title') }}
             </label>
             <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.neck.collection.description') }}
+              {{ t('characterCreation.tattoos.neck.tattoo.description') }}
             </p>
             <VSlider
-              v-model="localNeckTattooCollection"
+              v-model="localNeckTattooIndex"
               :min="0"
-              :max="collectionsLimit"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.neck.hash.title') }}
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.neck.hash.description') }}
-            </p>
-            <VSlider
-              v-model="localNeckTattooHash"
-              :min="0"
-              :max="neckTattooHashLimit"
+              :max="tattooLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -707,36 +278,18 @@ const handleContinue = () => {
 
       <!-- Torso -->
       <div v-if="selectedCategory === 2" class="space-y-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.torso.collection.title') }}
+              {{ t('characterCreation.tattoos.torso.tattoo.title') }}
             </label>
             <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.torso.collection.description') }}
+              {{ t('characterCreation.tattoos.torso.tattoo.description') }}
             </p>
             <VSlider
-              v-model="localTorsoTattooCollection"
+              v-model="localTorsoTattooIndex"
               :min="0"
-              :max="collectionsLimit"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.torso.hash.title') }}
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.torso.hash.description') }}
-            </p>
-            <VSlider
-              v-model="localTorsoTattooHash"
-              :min="0"
-              :max="torsoTattooHashLimit"
+              :max="tattooLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -748,36 +301,18 @@ const handleContinue = () => {
 
       <!-- Back -->
       <div v-if="selectedCategory === 3" class="space-y-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.back.collection.title') }}
+              {{ t('characterCreation.tattoos.back.tattoo.title') }}
             </label>
             <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.back.collection.description') }}
+              {{ t('characterCreation.tattoos.back.tattoo.description') }}
             </p>
             <VSlider
-              v-model="localBackTattooCollection"
+              v-model="localBackTattooIndex"
               :min="0"
-              :max="collectionsLimit"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.back.hash.title') }}
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.back.hash.description') }}
-            </p>
-            <VSlider
-              v-model="localBackTattooHash"
-              :min="0"
-              :max="backTattooHashLimit"
+              :max="tattooLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -789,36 +324,18 @@ const handleContinue = () => {
 
       <!-- Left Arm -->
       <div v-if="selectedCategory === 4" class="space-y-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.leftArm.collection.title') }}
+              {{ t('characterCreation.tattoos.leftArm.tattoo.title') }}
             </label>
             <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.leftArm.collection.description') }}
+              {{ t('characterCreation.tattoos.leftArm.tattoo.description') }}
             </p>
             <VSlider
-              v-model="localLeftArmTattooCollection"
+              v-model="localLeftArmTattooIndex"
               :min="0"
-              :max="collectionsLimit"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.leftArm.hash.title') }}
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.leftArm.hash.description') }}
-            </p>
-            <VSlider
-              v-model="localLeftArmTattooHash"
-              :min="0"
-              :max="leftArmTattooHashLimit"
+              :max="tattooLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -830,36 +347,18 @@ const handleContinue = () => {
 
       <!-- Right Arm -->
       <div v-if="selectedCategory === 5" class="space-y-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.rightArm.collection.title') }}
+              {{ t('characterCreation.tattoos.rightArm.tattoo.title') }}
             </label>
             <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.rightArm.collection.description') }}
+              {{ t('characterCreation.tattoos.rightArm.tattoo.description') }}
             </p>
             <VSlider
-              v-model="localRightArmTattooCollection"
+              v-model="localRightArmTattooIndex"
               :min="0"
-              :max="collectionsLimit"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.rightArm.hash.title') }}
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.rightArm.hash.description') }}
-            </p>
-            <VSlider
-              v-model="localRightArmTattooHash"
-              :min="0"
-              :max="rightArmTattooHashLimit"
+              :max="tattooLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -871,36 +370,18 @@ const handleContinue = () => {
 
       <!-- Left Leg -->
       <div v-if="selectedCategory === 6" class="space-y-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.leftLeg.collection.title') }}
+              {{ t('characterCreation.tattoos.leftLeg.tattoo.title') }}
             </label>
             <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.leftLeg.collection.description') }}
+              {{ t('characterCreation.tattoos.leftLeg.tattoo.description') }}
             </p>
             <VSlider
-              v-model="localLeftLegTattooCollection"
+              v-model="localLeftLegTattooIndex"
               :min="0"
-              :max="collectionsLimit"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.leftLeg.hash.title') }}
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.leftLeg.hash.description') }}
-            </p>
-            <VSlider
-              v-model="localLeftLegTattooHash"
-              :min="0"
-              :max="leftLegTattooHashLimit"
+              :max="tattooLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -912,36 +393,18 @@ const handleContinue = () => {
 
       <!-- Right Leg -->
       <div v-if="selectedCategory === 7" class="space-y-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30 space-y-6">
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/30">
           <div>
             <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.rightLeg.collection.title') }}
+              {{ t('characterCreation.tattoos.rightLeg.tattoo.title') }}
             </label>
             <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.rightLeg.collection.description') }}
+              {{ t('characterCreation.tattoos.rightLeg.tattoo.description') }}
             </p>
             <VSlider
-              v-model="localRightLegTattooCollection"
+              v-model="localRightLegTattooIndex"
               :min="0"
-              :max="collectionsLimit"
-              :step="1"
-              color="blue"
-              thumb-label
-              class="mt-2"
-            />
-          </div>
-
-          <div>
-            <label class="block text-slate-300 text-sm font-medium mb-3">
-              {{ t('characterCreation.tattoos.rightLeg.hash.title') }}
-            </label>
-            <p class="text-slate-500 text-xs mb-4">
-              {{ t('characterCreation.tattoos.rightLeg.hash.description') }}
-            </p>
-            <VSlider
-              v-model="localRightLegTattooHash"
-              :min="0"
-              :max="rightLegTattooHashLimit"
+              :max="tattooLimit"
               :step="1"
               color="blue"
               thumb-label
