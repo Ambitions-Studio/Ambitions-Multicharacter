@@ -218,11 +218,11 @@ local function CreateCharacter(sessionId, data)
 
   local gender = identity.gender and string.lower(identity.gender) or 'm'
 
-  local spawnLocation = spawnConfig.spawnLocation
-  local posX = spawnLocation.coords.x
-  local posY = spawnLocation.coords.y
-  local posZ = spawnLocation.coords.z
-  local heading = spawnLocation.coords.h or 0.0
+  local playerSpawn = spawnConfig.playerSpawn
+  local posX = playerSpawn.x
+  local posY = playerSpawn.y
+  local posZ = playerSpawn.z
+  local heading = playerSpawn.w or 0.0
 
   ambitionsPrint.info('Inserting character into database...')
   ambitionsPrint.info('  First Name:', identity.firstName)
