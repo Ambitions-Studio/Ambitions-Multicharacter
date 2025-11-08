@@ -5,8 +5,11 @@ import { mdiArrowLeft, mdiAccountPlus, mdiPlay, mdiTrashCan } from '@/icons'
 import CharacterSlot, { type Character } from '@/components/characterSelection/CharacterSlot.vue'
 import CharacterDetails from '@/components/characterSelection/CharacterDetails.vue'
 import CustomButton from '@/components/CustomButton.vue'
+import { sendNuiEvent } from '@/utils/nui'
+import { useCharacterStore } from '@/stores/useCharacterStore'
 
 const { t } = useI18n()
+const characterStore = useCharacterStore()
 
 const props = defineProps<{
   forceVisible?: boolean
@@ -22,7 +25,7 @@ const isVisible = ref<boolean>(false)
 const characterSlots = ref<number>(5)
 const playerCanDeleteCharacter = ref<boolean>(true)
 
-const characterData: Record<number, Character> = {
+const characterDataDev: Record<number, Character> = {
   1: {
     firstName: 'John',
     lastName: 'Doe',
@@ -58,25 +61,47 @@ const characterData: Record<number, Character> = {
   },
 }
 
+const characterData = ref<Record<number, Character>>(
+  props.forceVisible ? characterDataDev : {}
+)
+
 const allSlots = computed(() => {
   const slots = []
   for (let i = 1; i <= characterSlots.value; i++) {
-    const hasCharacter = characterData[i] !== undefined
+    const hasCharacter = characterData.value[i] !== undefined
     slots.push({
       id: i,
       isEmpty: !hasCharacter,
-      character: hasCharacter ? characterData[i] : null,
+      character: hasCharacter ? characterData.value[i] : null,
     })
   }
   return slots
 })
 
 const selectSlot = (slotId: number, isEmpty: boolean) => {
+  const wasSlotSelected = selectedSlot.value !== null
+
+  if (wasSlotSelected) {
+    sendNuiEvent('deselectSlot')
+  }
+
   selectedSlot.value = slotId
   isSlotEmpty.value = isEmpty
+
+  if (isEmpty) {
+    sendNuiEvent('selectEmptySlot', { slotIndex: slotId })
+  }
 }
 
 const createCharacter = () => {
+  if (selectedSlot.value === null) return
+
+  characterStore.startNewCharacter(selectedSlot.value)
+
+  isVisible.value = false
+
+  window.postMessage({ action: 'showIdentityCreator', slotId: selectedSlot.value }, '*')
+
   console.log('Créer un personnage pour le slot:', selectedSlot.value)
 }
 
@@ -90,22 +115,64 @@ const deleteCharacter = () => {
 
 const closeInterface = () => {
   isVisible.value = false
-  fetch('https://Ambitions-Multicharacter/closeCharacterSelection', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({}),
-  }).catch(() => {})
+  sendNuiEvent('closeCharacterSelection')
+}
+
+const formatPlaytime = (seconds: number): string => {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  return `${hours}h ${minutes}m`
+}
+
+const formatLastPlayed = (timestamp: string): string => {
+  const now = new Date()
+  const lastPlayed = new Date(timestamp)
+  const diffMs = now.getTime() - lastPlayed.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+
+  if (diffMins < 60) {
+    return t('characterSelection.timeAgo.minutes', { count: diffMins })
+  } else if (diffHours < 24) {
+    return t('characterSelection.timeAgo.hours', { count: diffHours })
+  } else {
+    return t('characterSelection.timeAgo.days', { count: diffDays })
+  }
 }
 
 onMounted(() => {
   window.addEventListener('message', (event) => {
     if (event.data.action === 'showCharacterSelection') {
       isVisible.value = true
-      if (event.data.config) {
-        characterSlots.value = event.data.config.characterSlots
-        playerCanDeleteCharacter.value = event.data.config.playerCanDeleteCharacter
+      if (event.data.maxSlots !== undefined) {
+        characterSlots.value = event.data.maxSlots
+      }
+      if (event.data.canDelete !== undefined) {
+        playerCanDeleteCharacter.value = event.data.canDelete
+      }
+      if (event.data.characters !== undefined && Array.isArray(event.data.characters)) {
+        const receivedCharacters: Record<number, Character> = {}
+        const maxCharsToDisplay = Math.min(event.data.characters.length, event.data.maxSlots || characterSlots.value)
+
+        for (let i = 0; i < maxCharsToDisplay; i++) {
+          const char = event.data.characters[i]
+          receivedCharacters[i + 1] = {
+            firstName: char.firstname || '',
+            lastName: char.lastname || '',
+            job: null,
+            jobGrade: null,
+            crew: null,
+            crewGrade: null,
+            cash: 0,
+            bank: 0,
+            dirtyMoney: 0,
+            licenses: [],
+            totalPlaytime: formatPlaytime(char.playtime || 0),
+            lastPlayed: formatLastPlayed(char.lastPlayed || char.createdAt),
+          }
+        }
+        characterData.value = receivedCharacters
       }
     } else if (event.data.action === 'hideCharacterSelection') {
       isVisible.value = false
@@ -149,7 +216,7 @@ onMounted(() => {
     ></div>
     <Transition name="fade-in" appear>
       <div
-        class="absolute left-16 top-16 w-[30rem] fhd:w-[26rem] 2k:w-[40rem] max-h-[85vh] fhd:max-h-[80vh] 2k:max-h-[90vh] overflow-hidden"
+        class="absolute left-16 top-16 w-[30rem] fhd:w-[26rem] 2k:w-[40rem] max-h-[85vh] fhd:max-h-[80vh] 2k:max-h-[95vh] overflow-hidden"
       >
         <div class="mb-8">
           <VBtn
@@ -166,17 +233,17 @@ onMounted(() => {
           <div class="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 mb-4"></div>
 
           <h1
-            class="text-4xl fhd:text-3xl 2k:text-5xl font-black text-white leading-tight tracking-wide"
+            class="text-4xl fhd:text-3xl 2k:text-4xl font-black text-white leading-tight tracking-wide"
           >
             {{ t('characterSelection.title') }}
-            <span class="text-3xl fhd:text-2xl 2k:text-4xl font-light text-blue-200/80">{{
+            <span class="text-3xl fhd:text-2xl 2k:text-3xl font-light text-blue-200/80">{{
               t('characterSelection.subtitle')
             }}</span>
           </h1>
         </div>
 
         <div
-          class="space-y-8 overflow-y-auto max-h-[calc(85vh-180px)] fhd:max-h-[calc(80vh-160px)] 2k:max-h-[calc(90vh-200px)] pr-3 scrollbar-thin scrollbar-track-slate-800/50 scrollbar-thumb-blue-600/40 hover:scrollbar-thumb-blue-500/60"
+          class="space-y-8 overflow-y-auto max-h-[calc(85vh-180px)] fhd:max-h-[calc(80vh-160px)] 2k:max-h-[calc(90vh-200px)] pr-3 pb-8 2k:pb-16 scrollbar-thin scrollbar-track-slate-800/50 scrollbar-thumb-blue-600/40 hover:scrollbar-thumb-blue-500/60"
         >
           <div class="space-y-4">
             <div class="flex items-center space-x-3 mb-6">
@@ -191,7 +258,7 @@ onMounted(() => {
               >
             </div>
 
-            <div class="space-y-6 2k:space-y-8">
+            <div class="space-y-6 2k:space-y-8 ml-6">
               <CharacterSlot
                 v-for="slot in allSlots"
                 :key="slot.id"
@@ -216,7 +283,7 @@ onMounted(() => {
       <div v-if="selectedSlot && isSlotEmpty">
         <CustomButton
           variant="success"
-          size="large"
+          size="medium"
           :icon="mdiAccountPlus"
           width="w-80 2k:w-96"
           @click="createCharacter"
@@ -228,7 +295,7 @@ onMounted(() => {
       <div v-if="selectedSlot && !isSlotEmpty" class="space-y-3 flex flex-col">
         <CustomButton
           variant="success"
-          size="large"
+          size="medium"
           :icon="mdiPlay"
           width="w-80 2k:w-96"
           @click="playCharacter"
@@ -239,7 +306,7 @@ onMounted(() => {
         <CustomButton
           v-if="playerCanDeleteCharacter"
           variant="danger"
-          size="large"
+          size="medium"
           :icon="mdiTrashCan"
           width="w-80 2k:w-96"
           @click="deleteCharacter"

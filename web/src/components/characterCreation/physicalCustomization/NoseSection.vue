@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -39,6 +40,17 @@ const localNoseLength = ref(props.noseLength)
 const localNoseBridge = ref(props.noseBridge)
 const localNoseBridgeTwist = ref(props.noseBridgeTwist)
 const localNoseTipHeight = ref(props.noseTipHeight)
+
+watch([localNoseWidth, localNoseHeight, localNoseLength, localNoseBridge, localNoseBridgeTwist, localNoseTipHeight], ([width, height, length, bridge, bridgeTwist, tipHeight]) => {
+  sendNuiEvent('applyNoseCustomization', {
+    width,
+    height,
+    length,
+    bridge,
+    bridgeTwist,
+    tipHeight,
+  })
+})
 </script>
 
 <template>

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import HAIR_COLORS from '@/data/hairColors'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -27,6 +29,23 @@ const emit = defineEmits<{
 const localChestHairStyle = ref(props.chestHairStyle)
 const localChestHairColor = ref(props.chestHairColor)
 const localChestHairOpacity = ref(props.chestHairOpacity)
+const maxChestHairStyles = ref(16) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number; sunDamageStyles: number; molesFrecklesStyles: number; chestHairStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxChestHairStyles.value = limits.chestHairStyles
+  }
+})
+
+watch([localChestHairStyle, localChestHairColor, localChestHairOpacity], ([style, color, opacity]) => {
+  sendNuiEvent('applyChestHairCustomization', {
+    style,
+    color,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -56,7 +75,7 @@ const localChestHairOpacity = ref(props.chestHairOpacity)
         <VSlider
           v-model="localChestHairStyle"
           :min="0"
-          :max="16"
+          :max="maxChestHairStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"
@@ -68,6 +87,7 @@ const localChestHairOpacity = ref(props.chestHairOpacity)
       </div>
     </div>
 
+    <!-- Chest Hair Color -->
     <div class="bg-slate-800/80 rounded-xl p-5 border-2 border-solid border-slate-900/30 hover:border-slate-900/50 transition-all duration-300">
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1">
@@ -80,18 +100,14 @@ const localChestHairOpacity = ref(props.chestHairOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localChestHairColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:chestHairColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in HAIR_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localChestHairColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localChestHairColor = index; emit('update:chestHairColor', index)"
         />
       </div>
     </div>

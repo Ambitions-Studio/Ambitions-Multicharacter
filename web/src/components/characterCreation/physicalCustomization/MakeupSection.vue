@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import MAKEUP_COLORS from '@/data/makeupColors'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -31,6 +33,24 @@ const localMakeupStyle = ref(props.makeupStyle)
 const localMakeupPrimaryColor = ref(props.makeupPrimaryColor)
 const localMakeupSecondaryColor = ref(props.makeupSecondaryColor)
 const localMakeupOpacity = ref(props.makeupOpacity)
+const maxMakeupStyles = ref(74) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxMakeupStyles.value = limits.makeupStyles
+  }
+})
+
+watch([localMakeupStyle, localMakeupPrimaryColor, localMakeupSecondaryColor, localMakeupOpacity], ([style, primaryColor, secondaryColor, opacity]) => {
+  sendNuiEvent('applyMakeupCustomization', {
+    style,
+    primaryColor,
+    secondaryColor,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -60,7 +80,7 @@ const localMakeupOpacity = ref(props.makeupOpacity)
         <VSlider
           v-model="localMakeupStyle"
           :min="0"
-          :max="74"
+          :max="maxMakeupStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"
@@ -72,6 +92,7 @@ const localMakeupOpacity = ref(props.makeupOpacity)
       </div>
     </div>
 
+    <!-- Makeup Primary Color -->
     <div class="bg-slate-800/80 rounded-xl p-5 border-2 border-solid border-slate-900/30 hover:border-slate-900/50 transition-all duration-300">
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1">
@@ -84,22 +105,19 @@ const localMakeupOpacity = ref(props.makeupOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localMakeupPrimaryColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:makeupPrimaryColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in MAKEUP_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localMakeupPrimaryColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localMakeupPrimaryColor = index; emit('update:makeupPrimaryColor', index)"
         />
       </div>
     </div>
 
+    <!-- Makeup Secondary Color -->
     <div class="bg-slate-800/80 rounded-xl p-5 border-2 border-solid border-slate-900/30 hover:border-slate-900/50 transition-all duration-300">
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1">
@@ -112,18 +130,14 @@ const localMakeupOpacity = ref(props.makeupOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localMakeupSecondaryColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:makeupSecondaryColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in MAKEUP_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localMakeupSecondaryColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localMakeupSecondaryColor = index; emit('update:makeupSecondaryColor', index)"
         />
       </div>
     </div>

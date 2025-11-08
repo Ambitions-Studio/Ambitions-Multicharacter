@@ -54,6 +54,7 @@
       "practitioner": "Praticien"
     },
     "timeAgo": {
+      "minutes": "Il y a {count} minute | Il y a {count} minutes",
       "hours": "Il y a {count} heure | Il y a {count} heures",
       "days": "Il y a {count} jour | Il y a {count} jours"
     }
@@ -114,6 +115,14 @@
       "main": "Créateur",
       "sub": "de Personnage"
     },
+    "cameraControls": {
+      "leftClick": "Clic Gauche",
+      "leftClickDescription": "Déplacer la caméra",
+      "wheel": "Molette",
+      "wheelDescription": "Zoom / Dézoom",
+      "rightClick": "Clic Droit",
+      "rightClickDescription": "Faire pivoter"
+    },
     "steps": {
       "pedSelection": "Sélection du Ped",
       "heritage": "Héritage",
@@ -172,7 +181,7 @@
         "ageing": "Vieillissement",
         "makeup": "Maquillage",
         "blush": "Fard à Joues",
-        "complexion": "Teint",
+        "complexion": "Rougeurs",
         "sunDamage": "Dommages du Soleil",
         "molesFreckles": "Grains de Beauté",
         "chestHair": "Poils du Torse",
@@ -485,16 +494,16 @@
         }
       },
       "complexion": {
-        "category": "Personnalisation du Teint",
+        "category": "Personnalisation des Rougeurs",
         "style": {
-          "title": "Type de Teint",
-          "description": "Modifiez la texture et l'apparence de votre peau",
+          "title": "Type de Rougeurs",
+          "description": "Ajoutez des rougeurs ou imperfections à votre peau",
           "label": "Type",
           "none": "Aucun"
         },
         "opacity": {
-          "title": "Intensité du Teint",
-          "description": "Ajustez l'intensité de la texture de peau",
+          "title": "Intensité des Rougeurs",
+          "description": "Ajustez l'intensité des rougeurs de peau",
           "min": "Léger",
           "max": "Marqué"
         }
@@ -872,115 +881,51 @@
         "rightLeg": "Jambe Droite"
       },
       "head": {
-        "category": "Tatouages Tête",
-        "collection": {
-          "title": "Collection de Tatouages",
-          "description": "Choisissez la collection de tatouages pour la tête",
-          "label": "Collection",
-          "none": "Aucun"
-        },
-        "hash": {
-          "title": "Tatouage Spécifique",
-          "description": "Sélectionnez le tatouage exact",
-          "label": "Tatouage"
+        "tattoo": {
+          "title": "Tatouage de Tête",
+          "description": "Sélectionnez un tatouage pour la zone de la tête"
         }
       },
       "neck": {
-        "category": "Tatouages Cou",
-        "collection": {
-          "title": "Collection de Tatouages",
-          "description": "Choisissez la collection de tatouages pour le cou",
-          "label": "Collection",
-          "none": "Aucun"
-        },
-        "hash": {
-          "title": "Tatouage Spécifique",
-          "description": "Sélectionnez le tatouage exact",
-          "label": "Tatouage"
+        "tattoo": {
+          "title": "Tatouage de Cou",
+          "description": "Sélectionnez un tatouage pour la zone du cou"
         }
       },
       "torso": {
-        "category": "Tatouages Torse",
-        "collection": {
-          "title": "Collection de Tatouages",
-          "description": "Choisissez la collection de tatouages pour le torse",
-          "label": "Collection",
-          "none": "Aucun"
-        },
-        "hash": {
-          "title": "Tatouage Spécifique",
-          "description": "Sélectionnez le tatouage exact",
-          "label": "Tatouage"
+        "tattoo": {
+          "title": "Tatouage de Torse",
+          "description": "Sélectionnez un tatouage pour la zone du torse"
         }
       },
       "back": {
-        "category": "Tatouages Dos",
-        "collection": {
-          "title": "Collection de Tatouages",
-          "description": "Choisissez la collection de tatouages pour le dos",
-          "label": "Collection",
-          "none": "Aucun"
-        },
-        "hash": {
-          "title": "Tatouage Spécifique",
-          "description": "Sélectionnez le tatouage exact",
-          "label": "Tatouage"
+        "tattoo": {
+          "title": "Tatouage de Dos",
+          "description": "Sélectionnez un tatouage pour la zone du dos"
         }
       },
       "leftArm": {
-        "category": "Tatouages Bras Gauche",
-        "collection": {
-          "title": "Collection de Tatouages",
-          "description": "Choisissez la collection de tatouages pour le bras gauche",
-          "label": "Collection",
-          "none": "Aucun"
-        },
-        "hash": {
-          "title": "Tatouage Spécifique",
-          "description": "Sélectionnez le tatouage exact",
-          "label": "Tatouage"
+        "tattoo": {
+          "title": "Tatouage de Bras Gauche",
+          "description": "Sélectionnez un tatouage pour le bras gauche"
         }
       },
       "rightArm": {
-        "category": "Tatouages Bras Droit",
-        "collection": {
-          "title": "Collection de Tatouages",
-          "description": "Choisissez la collection de tatouages pour le bras droit",
-          "label": "Collection",
-          "none": "Aucun"
-        },
-        "hash": {
-          "title": "Tatouage Spécifique",
-          "description": "Sélectionnez le tatouage exact",
-          "label": "Tatouage"
+        "tattoo": {
+          "title": "Tatouage de Bras Droit",
+          "description": "Sélectionnez un tatouage pour le bras droit"
         }
       },
       "leftLeg": {
-        "category": "Tatouages Jambe Gauche",
-        "collection": {
-          "title": "Collection de Tatouages",
-          "description": "Choisissez la collection de tatouages pour la jambe gauche",
-          "label": "Collection",
-          "none": "Aucun"
-        },
-        "hash": {
-          "title": "Tatouage Spécifique",
-          "description": "Sélectionnez le tatouage exact",
-          "label": "Tatouage"
+        "tattoo": {
+          "title": "Tatouage de Jambe Gauche",
+          "description": "Sélectionnez un tatouage pour la jambe gauche"
         }
       },
       "rightLeg": {
-        "category": "Tatouages Jambe Droite",
-        "collection": {
-          "title": "Collection de Tatouages",
-          "description": "Choisissez la collection de tatouages pour la jambe droite",
-          "label": "Collection",
-          "none": "Aucun"
-        },
-        "hash": {
-          "title": "Tatouage Spécifique",
-          "description": "Sélectionnez le tatouage exact",
-          "label": "Tatouage"
+        "tattoo": {
+          "title": "Tatouage de Jambe Droite",
+          "description": "Sélectionnez un tatouage pour la jambe droite"
         }
       }
     },
@@ -1033,7 +978,7 @@
         "chestHair": "Poils de Poitrine",
         "blemishes": "Imperfections",
         "ageing": "Vieillissement",
-        "complexion": "Teint",
+        "complexion": "Rougeurs",
         "sunDamage": "Dommages Solaires",
         "moles": "Grains de Beauté",
         "bodyBlemishes": "Imperfections Corporelles"

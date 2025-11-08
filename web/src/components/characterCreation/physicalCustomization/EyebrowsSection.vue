@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import HAIR_COLORS from '@/data/hairColors'
+import { sendNuiCallback, sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -35,6 +37,25 @@ const localEyebrowDepth = ref(props.eyebrowDepth)
 const localEyebrowsStyle = ref(props.eyebrowsStyle)
 const localEyebrowsColor = ref(props.eyebrowsColor)
 const localEyebrowsOpacity = ref(props.eyebrowsOpacity)
+const maxEyebrowsStyles = ref(33) // Default fallback
+
+// Get customization limits from game
+onMounted(async () => {
+  const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number }>('getCustomizationLimits')
+  if (limits) {
+    maxEyebrowsStyles.value = limits.eyebrowsStyles
+  }
+})
+
+watch([localEyebrowHeight, localEyebrowDepth, localEyebrowsStyle, localEyebrowsColor, localEyebrowsOpacity], ([height, depth, style, color, opacity]) => {
+  sendNuiEvent('applyEyebrowsCustomization', {
+    height,
+    depth,
+    style,
+    color,
+    opacity,
+  })
+})
 </script>
 
 <template>
@@ -137,7 +158,7 @@ const localEyebrowsOpacity = ref(props.eyebrowsOpacity)
         <VSlider
           v-model="localEyebrowsStyle"
           :min="0"
-          :max="33"
+          :max="maxEyebrowsStyles"
           :step="1"
           track-color="rgba(71, 85, 105, 0.6)"
           color="blue"
@@ -162,18 +183,14 @@ const localEyebrowsOpacity = ref(props.eyebrowsOpacity)
           </span>
         </div>
       </div>
-      <div class="mt-4 pt-2">
-        <VSlider
-          v-model="localEyebrowsColor"
-          :min="0"
-          :max="63"
-          :step="1"
-          track-color="rgba(71, 85, 105, 0.6)"
-          color="blue"
-          class="w-full"
-          hide-details
-          thumb-label
-          @update:model-value="emit('update:eyebrowsColor', $event)"
+      <div class="mt-4 pt-2 flex flex-wrap gap-2">
+        <button
+          v-for="(color, index) in HAIR_COLORS"
+          :key="index"
+          class="w-6 h-6 rounded-full border-2 transition-all duration-200 hover:scale-110"
+          :class="localEyebrowsColor === index ? 'border-white shadow-lg shadow-white/50' : 'border-slate-600 hover:border-slate-400'"
+          :style="{ backgroundColor: color }"
+          @click="localEyebrowsColor = index; emit('update:eyebrowsColor', index)"
         />
       </div>
     </div>

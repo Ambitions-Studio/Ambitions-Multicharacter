@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider } from 'vuetify/components'
+import { sendNuiEvent } from '@/utils/nui'
 
 const { t } = useI18n()
 
@@ -31,6 +32,15 @@ const localChinLowering = ref(props.chinLowering)
 const localChinLength = ref(props.chinLength)
 const localChinWidth = ref(props.chinWidth)
 const localChinCleft = ref(props.chinCleft)
+
+watch([localChinLowering, localChinLength, localChinWidth, localChinCleft], ([lowering, length, width, cleft]) => {
+  sendNuiEvent('applyChinCustomization', {
+    lowering,
+    length,
+    width,
+    cleft,
+  })
+})
 </script>
 
 <template>

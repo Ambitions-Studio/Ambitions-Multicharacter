@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VSlider, VBtn } from 'vuetify/components'
 import { useAppearanceStore } from '@/stores/useAppearanceStore'
 import { useCharacterStore } from '@/stores/useCharacterStore'
+import { sendNuiCallback } from '@/utils/nui'
 import AccessoriesNavigation from '@/components/characterCreation/layout/AccessoriesNavigation.vue'
 
 const { t } = useI18n()
@@ -12,6 +13,19 @@ const characterStore = useCharacterStore()
 
 const selectedCategory = ref(0)
 const previousCategory = ref(0)
+
+const hatDrawableLimit = ref(100)
+const hatTextureLimit = ref(50)
+const glassesDrawableLimit = ref(100)
+const glassesTextureLimit = ref(50)
+const earringsDrawableLimit = ref(100)
+const earringsTextureLimit = ref(50)
+const watchDrawableLimit = ref(100)
+const watchTextureLimit = ref(50)
+const braceletDrawableLimit = ref(100)
+const braceletTextureLimit = ref(50)
+const neckAccessoryDrawableLimit = ref(100)
+const neckAccessoryTextureLimit = ref(50)
 
 const accessoriesCategories = ref([
   { titleKey: 'characterCreation.accessories.categories.hat', key: 'hat' },
@@ -135,6 +149,289 @@ watch(selectedCategory, (newCategory, oldCategory) => {
   previousCategory.value = oldCategory
 })
 
+const updateHatTypeLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getAccessoryTextureLimit', {
+      prop: 0,
+      drawable: localHatDrawable.value
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      hatTextureLimit.value = response.limit
+      if (localHatTexture.value > response.limit) {
+        localHatTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get hat texture limit:', error)
+  }
+}
+
+const updateGlassesTypeLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getAccessoryTextureLimit', {
+      prop: 1,
+      drawable: localGlassesDrawable.value
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      glassesTextureLimit.value = response.limit
+      if (localGlassesTexture.value > response.limit) {
+        localGlassesTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get glasses texture limit:', error)
+  }
+}
+
+const updateEarringsTypeLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getAccessoryTextureLimit', {
+      prop: 2,
+      drawable: localEarringsDrawable.value
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      earringsTextureLimit.value = response.limit
+      if (localEarringsTexture.value > response.limit) {
+        localEarringsTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get earrings texture limit:', error)
+  }
+}
+
+const updateWatchTypeLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getAccessoryTextureLimit', {
+      prop: 6,
+      drawable: localWatchDrawable.value
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      watchTextureLimit.value = response.limit
+      if (localWatchTexture.value > response.limit) {
+        localWatchTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get watch texture limit:', error)
+  }
+}
+
+const updateBraceletTypeLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getAccessoryTextureLimit', {
+      prop: 7,
+      drawable: localBraceletDrawable.value
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      braceletTextureLimit.value = response.limit
+      if (localBraceletTexture.value > response.limit) {
+        localBraceletTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get bracelet texture limit:', error)
+  }
+}
+
+const updateNeckAccessoryTypeLimit = async () => {
+  try {
+    const response = (await sendNuiCallback('getClothingTextureLimit', {
+      component: 7,
+      drawable: localNeckAccessoryDrawable.value
+    })) as { limit: number }
+    if (response?.limit !== undefined) {
+      neckAccessoryTextureLimit.value = response.limit
+      if (localNeckAccessoryTexture.value > response.limit) {
+        localNeckAccessoryTexture.value = response.limit
+      }
+    }
+  } catch (error) {
+    console.error('Failed to get neck accessory texture limit:', error)
+  }
+}
+
+watch(localHatDrawable, async (newVal) => {
+  appearanceStore.setHatSection({ hatDrawable: newVal, hatTexture: localHatTexture.value })
+  try {
+    await sendNuiCallback('applyHatCustomization', {
+      type: newVal,
+      variant: localHatTexture.value
+    })
+    await updateHatTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply hat drawable:', error)
+  }
+})
+
+watch(localHatTexture, async (newVal) => {
+  appearanceStore.setHatSection({ hatDrawable: localHatDrawable.value, hatTexture: newVal })
+  try {
+    await sendNuiCallback('applyHatCustomization', {
+      type: localHatDrawable.value,
+      variant: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply hat texture:', error)
+  }
+})
+
+watch(localGlassesDrawable, async (newVal) => {
+  appearanceStore.setGlassesSection({ glassesDrawable: newVal, glassesTexture: localGlassesTexture.value })
+  try {
+    await sendNuiCallback('applyGlassesCustomization', {
+      type: newVal,
+      variant: localGlassesTexture.value
+    })
+    await updateGlassesTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply glasses drawable:', error)
+  }
+})
+
+watch(localGlassesTexture, async (newVal) => {
+  appearanceStore.setGlassesSection({ glassesDrawable: localGlassesDrawable.value, glassesTexture: newVal })
+  try {
+    await sendNuiCallback('applyGlassesCustomization', {
+      type: localGlassesDrawable.value,
+      variant: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply glasses texture:', error)
+  }
+})
+
+watch(localEarringsDrawable, async (newVal) => {
+  appearanceStore.setEarringsSection({ earringsDrawable: newVal, earringsTexture: localEarringsTexture.value })
+  try {
+    await sendNuiCallback('applyEarringsCustomization', {
+      type: newVal,
+      variant: localEarringsTexture.value
+    })
+    await updateEarringsTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply earrings drawable:', error)
+  }
+})
+
+watch(localEarringsTexture, async (newVal) => {
+  appearanceStore.setEarringsSection({ earringsDrawable: localEarringsDrawable.value, earringsTexture: newVal })
+  try {
+    await sendNuiCallback('applyEarringsCustomization', {
+      type: localEarringsDrawable.value,
+      variant: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply earrings texture:', error)
+  }
+})
+
+watch(localWatchDrawable, async (newVal) => {
+  appearanceStore.setWatchSection({ watchDrawable: newVal, watchTexture: localWatchTexture.value })
+  try {
+    await sendNuiCallback('applyWatchCustomization', {
+      type: newVal,
+      variant: localWatchTexture.value
+    })
+    await updateWatchTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply watch drawable:', error)
+  }
+})
+
+watch(localWatchTexture, async (newVal) => {
+  appearanceStore.setWatchSection({ watchDrawable: localWatchDrawable.value, watchTexture: newVal })
+  try {
+    await sendNuiCallback('applyWatchCustomization', {
+      type: localWatchDrawable.value,
+      variant: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply watch texture:', error)
+  }
+})
+
+watch(localBraceletDrawable, async (newVal) => {
+  appearanceStore.setBraceletSection({ braceletDrawable: newVal, braceletTexture: localBraceletTexture.value })
+  try {
+    await sendNuiCallback('applyBraceletCustomization', {
+      type: newVal,
+      variant: localBraceletTexture.value
+    })
+    await updateBraceletTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply bracelet drawable:', error)
+  }
+})
+
+watch(localBraceletTexture, async (newVal) => {
+  appearanceStore.setBraceletSection({ braceletDrawable: localBraceletDrawable.value, braceletTexture: newVal })
+  try {
+    await sendNuiCallback('applyBraceletCustomization', {
+      type: localBraceletDrawable.value,
+      variant: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply bracelet texture:', error)
+  }
+})
+
+watch(localNeckAccessoryDrawable, async (newVal) => {
+  appearanceStore.setNeckAccessorySection({ neckAccessoryDrawable: newVal, neckAccessoryTexture: localNeckAccessoryTexture.value })
+  try {
+    await sendNuiCallback('applyNeckAccessoryCustomization', {
+      type: newVal,
+      variant: localNeckAccessoryTexture.value
+    })
+    await updateNeckAccessoryTypeLimit()
+  } catch (error) {
+    console.error('Failed to apply neck accessory drawable:', error)
+  }
+})
+
+watch(localNeckAccessoryTexture, async (newVal) => {
+  appearanceStore.setNeckAccessorySection({ neckAccessoryDrawable: localNeckAccessoryDrawable.value, neckAccessoryTexture: newVal })
+  try {
+    await sendNuiCallback('applyNeckAccessoryCustomization', {
+      type: localNeckAccessoryDrawable.value,
+      variant: newVal
+    })
+  } catch (error) {
+    console.error('Failed to apply neck accessory texture:', error)
+  }
+})
+
+onMounted(async () => {
+  try {
+    const limitsResponse = (await sendNuiCallback('getAccessoriesLimits', {})) as {
+      hats: number
+      glasses: number
+      earrings: number
+      watches: number
+      bracelets: number
+      neckAccessories: number
+    }
+
+    if (limitsResponse) {
+      hatDrawableLimit.value = limitsResponse.hats
+      glassesDrawableLimit.value = limitsResponse.glasses
+      earringsDrawableLimit.value = limitsResponse.earrings
+      watchDrawableLimit.value = limitsResponse.watches
+      braceletDrawableLimit.value = limitsResponse.bracelets
+      neckAccessoryDrawableLimit.value = limitsResponse.neckAccessories
+    }
+
+    await updateHatTypeLimit()
+    await updateGlassesTypeLimit()
+    await updateEarringsTypeLimit()
+    await updateWatchTypeLimit()
+    await updateBraceletTypeLimit()
+    await updateNeckAccessoryTypeLimit()
+  } catch (error) {
+    console.error('Failed to get accessories limits:', error)
+  }
+})
+
 const handleContinue = () => {
   // Save current section before validating
   saveSectionData(selectedCategory.value)
@@ -198,7 +495,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localHatDrawable"
               :min="0"
-              :max="100"
+              :max="hatDrawableLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -216,7 +513,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localHatTexture"
               :min="0"
-              :max="50"
+              :max="hatTextureLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -239,7 +536,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localGlassesDrawable"
               :min="0"
-              :max="100"
+              :max="glassesDrawableLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -257,7 +554,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localGlassesTexture"
               :min="0"
-              :max="50"
+              :max="glassesTextureLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -280,7 +577,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localEarringsDrawable"
               :min="0"
-              :max="100"
+              :max="earringsDrawableLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -298,7 +595,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localEarringsTexture"
               :min="0"
-              :max="50"
+              :max="earringsTextureLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -321,7 +618,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localWatchDrawable"
               :min="0"
-              :max="100"
+              :max="watchDrawableLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -339,7 +636,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localWatchTexture"
               :min="0"
-              :max="50"
+              :max="watchTextureLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -362,7 +659,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBraceletDrawable"
               :min="0"
-              :max="100"
+              :max="braceletDrawableLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -380,7 +677,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localBraceletTexture"
               :min="0"
-              :max="50"
+              :max="braceletTextureLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -403,7 +700,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localNeckAccessoryDrawable"
               :min="0"
-              :max="100"
+              :max="neckAccessoryDrawableLimit"
               :step="1"
               color="blue"
               thumb-label
@@ -421,7 +718,7 @@ const handleContinue = () => {
             <VSlider
               v-model="localNeckAccessoryTexture"
               :min="0"
-              :max="50"
+              :max="neckAccessoryTextureLimit"
               :step="1"
               color="blue"
               thumb-label

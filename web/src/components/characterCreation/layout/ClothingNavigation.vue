@@ -21,7 +21,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: number]
 }>()
 
-const categoryEmojis = ['🎭', '👕', '🎽', '💪', '🧥', '🦺', '🎨', '👖', '👟', '🎒']
+const categoryEmojis = ['🎭', '👕', '🎽', '💪', '🦺', '🎨', '👖', '👟', '🎒']
 
 const getCategoryTitle = (category: Category): string => {
   if (category.titleKey) {
