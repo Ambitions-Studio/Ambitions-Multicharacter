@@ -2,6 +2,8 @@ local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client accessories module loaded')
 
+--- Get available accessory variations for current ped
+---@return table Table containing max values for hats, glasses, earrings, watches, bracelets, neckAccessories
 local function GetAccessoriesLimits()
   local ped = PlayerPedId()
 
@@ -15,11 +17,18 @@ local function GetAccessoriesLimits()
   }
 end
 
+--- Get texture variation limit for a specific accessory prop
+---@param prop number The prop index
+---@param drawable number The drawable index
+---@return number The maximum texture variation index
 local function GetAccessoryTextureLimit(prop, drawable)
   local ped = PlayerPedId()
   return GetNumberOfPedPropTextureVariations(ped, prop, drawable) - 1
 end
 
+--- Apply hat customization to player ped
+---@param data table Contains type number and variant number
+---@return nil
 local function ApplyHatCustomization(data)
   local ped = PlayerPedId()
 
@@ -32,6 +41,9 @@ local function ApplyHatCustomization(data)
   ambitionsPrint.info('Applied hat - Type:', data.type, 'Variant:', data.variant)
 end
 
+--- Apply glasses customization to player ped
+---@param data table Contains type number and variant number
+---@return nil
 local function ApplyGlassesCustomization(data)
   local ped = PlayerPedId()
 
@@ -44,6 +56,9 @@ local function ApplyGlassesCustomization(data)
   ambitionsPrint.info('Applied glasses - Type:', data.type, 'Variant:', data.variant)
 end
 
+--- Apply earrings customization to player ped
+---@param data table Contains type number and variant number
+---@return nil
 local function ApplyEarringsCustomization(data)
   local ped = PlayerPedId()
 
@@ -56,6 +71,9 @@ local function ApplyEarringsCustomization(data)
   ambitionsPrint.info('Applied earrings - Type:', data.type, 'Variant:', data.variant)
 end
 
+--- Apply watch customization to player ped
+---@param data table Contains type number and variant number
+---@return nil
 local function ApplyWatchCustomization(data)
   local ped = PlayerPedId()
 
@@ -68,6 +86,9 @@ local function ApplyWatchCustomization(data)
   ambitionsPrint.info('Applied watch - Type:', data.type, 'Variant:', data.variant)
 end
 
+--- Apply bracelet customization to player ped
+---@param data table Contains type number and variant number
+---@return nil
 local function ApplyBraceletCustomization(data)
   local ped = PlayerPedId()
 
@@ -80,6 +101,9 @@ local function ApplyBraceletCustomization(data)
   ambitionsPrint.info('Applied bracelet - Type:', data.type, 'Variant:', data.variant)
 end
 
+--- Apply neck accessory customization to player ped
+---@param data table Contains type number and variant number
+---@return nil
 local function ApplyNeckAccessoryCustomization(data)
   local ped = PlayerPedId()
 

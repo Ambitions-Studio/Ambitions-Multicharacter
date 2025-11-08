@@ -3,6 +3,8 @@ local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client clothing callbacks module loaded')
 
+--- Register all clothing-related NUI callbacks for real-time clothing customization
+---@return nil
 local function RegisterClothingCallbacks()
   RegisterNUICallback('applyMaskCustomization', function(data, cb)
     ambitionsPrint.info('Applying mask customization in real-time')

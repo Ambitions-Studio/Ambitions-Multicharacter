@@ -3,7 +3,8 @@ local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client appearance callbacks module loaded')
 
---- Register all appearance-related NUI callbacks
+--- Register all appearance-related NUI callbacks for real-time character customization
+---@return nil
 local function RegisterAppearanceCallbacks()
   -- Real-time ped model change
   RegisterNUICallback('applyPedModel', function(data, cb)

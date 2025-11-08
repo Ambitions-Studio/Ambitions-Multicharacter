@@ -3,6 +3,8 @@ local ConfigTattoos = require('config.tattoo')
 
 ambitionsPrint.info('Client tattoos module loaded')
 
+--- Build tattoos organized by body zone from configuration
+---@return table Table containing tattoos organized by zone (head, neck, torso, back, leftArm, rightArm, leftLeg, rightLeg)
 local function BuildTattoosByZone()
   local tattoosByZone = {
     head = {},
@@ -107,6 +109,8 @@ local activeTattoos = {
   rightLeg = nil,
 }
 
+--- Get available tattoo counts for each body zone
+---@return table Table containing tattoo counts for each zone
 local function GetTattoosLimits()
   return {
     headTattoos = #tattoosByZone.head,
@@ -135,6 +139,8 @@ local function ClearAllTattoos()
   ambitionsPrint.info('Cleared all tattoos')
 end
 
+--- Reapply all active tattoos to player ped after clearing decorations
+---@return nil
 local function ReapplyAllTattoos()
   local ped = PlayerPedId()
   local pedModel = GetEntityModel(ped)
@@ -173,6 +179,9 @@ local function ReapplyAllTattoos()
   ambitionsPrint.info('========== ReapplyAllTattoos END ==========')
 end
 
+--- Apply head tattoo to player ped
+---@param data table Contains tattooIndex number
+---@return nil
 local function ApplyHeadTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
@@ -207,6 +216,9 @@ local function ApplyHeadTattoo(data)
   ambitionsPrint.info('========== ApplyHeadTattoo END ==========')
 end
 
+--- Apply neck tattoo to player ped
+---@param data table Contains tattooIndex number
+---@return nil
 local function ApplyNeckTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
@@ -227,6 +239,9 @@ local function ApplyNeckTattoo(data)
   ReapplyAllTattoos()
 end
 
+--- Apply torso tattoo to player ped
+---@param data table Contains tattooIndex number
+---@return nil
 local function ApplyTorsoTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
@@ -247,6 +262,9 @@ local function ApplyTorsoTattoo(data)
   ReapplyAllTattoos()
 end
 
+--- Apply back tattoo to player ped
+---@param data table Contains tattooIndex number
+---@return nil
 local function ApplyBackTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
@@ -267,6 +285,9 @@ local function ApplyBackTattoo(data)
   ReapplyAllTattoos()
 end
 
+--- Apply left arm tattoo to player ped
+---@param data table Contains tattooIndex number
+---@return nil
 local function ApplyLeftArmTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
@@ -287,6 +308,9 @@ local function ApplyLeftArmTattoo(data)
   ReapplyAllTattoos()
 end
 
+--- Apply right arm tattoo to player ped
+---@param data table Contains tattooIndex number
+---@return nil
 local function ApplyRightArmTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
@@ -307,6 +331,9 @@ local function ApplyRightArmTattoo(data)
   ReapplyAllTattoos()
 end
 
+--- Apply left leg tattoo to player ped
+---@param data table Contains tattooIndex number
+---@return nil
 local function ApplyLeftLegTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
@@ -327,6 +354,9 @@ local function ApplyLeftLegTattoo(data)
   ReapplyAllTattoos()
 end
 
+--- Apply right leg tattoo to player ped
+---@param data table Contains tattooIndex number
+---@return nil
 local function ApplyRightLegTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0

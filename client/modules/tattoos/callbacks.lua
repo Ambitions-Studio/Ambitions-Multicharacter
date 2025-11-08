@@ -3,6 +3,8 @@ local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client tattoos callbacks module loaded')
 
+--- Register all tattoos-related NUI callbacks for real-time tattoos customization
+---@return nil
 local function RegisterTattoosCallbacks()
   RegisterNUICallback('applyHeadTattoo', function(data, cb)
     ambitionsPrint.info('Applying head tattoo in real-time')

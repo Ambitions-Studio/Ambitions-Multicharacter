@@ -3,6 +3,8 @@ local ambitionsPrint = require('Ambitions.shared.lib.log.print')
 
 ambitionsPrint.info('Client accessories callbacks module loaded')
 
+--- Register all accessories-related NUI callbacks for real-time accessories customization
+---@return nil
 local function RegisterAccessoriesCallbacks()
   RegisterNUICallback('applyHatCustomization', function(data, cb)
     ambitionsPrint.info('Applying hat customization in real-time')
