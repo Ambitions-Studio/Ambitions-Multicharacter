@@ -11,9 +11,15 @@ import AccessoriesStep from '@/components/characterCreation/steps/AccessoriesSte
 import TattoosStep from '@/components/characterCreation/steps/TattoosStep.vue'
 import RecapStep from '@/components/characterCreation/steps/RecapStep.vue'
 import ValidationButton from '@/components/characterCreation/steps/ValidationButton.vue'
-import { sendNuiEvent } from '@/utils/nui'
+import { sendNuiEvent, sendNuiCallback } from '@/utils/nui'
+import { useCharacterStore } from '@/stores/useCharacterStore'
+import { useIdentityCreationStore } from '@/stores/useIdentityCreationStore'
+import { useAppearanceStore } from '@/stores/useAppearanceStore'
 
 const currentStep = ref(0)
+const characterStore = useCharacterStore()
+const identityStore = useIdentityCreationStore()
+const appearanceStore = useAppearanceStore()
 
 // Camera controls state
 const isLeftMouseDown = ref(false)
@@ -322,6 +328,58 @@ const handleMouseWheel = (event: WheelEvent) => {
     mouseX,
     mouseY,
   })
+}
+
+const handleValidateCharacter = async () => {
+  const characterIdentity = characterStore.identity
+  const characterAppearance = characterStore.appearance
+  const storeIdentity = identityStore.getIdentityData()
+  const storeAppearance = appearanceStore.getAppearanceData()
+
+  const identityMatch =
+    characterIdentity?.firstName === storeIdentity.firstName &&
+    characterIdentity?.lastName === storeIdentity.lastName &&
+    characterIdentity?.dateOfBirth === storeIdentity.dateOfBirth &&
+    characterIdentity?.gender === storeIdentity.gender &&
+    characterIdentity?.nationality === storeIdentity.nationality &&
+    characterIdentity?.height === storeIdentity.height
+
+  const appearanceMatch = JSON.stringify(characterAppearance) === JSON.stringify(storeAppearance)
+
+  if (!identityMatch || !appearanceMatch) {
+    console.error('❌ VALIDATION ERROR: Data mismatch between stores!')
+    console.error('Character Store Identity:', JSON.stringify(characterIdentity, null, 2))
+    console.error('Identity Store:', JSON.stringify(storeIdentity, null, 2))
+    console.error('Character Store Appearance:', JSON.stringify(characterAppearance, null, 2))
+    console.error('Appearance Store:', JSON.stringify(storeAppearance, null, 2))
+
+    try {
+      await sendNuiCallback('characterCreationError', {
+        error: 'DATA_MISMATCH',
+        message: 'Les données ne correspondent pas entre les stores'
+      })
+    } catch (error) {
+      console.error('Failed to send error to Lua:', error)
+    }
+    return
+  }
+
+  const completeCharacterData = {
+    identity: storeIdentity,
+    appearance: storeAppearance,
+    slot: characterStore.selectedSlot
+  }
+
+  console.log('✅ VALIDATION SUCCESS: All data matches!')
+  console.log('📋 Complete Character Data:')
+  console.log(JSON.stringify(completeCharacterData, null, 2))
+
+  try {
+    await sendNuiCallback('createCharacter', completeCharacterData)
+    console.log('✅ Character data sent to Lua successfully!')
+  } catch (error) {
+    console.error('❌ Failed to send character data to Lua:', error)
+  }
 }
 
 onMounted(() => {
@@ -719,7 +777,7 @@ onUnmounted(() => {
 
     <template #outside-transition>
       <!-- Validation Button - Fixed Bottom Right -->
-      <ValidationButton v-if="currentStep === 6" />
+      <ValidationButton v-if="currentStep === 6" @validate="handleValidateCharacter" />
 
       <div class="absolute right-0 top-0 w-3/5 h-full pointer-events-none"></div>
     </template>
