@@ -29,9 +29,8 @@ const emit = defineEmits<{
 const localBeardStyle = ref(props.beardStyle)
 const localBeardColor = ref(props.beardColor)
 const localBeardOpacity = ref(props.beardOpacity)
-const maxBeardStyles = ref(28) // Default fallback
+const maxBeardStyles = ref(28)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number }>('getCustomizationLimits')
   if (limits) {
