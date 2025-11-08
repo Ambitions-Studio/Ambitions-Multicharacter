@@ -24,9 +24,8 @@ const emit = defineEmits<{
 
 const localSunDamageStyle = ref(props.sunDamageStyle)
 const localSunDamageOpacity = ref(props.sunDamageOpacity)
-const maxSunDamageStyles = ref(10) // Default fallback
+const maxSunDamageStyles = ref(10)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number; ageingStyles: number; makeupStyles: number; blushStyles: number; complexionStyles: number; sunDamageStyles: number }>('getCustomizationLimits')
   if (limits) {

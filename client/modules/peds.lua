@@ -1,15 +1,11 @@
 local pedsConfig = require('config.peds')
 local heritageConfig = require('config.heritage')
-local ambitionsPrint = require('Ambitions.shared.lib.log.print')
-
-ambitionsPrint.info('Client peds module loaded')
 
 --- Format ped list for NUI
 ---@return table Formatted ped models with title, value and category
 local function FormatPedsForNUI()
   local formattedPeds = {}
 
-  -- Add basics first (always shown)
   for _, pedValue in ipairs(pedsConfig.pedList.basics) do
     table.insert(formattedPeds, {
       title = GetLabelText(pedValue) ~= 'NULL' and GetLabelText(pedValue) or pedValue,
@@ -18,7 +14,6 @@ local function FormatPedsForNUI()
     })
   end
 
-  -- Add other peds only if authorized
   if pedsConfig.authorizePedwhileInCreator then
     for _, pedValue in ipairs(pedsConfig.pedList.peds) do
       table.insert(formattedPeds, {
@@ -45,10 +40,6 @@ end
 local function SendPedsConfigToNUI()
   local config = GetPedsConfig()
 
-  ambitionsPrint.info('Sending peds config to NUI')
-  ambitionsPrint.info('authorizePedwhileInCreator:', config.authorizePedwhileInCreator)
-  ambitionsPrint.info('Total ped models:', #config.pedModels)
-
   SendNUIMessage({
     action = 'setPedsConfig',
     config = config
@@ -61,14 +52,12 @@ end
 ---@return string textureName The texture filename
 local function GetHeritageTexture(id, isFemale)
   if isFemale then
-    -- Mothers (21-41, 45)
     if id == 45 then
       return 'special_female_0'
     else
       return 'female_' .. (id - 21)
     end
   else
-    -- Fathers (0-20, 42-44)
     if id >= 42 then
       return 'special_male_' .. (id - 42)
     else
@@ -83,7 +72,6 @@ local function GetHeritageConfig()
   local fathers = {}
   local mothers = {}
 
-  -- Format fathers
   for _, father in ipairs(heritageConfig.fathers) do
     table.insert(fathers, {
       id = father.id,
@@ -92,7 +80,6 @@ local function GetHeritageConfig()
     })
   end
 
-  -- Format mothers
   for _, mother in ipairs(heritageConfig.mothers) do
     table.insert(mothers, {
       id = mother.id,
@@ -110,10 +97,6 @@ end
 --- Send heritage configuration to NUI
 local function SendHeritageConfigToNUI()
   local config = GetHeritageConfig()
-
-  ambitionsPrint.info('Sending heritage config to NUI')
-  ambitionsPrint.info('Total fathers:', #config.fathers)
-  ambitionsPrint.info('Total mothers:', #config.mothers)
 
   SendNUIMessage({
     action = 'setHeritageConfig',

@@ -33,9 +33,8 @@ const localLipThickness = ref(props.lipThickness)
 const localLipstickStyle = ref(props.lipstickStyle)
 const localLipstickColor = ref(props.lipstickColor)
 const localLipstickOpacity = ref(props.lipstickOpacity)
-const maxLipstickStyles = ref(9) // Default fallback
+const maxLipstickStyles = ref(9)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number; beardStyles: number; lipstickStyles: number }>('getCustomizationLimits')
   if (limits) {

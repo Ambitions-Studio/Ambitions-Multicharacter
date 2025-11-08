@@ -37,9 +37,8 @@ const localEyebrowDepth = ref(props.eyebrowDepth)
 const localEyebrowsStyle = ref(props.eyebrowsStyle)
 const localEyebrowsColor = ref(props.eyebrowsColor)
 const localEyebrowsOpacity = ref(props.eyebrowsOpacity)
-const maxEyebrowsStyles = ref(33) // Default fallback
+const maxEyebrowsStyles = ref(33)
 
-// Get customization limits from game
 onMounted(async () => {
   const limits = await sendNuiCallback<undefined, { hairStyles: number; hairTextures: number; eyebrowsStyles: number }>('getCustomizationLimits')
   if (limits) {

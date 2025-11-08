@@ -1,384 +1,244 @@
--- ===================================================================
--- AMBITIONS MULTICHARACTER - DEFAULT CHARACTER CONFIGURATION
--- ===================================================================
--- This configuration file defines default character appearance settings
--- for the Ambitions multicharacter system. These defaults are used when
--- creating new characters to provide consistent starting points.
---
--- SYSTEM FEATURES:
--- • Complete GTA V character customization support
--- • Gender-specific default configurations
--- • All clothing slots and accessories included
--- • Facial features and body modifications covered
--- • Optimized for character creation workflow
--- ===================================================================
-
 return {
-  -- ===================================================================
-  -- DEFAULT CHARACTER APPEARANCE SYSTEM
-  -- ===================================================================
-
-  --- Default character configurations by gender
-  ---
-  --- These configurations provide base appearance settings for new characters.
-  --- Each gender has optimized defaults that ensure characters look natural
-  --- and professional while still allowing full customization.
-  ---
-  --- GENDER KEYS:
-  --- • "m" = Male character defaults
-  --- • "f" = Female character defaults
-  ---
-  --- VALUE RANGES:
-  --- • Most values range from -10 to +10 (facial features)
-  --- • Clothing indices start from 0 (-1 means no item equipped)
-  --- • Colors typically range from 0-63 (hair, makeup)
-  --- • Opacity values range from 0-10 (makeup, overlays)
   defaultCharacter = {
     ["m"] = {
-      -- ===================================================================
-      -- HERITAGE & GENETICS
-      -- ===================================================================
+      mom = 21,
+      dad = 0,
+      face_md_weight = 50,
+      skin_md_weight = 50,
 
-      --- Parent selection for character genetics
-      --- Determines base facial structure and skin tone
-      --- Range: 0-45 (face IDs from Benjamin to Misty)
-      mom = 21,                -- Mother face ID (0-45: any face can be used)
-      dad = 0,                 -- Father face ID (0-45: any face can be used)
-      face_md_weight = 50,     -- Face mix: 0-100 (0=mother, 100=father)
-      skin_md_weight = 50,     -- Skin mix: 0-100 (0=mother, 100=father)
+      nose_1 = 0,
+      nose_2 = 0,
+      nose_3 = 0,
+      nose_4 = 0,
+      nose_5 = 0,
+      nose_6 = 0,
 
-      -- ===================================================================
-      -- FACIAL STRUCTURE
-      -- ===================================================================
+      cheeks_1 = 0,
+      cheeks_2 = 0,
+      cheeks_3 = 0,
+      lip_thickness = 0,
 
-      --- Nose configuration
-      --- Fine-tunes nose shape and proportions
-      --- Range: -10 to +10 for most parameters
-      nose_1 = 0,              -- Nose width (narrow to wide)
-      nose_2 = 0,              -- Nose peak height (low to high)
-      nose_3 = 0,              -- Nose peak length (short to long)
-      nose_4 = 0,              -- Nose bone height (low to high)
-      nose_5 = 0,              -- Nose peak lowering (up to down)
-      nose_6 = 0,              -- Nose bone twist (left to right)
+      jaw_1 = 0,
+      jaw_2 = 0,
+      chin_1 = 0,
+      chin_2 = 0,
+      chin_3 = 0,
+      chin_4 = 0,
+      neck_thickness = 0,
 
-      --- Cheek and jaw structure
-      --- Defines facial width and bone prominence
-      --- Range: -10 to +10 for bone adjustments
-      cheeks_1 = 0,            -- Cheek bones height (low to high)
-      cheeks_2 = 0,            -- Cheek bones width (narrow to wide)
-      cheeks_3 = 0,            -- Cheeks width (thin to full)
-      lip_thickness = 0,       -- Lip thickness (thin to full)
+      hair_1 = 0,
+      hair_2 = 0,
+      hair_color_1 = 0,
+      hair_color_2 = 0,
 
-      --- Jaw and chin configuration (SetPedFaceFeature indices 13-19)
-      --- Adjusts jaw and chin shape and prominence
-      --- Range: -10 to +10 for positioning (internally converted to -1.0 to 1.0)
-      jaw_1 = 0,               -- Index 13: Jaw bone width (narrow to wide)
-      jaw_2 = 0,               -- Index 14: Jaw bone shape (round to square)
-      chin_1 = 0,              -- Index 15: Chin bone position (up to down)
-      chin_2 = 0,              -- Index 16: Chin bone length (backward to forward)
-      chin_3 = 0,              -- Index 17: Chin bone shape (pointed to square)
-      chin_4 = 0,              -- Index 18: Chin hole/dimple (shallow to deep)
-      neck_thickness = 0,      -- Index 19: Neck thickness (thin to thick)
+      tshirt_1 = 15,
+      tshirt_2 = 0,
+      torso_1 = 0,
+      torso_2 = 0,
+      decals_1 = 0,
+      decals_2 = 0,
+      arms = 0,
+      arms_2 = 0,
+      pants_1 = 0,
+      pants_2 = 0,
+      shoes_1 = 1,
+      shoes_2 = 0,
 
-      -- ===================================================================
-      -- HAIR STYLING
-      -- ===================================================================
+      mask_1 = 0,
+      mask_2 = 0,
+      bproof_1 = 0,
+      bproof_2 = 0,
+      chain_1 = 0,
+      chain_2 = 0,
+      bags_1 = 0,
+      bags_2 = 0,
 
-      --- Hair appearance settings
-      --- Defines hairstyle and coloring
-      --- Styles vary by gender and range from 0 to available options
-      hair_1 = 0,              -- Hair style index (0 = bald/default)
-      hair_2 = 0,              -- Hair texture variation
-      hair_color_1 = 0,        -- Primary hair color (0-63)
-      hair_color_2 = 0,        -- Secondary/highlight color (0-63)
+      helmet_1 = -1,
+      helmet_2 = 0,
+      glasses_1 = -1,
+      glasses_2 = 0,
+      ears_1 = -1,
+      ears_2 = 0,
+      watches_1 = -1,
+      watches_2 = 0,
+      bracelets_1 = -1,
+      bracelets_2 = 0,
 
-      -- ===================================================================
-      -- CLOTHING & ACCESSORIES
-      -- ===================================================================
+      eye_color = 0,
+      eye_squint = 0,
 
-      --- Core clothing components (SetPedComponentVariation)
-      --- Component IDs 0-11 with drawable and texture variants
-      --- -1 indicates no item equipped for optional slots
-      tshirt_1 = 15,           -- Component 8: Undershirt/accessories
-      tshirt_2 = 0,            -- Undershirt texture
-      torso_1 = 0,             -- Component 3: Torso (shirts, jackets)
-      torso_2 = 0,             -- Torso texture
-      decals_1 = 0,            -- Component 10: Decals/badges
-      decals_2 = 0,            -- Decals texture
-      arms = 0,                -- Component 11: Torso auxiliary parts
-      arms_2 = 0,              -- Arms texture
-      pants_1 = 0,             -- Component 4: Legs/pants
-      pants_2 = 0,             -- Pants texture
-      shoes_1 = 1,             -- Component 6: Feet/shoes
-      shoes_2 = 0,             -- Shoes texture
+      blemishes_1 = 0,
+      blemishes_2 = 0,
+      blemishes_3 = 0,
 
-      --- Additional clothing components
-      mask_1 = 0,              -- Component 1: Face masks
-      mask_2 = 0,              -- Mask texture
-      bproof_1 = 0,            -- Component 9: Bulletproof vest/kevlar
-      bproof_2 = 0,            -- Kevlar texture
-      chain_1 = 0,             -- Component 7: Accessories/chains
-      chain_2 = 0,             -- Chain texture
-      bags_1 = 0,              -- Component 5: Bags/parachute
-      bags_2 = 0,              -- Bag texture
+      beard_1 = 0,
+      beard_2 = 0,
+      beard_3 = 0,
+      beard_4 = 0,
 
-      --- Props (SetPedPropIndex) - use -1 to disable
-      helmet_1 = -1,           -- Prop 0: Hats/helmets
-      helmet_2 = 0,            -- Helmet texture
-      glasses_1 = -1,          -- Prop 1: Glasses/eyewear
-      glasses_2 = 0,           -- Glasses texture
-      ears_1 = -1,             -- Prop 2: Ear accessories
-      ears_2 = 0,              -- Ear accessory texture
-      watches_1 = -1,          -- Prop 6: Watches
-      watches_2 = 0,           -- Watch texture
-      bracelets_1 = -1,        -- Prop 7: Bracelets
-      bracelets_2 = 0,         -- Bracelet texture
+      eyebrows_1 = 0,
+      eyebrows_2 = 0,
+      eyebrows_3 = 0,
+      eyebrows_4 = 0,
+      eyebrows_5 = 0,
+      eyebrows_6 = 0,
 
-      -- ===================================================================
-      -- FACIAL FEATURES & MAKEUP
-      -- ===================================================================
+      age_1 = 0,
+      age_2 = 0,
 
-      --- Eye configuration
-      --- Controls eye color and shape modifications
-      eye_color = 0,           -- Eye color (0-31)
-      eye_squint = 0,          -- Eye opening/squinting (-10 to +10)
+      makeup_1 = 0,
+      makeup_2 = 0,
+      makeup_3 = 0,
+      makeup_4 = 0,
 
-      --- Head Overlays (SetPedHeadOverlay)
-      --- Overlay ID 0: Blemishes (0-23, 255=disable)
-      blemishes_1 = 0,         -- Blemish style
-      blemishes_2 = 0,         -- Blemish opacity (0-10)
-      blemishes_3 = 0,         -- Blemish color (0-63)
+      blush_1 = 0,
+      blush_2 = 0,
+      blush_3 = 0,
 
-      --- Overlay ID 1: Facial Hair/Beard (0-28, 255=disable)
-      beard_1 = 0,             -- Beard style
-      beard_2 = 0,             -- Beard opacity (0-10)
-      beard_3 = 0,             -- Beard color (0-63)
-      beard_4 = 0,             -- Beard secondary color (0-63)
+      complexion_1 = 0,
+      complexion_2 = 0,
 
-      --- Overlay ID 2: Eyebrows (0-33, 255=disable)
-      eyebrows_1 = 0,          -- Eyebrow style
-      eyebrows_2 = 0,          -- Eyebrow opacity (0-10)
-      eyebrows_3 = 0,          -- Eyebrow color (0-63)
-      eyebrows_4 = 0,          -- Eyebrow secondary color (0-63)
-      eyebrows_5 = 0,          -- Eyebrow height (-10 to +10)
-      eyebrows_6 = 0,          -- Eyebrow depth (-10 to +10)
+      sun_1 = 0,
+      sun_2 = 0,
 
-      --- Overlay ID 3: Ageing (0-14, 255=disable)
-      age_1 = 0,               -- Aging style
-      age_2 = 0,               -- Aging opacity (0-10)
+      lipstick_1 = 0,
+      lipstick_2 = 0,
+      lipstick_3 = 0,
+      lipstick_4 = 0,
 
-      --- Overlay ID 4: Makeup (0-74, 255=disable)
-      makeup_1 = 0,            -- Makeup style
-      makeup_2 = 0,            -- Makeup opacity (0-10)
-      makeup_3 = 0,            -- Makeup color (0-63)
-      makeup_4 = 0,            -- Makeup secondary color (0-63)
+      moles_1 = 0,
+      moles_2 = 0,
 
-      --- Overlay ID 5: Blush (0-6, 255=disable)
-      blush_1 = 0,             -- Blush style
-      blush_2 = 0,             -- Blush opacity (0-10)
-      blush_3 = 0,             -- Blush color (0-63)
+      chest_1 = 0,
+      chest_2 = 0,
+      chest_3 = 0,
 
-      --- Overlay ID 6: Complexion (0-11, 255=disable)
-      complexion_1 = 0,        -- Complexion style
-      complexion_2 = 0,        -- Complexion opacity (0-10)
-
-      --- Overlay ID 7: Sun Damage (0-10, 255=disable)
-      sun_1 = 0,               -- Sun damage style
-      sun_2 = 0,               -- Sun damage opacity (0-10)
-
-      --- Overlay ID 8: Lipstick (0-9, 255=disable)
-      lipstick_1 = 0,          -- Lipstick style
-      lipstick_2 = 0,          -- Lipstick opacity (0-10)
-      lipstick_3 = 0,          -- Lipstick color (0-63)
-      lipstick_4 = 0,          -- Lipstick secondary color (0-63)
-
-      --- Overlay ID 9: Moles/Freckles (0-17, 255=disable)
-      moles_1 = 0,             -- Moles style
-      moles_2 = 0,             -- Moles opacity (0-10)
-
-      --- Overlay ID 10: Chest Hair (0-16, 255=disable)
-      chest_1 = 0,             -- Chest hair style
-      chest_2 = 0,             -- Chest hair opacity (0-10)
-      chest_3 = 0,             -- Chest hair color (0-63)
-
-      --- Overlay ID 11-12: Body Blemishes (0-11, 255=disable)
-      bodyb_1 = -1,            -- Body blemish style
-      bodyb_2 = 0,             -- Body blemish opacity (0-10)
-      bodyb_3 = -1,            -- Additional body blemish style
-      bodyb_4 = 0,             -- Additional blemish opacity (0-10)
-
+      bodyb_1 = -1,
+      bodyb_2 = 0,
+      bodyb_3 = -1,
+      bodyb_4 = 0,
     },
 
     ["f"] = {
-      -- ===================================================================
-      -- HERITAGE & GENETICS (Female Configuration)
-      -- ===================================================================
+      mom = 21,
+      dad = 0,
+      grandparents = 0,
 
-      --- Female-optimized parent selection
-      --- Provides feminine facial structure defaults
-      mom = 21,                -- Mother face optimized for female appearance
-      dad = 0,                 -- Father face for genetic diversity
-      grandparents = 0,        -- Grandparent influence
+      face_md_weight = 50,
+      skin_md_weight = 50,
+      face_g_weight = 0,
 
-      --- Genetic blending for feminine features
-      face_md_weight = 50,     -- Balanced parent influence
-      skin_md_weight = 50,     -- Balanced skin tone inheritance
-      face_g_weight = 0,       -- No grandparent influence
+      nose_1 = 0,
+      nose_2 = 0,
+      nose_3 = 0,
+      nose_4 = 0,
+      nose_5 = 0,
+      nose_6 = 0,
 
-      -- ===================================================================
-      -- FACIAL STRUCTURE (Female-Optimized)
-      -- ===================================================================
+      cheeks_1 = 0,
+      cheeks_2 = 0,
+      cheeks_3 = 0,
+      lip_thickness = 0,
 
-      --- Feminine nose configuration
-      --- Generally more refined and delicate than male defaults
-      nose_1 = 0,              -- Nose width (typically narrower for females)
-      nose_2 = 0,              -- Nose peak height
-      nose_3 = 0,              -- Nose peak length
-      nose_4 = 0,              -- Nose bone height
-      nose_5 = 0,              -- Nose peak lowering
-      nose_6 = 0,              -- Nose bone twist
+      jaw_1 = 0,
+      jaw_2 = 0,
+      chin_1 = 0,
+      chin_2 = 0,
+      chin_3 = 0,
+      chin_4 = 0,
+      neck_thickness = 0,
 
-      --- Feminine facial structure
-      --- Softer features with natural contours
-      cheeks_1 = 0,            -- Cheek bones height
-      cheeks_2 = 0,            -- Cheek bones width
-      cheeks_3 = 0,            -- Cheeks width
-      lip_thickness = 0,       -- Lip fullness (often slightly fuller for females)
+      hair_1 = 4,
+      hair_2 = 0,
+      hair_color_1 = 1,
+      hair_color_2 = 0,
 
-      --- Jaw and chin configuration (SetPedFaceFeature indices 13-19) - Female
-      --- Adjusts jaw and chin shape for feminine features
-      --- Range: -10 to +10 for positioning (internally converted to -1.0 to 1.0)
-      jaw_1 = 0,               -- Index 13: Jaw bone width (narrow to wide)
-      jaw_2 = 0,               -- Index 14: Jaw bone shape (round to square)
-      chin_1 = 0,              -- Index 15: Chin bone position (up to down)
-      chin_2 = 0,              -- Index 16: Chin bone length (backward to forward)
-      chin_3 = 0,              -- Index 17: Chin bone shape (pointed to square)
-      chin_4 = 0,              -- Index 18: Chin hole/dimple (shallow to deep)
-      neck_thickness = 0,      -- Index 19: Neck thickness (thin to thick)
+      tshirt_1 = 14,
+      tshirt_2 = 0,
+      torso_1 = 15,
+      torso_2 = 0,
+      decals_1 = 0,
+      decals_2 = 0,
+      arms = 15,
+      arms_2 = 0,
+      pants_1 = 14,
+      pants_2 = 0,
+      shoes_1 = 5,
+      shoes_2 = 0,
 
-      -- ===================================================================
-      -- HAIR STYLING (Female Defaults)
-      -- ===================================================================
+      mask_1 = 0,
+      mask_2 = 0,
+      bproof_1 = 0,
+      bproof_2 = 0,
+      chain_1 = 0,
+      chain_2 = 0,
+      helmet_1 = -1,
+      helmet_2 = 0,
+      glasses_1 = -1,
+      glasses_2 = 0,
+      watches_1 = -1,
+      watches_2 = 0,
+      bracelets_1 = -1,
+      bracelets_2 = 0,
+      bags_1 = 0,
+      bags_2 = 0,
 
-      --- Female hairstyle defaults
-      --- Professional and versatile styling options
-      hair_1 = 4,              -- Female-appropriate hairstyle
-      hair_2 = 0,              -- Hair texture
-      hair_color_1 = 1,        -- Natural hair color variation
-      hair_color_2 = 0,        -- Highlight/lowlight color
+      eye_color = 0,
+      eye_squint = 0,
 
-      -- ===================================================================
-      -- FEMALE CLOTHING DEFAULTS
-      -- ===================================================================
+      blemishes_1 = 0,
+      blemishes_2 = 0,
+      blemishes_3 = 0,
 
-      --- Female-specific clothing configuration
-      --- Professional and appropriate default wardrobe
-      tshirt_1 = 14,           -- Female undershirt/base layer
-      tshirt_2 = 0,            -- Texture variant
-      torso_1 = 15,            -- Female torso clothing
-      torso_2 = 0,             -- Texture variant
-      decals_1 = 0,            -- Decal overlays
-      decals_2 = 0,            -- Decal texture
-      arms = 15,               -- Female arm clothing fit
-      arms_2 = 0,              -- Arms texture
-      pants_1 = 14,            -- Female leg clothing
-      pants_2 = 0,             -- Pants texture
-      shoes_1 = 5,             -- Female footwear
-      shoes_2 = 0,             -- Shoe texture
+      beard_1 = 0,
+      beard_2 = 0,
+      beard_3 = 0,
+      beard_4 = 0,
 
-      --- Female accessories (same availability as male)
-      mask_1 = 0,              -- Face coverings
-      mask_2 = 0,              -- Mask texture
-      bproof_1 = 0,            -- Protective gear
-      bproof_2 = 0,            -- Armor texture
-      chain_1 = 0,             -- Neck jewelry
-      chain_2 = 0,             -- Chain texture
-      helmet_1 = -1,           -- Headwear - disabled by default
-      helmet_2 = 0,            -- Helmet texture
-      glasses_1 = -1,          -- Eyewear - disabled by default
-      glasses_2 = 0,           -- Glasses texture
-      watches_1 = -1,          -- Timepieces - disabled by default
-      watches_2 = 0,           -- Watch texture
-      bracelets_1 = -1,        -- Wrist jewelry - disabled by default
-      bracelets_2 = 0,         -- Bracelet texture
-      bags_1 = 0,              -- Bags and accessories
-      bags_2 = 0,              -- Bag texture
+      eyebrows_1 = 1,
+      eyebrows_2 = 10,
+      eyebrows_3 = 0,
+      eyebrows_4 = 0,
+      eyebrows_5 = 0,
+      eyebrows_6 = 0,
 
-      -- ===================================================================
-      -- FEMININE FACIAL FEATURES
-      -- ===================================================================
+      age_1 = 0,
+      age_2 = 0,
 
-      --- Eye styling for females
-      eye_color = 0,           -- Eye color selection
-      eye_squint = 0,          -- Eye shape modification
+      makeup_1 = 0,
+      makeup_2 = 0,
+      makeup_3 = 0,
+      makeup_4 = 0,
 
-      --- Head Overlays (SetPedHeadOverlay) - Female optimized
-      --- Overlay ID 0: Blemishes (0-23, 255=disable)
-      blemishes_1 = 0,         -- Blemish style
-      blemishes_2 = 0,         -- Blemish opacity (0-10)
-      blemishes_3 = 0,         -- Blemish color (0-63)
+      blush_1 = 0,
+      blush_2 = 0,
+      blush_3 = 0,
 
-      --- Overlay ID 1: Facial Hair/Beard (0-28, 255=disable) - N/A for females
-      beard_1 = 0,             -- Not applicable for females
-      beard_2 = 0,             -- Not applicable for females
-      beard_3 = 0,             -- Not applicable for females
-      beard_4 = 0,             -- Not applicable for females
+      complexion_1 = 0,
+      complexion_2 = 0,
 
-      --- Overlay ID 2: Eyebrows (0-33, 255=disable) - Enhanced for females
-      eyebrows_1 = 1,          -- Eyebrow style (more defined)
-      eyebrows_2 = 10,         -- Eyebrow opacity (higher)
-      eyebrows_3 = 0,          -- Eyebrow color (0-63)
-      eyebrows_4 = 0,          -- Eyebrow secondary color (0-63)
-      eyebrows_5 = 0,          -- Eyebrow height (-10 to +10)
-      eyebrows_6 = 0,          -- Eyebrow depth (-10 to +10)
+      sun_1 = 0,
+      sun_2 = 0,
 
-      --- Overlay ID 3: Ageing (0-14, 255=disable)
-      age_1 = 0,               -- Aging style
-      age_2 = 0,               -- Aging opacity (0-10)
+      lipstick_1 = 0,
+      lipstick_2 = 0,
+      lipstick_3 = 0,
+      lipstick_4 = 0,
 
-      --- Overlay ID 4: Makeup (0-74, 255=disable)
-      makeup_1 = 0,            -- Makeup style
-      makeup_2 = 0,            -- Makeup opacity (0-10)
-      makeup_3 = 0,            -- Makeup color (0-63)
-      makeup_4 = 0,            -- Makeup secondary color (0-63)
+      moles_1 = 0,
+      moles_2 = 0,
 
-      --- Overlay ID 5: Blush (0-6, 255=disable)
-      blush_1 = 0,             -- Blush style
-      blush_2 = 0,             -- Blush opacity (0-10)
-      blush_3 = 0,             -- Blush color (0-63)
+      chest_1 = 0,
+      chest_2 = 0,
+      chest_3 = 0,
 
-      --- Overlay ID 6: Complexion (0-11, 255=disable)
-      complexion_1 = 0,        -- Complexion style
-      complexion_2 = 0,        -- Complexion opacity (0-10)
+      bodyb_1 = -1,
+      bodyb_2 = 0,
+      bodyb_3 = -1,
+      bodyb_4 = 0,
 
-      --- Overlay ID 7: Sun Damage (0-10, 255=disable)
-      sun_1 = 0,               -- Sun damage style
-      sun_2 = 0,               -- Sun damage opacity (0-10)
-
-      --- Overlay ID 8: Lipstick (0-9, 255=disable)
-      lipstick_1 = 0,          -- Lipstick style
-      lipstick_2 = 0,          -- Lipstick opacity (0-10)
-      lipstick_3 = 0,          -- Lipstick color (0-63)
-      lipstick_4 = 0,          -- Lipstick secondary color (0-63)
-
-      --- Overlay ID 9: Moles/Freckles (0-17, 255=disable)
-      moles_1 = 0,             -- Moles style
-      moles_2 = 0,             -- Moles opacity (0-10)
-
-      --- Overlay ID 10: Chest Hair (0-16, 255=disable) - N/A for females
-      chest_1 = 0,             -- Not applicable for females
-      chest_2 = 0,             -- Not applicable for females
-      chest_3 = 0,             -- Not applicable for females
-
-      --- Overlay ID 11-12: Body Blemishes (0-11, 255=disable)
-      bodyb_1 = -1,            -- Body blemish style
-      bodyb_2 = 0,             -- Body blemish opacity (0-10)
-      bodyb_3 = -1,            -- Additional body blemish style
-      bodyb_4 = 0,             -- Additional blemish opacity (0-10)
-
-      --- Props (SetPedPropIndex) - Female accessories
-      ears_1 = -1,             -- Prop 2: Ear jewelry - disabled by default
-      ears_2 = 0,              -- Ear accessory texture
+      ears_1 = -1,
+      ears_2 = 0,
     }
   }
 }
