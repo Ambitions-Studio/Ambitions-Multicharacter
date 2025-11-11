@@ -26,10 +26,6 @@ local function OpenInterface(data)
   SendNUIMessage(nuiData)
 end
 
-RegisterNetEvent('ambitions-multicharacter:client:openInterface', function(data)
-  OpenInterface(data)
-end)
-
 --- NUI callback when player selects an empty character slot
 ---@param data table Contains slotIndex number
 ---@param cb function Callback function to acknowledge the request

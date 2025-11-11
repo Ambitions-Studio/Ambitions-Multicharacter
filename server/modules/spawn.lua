@@ -1,6 +1,7 @@
 local identifiers = require('Ambitions.server.lib.player.identifiers')
 local random = require('Ambitions.shared.lib.math.random')
 local spawnConfig = require('config.spawn')
+local callback = require('Ambitions.server.lib.callback')
 
 --- Setup character selection by retrieving all characters for a user
 ---@param sessionId number The session id of the player
@@ -69,14 +70,12 @@ local function SetupCharacter(sessionId)
     end
   end
 
-  TriggerClientEvent('ambitions-multicharacter:client:openInterface', sessionId, {
-    characters = characterData
-  })
+  return characterData
 end
 
-RegisterNetEvent('ambitions-multicharacter:server:setupCharacter', function()
-  local SESSION_ID <const> = source
-  SetupCharacter(SESSION_ID)
+callback.register('multichar:getCharacters', function(source)
+  local characters = SetupCharacter(source)
+  return characters
 end)
 
 --- Delete a character by unique ID

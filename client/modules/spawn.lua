@@ -1,5 +1,7 @@
 local spawnConfig = require('config.spawn')
 local cameraModule = require('client.modules.camera')
+local callback = require('Ambitions.client.lib.callback')
+local interfaceModule = require('client.modules.interface')
 
 --- Set the default clothes for the player
 ---@param ped number The ped of the player
@@ -65,7 +67,15 @@ local function PrepareCharacterSelection()
     Wait(100)
   end
 
-  TriggerServerEvent('ambitions-multicharacter:server:setupCharacter')
+  callback.trigger('multichar:getCharacters', false, function(characters)
+    if characters then
+      interfaceModule.OpenInterface({
+        characters = characters
+      })
+    else
+      print('[Ambitions-Multicharacter] ERROR: No response from server for getCharacters')
+    end
+  end)
 end
 
 RegisterNetEvent('ambitions-multicharacter:client:prepareCharacterSelection', function()
