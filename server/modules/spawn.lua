@@ -1,4 +1,13 @@
 print('[Ambitions-Multicharacter] spawn.lua server loaded!')
+print('[DEBUG MULTICHAR] Type of amb:', type(amb))
+print('[DEBUG MULTICHAR] Type of amb.registerServerCallback:', type(amb.registerServerCallback))
+print('[DEBUG MULTICHAR] amb.registerServerCallback value:', amb.registerServerCallback)
+
+local testFunc = function(source)
+    print('test')
+end
+print('[DEBUG MULTICHAR] Type of testFunc:', type(testFunc))
+print('[DEBUG MULTICHAR] testFunc value:', testFunc)
 
 --- Setup character selection by retrieving all characters for a user
 ---@param sessionId number The session id of the player
