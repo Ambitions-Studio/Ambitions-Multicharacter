@@ -28,6 +28,10 @@ server_scripts {
 }
 
 client_scripts {
+  'client/modules/appearance/*.lua',
+  'client/modules/clothing/*.lua',
+  'client/modules/accessories/*.lua',
+  'client/modules/tattoos/*.lua',
   'client/modules/**/*.lua',
 }
 
