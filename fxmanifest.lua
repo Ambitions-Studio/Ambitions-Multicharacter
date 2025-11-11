@@ -14,9 +14,10 @@ name 'Ambitions Multicharacter'
 
 lua54 'yes'
 
-shared_scripts {
-  '@Ambitions/init.lua',
+client_script '@Ambitions/init.lua'
+server_script '@Ambitions/init.lua'
 
+shared_scripts {
   'config/*.lua'
 }
 
