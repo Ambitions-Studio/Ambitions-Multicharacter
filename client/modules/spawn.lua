@@ -1,8 +1,3 @@
-local spawnConfig = require('config.spawn')
-local cameraModule = require('client.modules.camera')
-local callback = require('Ambitions.client.lib.callback')
-local interfaceModule = require('client.modules.interface')
-
 --- Set the default clothes for the player
 ---@param ped number The ped of the player
 local function SetDefaultClothes(ped)
@@ -56,7 +51,7 @@ local function PrepareCharacterSelection()
 
   Wait(500)
 
-  cameraModule.CreateCharacterSelectionCamera(playerPed, -0.35, 1.4, 0.45, 1000)
+  CreateCharacterSelectionCamera(playerPed, -0.35, 1.4, 0.45, 1000)
 
   ShutdownLoadingScreen()
   ShutdownLoadingScreenNui()
@@ -67,9 +62,9 @@ local function PrepareCharacterSelection()
     Wait(100)
   end
 
-  callback.trigger('multichar:getCharacters', false, function(characters)
+  amb.triggerServerCallback('multichar:getCharacters', false, function(characters)
     if characters then
-      interfaceModule.OpenInterface({
+      OpenInterface({
         characters = characters
       })
     else

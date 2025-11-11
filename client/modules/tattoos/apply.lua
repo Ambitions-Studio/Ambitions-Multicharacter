@@ -1,5 +1,3 @@
-local ConfigTattoos = require('config.tattoo')
-
 --- Build tattoos organized by body zone from configuration
 ---@return table Table containing tattoos organized by zone (head, neck, torso, back, leftArm, rightArm, leftLeg, rightLeg)
 local function BuildTattoosByZone()
@@ -14,8 +12,8 @@ local function BuildTattoosByZone()
     rightLeg = {},
   }
 
-  if ConfigTattoos.ZONE_HEAD then
-    for _, tattoo in ipairs(ConfigTattoos.ZONE_HEAD) do
+  if tattooConfig.ZONE_HEAD then
+    for _, tattoo in ipairs(tattooConfig.ZONE_HEAD) do
       table.insert(tattoosByZone.head, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -26,8 +24,8 @@ local function BuildTattoosByZone()
 
   tattoosByZone.neck = tattoosByZone.head
 
-  if ConfigTattoos.ZONE_TORSO then
-    for _, tattoo in ipairs(ConfigTattoos.ZONE_TORSO) do
+  if tattooConfig.ZONE_TORSO then
+    for _, tattoo in ipairs(tattooConfig.ZONE_TORSO) do
       table.insert(tattoosByZone.torso, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -38,8 +36,8 @@ local function BuildTattoosByZone()
 
   tattoosByZone.back = tattoosByZone.torso
 
-  if ConfigTattoos.ZONE_LEFT_ARM then
-    for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_ARM) do
+  if tattooConfig.ZONE_LEFT_ARM then
+    for _, tattoo in ipairs(tattooConfig.ZONE_LEFT_ARM) do
       table.insert(tattoosByZone.rightArm, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -48,8 +46,8 @@ local function BuildTattoosByZone()
     end
   end
 
-  if ConfigTattoos.ZONE_RIGHT_ARM then
-    for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_ARM) do
+  if tattooConfig.ZONE_RIGHT_ARM then
+    for _, tattoo in ipairs(tattooConfig.ZONE_RIGHT_ARM) do
       table.insert(tattoosByZone.leftArm, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -58,8 +56,8 @@ local function BuildTattoosByZone()
     end
   end
 
-  if ConfigTattoos.ZONE_LEFT_LEG then
-    for _, tattoo in ipairs(ConfigTattoos.ZONE_LEFT_LEG) do
+  if tattooConfig.ZONE_LEFT_LEG then
+    for _, tattoo in ipairs(tattooConfig.ZONE_LEFT_LEG) do
       table.insert(tattoosByZone.rightLeg, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -68,8 +66,8 @@ local function BuildTattoosByZone()
     end
   end
 
-  if ConfigTattoos.ZONE_RIGHT_LEG then
-    for _, tattoo in ipairs(ConfigTattoos.ZONE_RIGHT_LEG) do
+  if tattooConfig.ZONE_RIGHT_LEG then
+    for _, tattoo in ipairs(tattooConfig.ZONE_RIGHT_LEG) do
       table.insert(tattoosByZone.leftLeg, {
         collection = tattoo.collection,
         name = tattoo.hashMale,
@@ -96,7 +94,7 @@ local activeTattoos = {
 
 --- Get available tattoo counts for each body zone
 ---@return table Table containing tattoo counts for each zone
-local function GetTattoosLimits()
+function GetTattoosLimits()
   return {
     headTattoos = #tattoosByZone.head,
     torsoTattoos = #tattoosByZone.torso,
@@ -108,7 +106,7 @@ local function GetTattoosLimits()
   }
 end
 
-local function ClearAllTattoos()
+function ClearAllTattoos()
   local ped = PlayerPedId()
   ClearPedDecorations(ped)
   activeTattoos = {
@@ -148,7 +146,7 @@ end
 --- Apply head tattoo to player ped
 ---@param data table Contains tattooIndex number
 ---@return nil
-local function ApplyHeadTattoo(data)
+function ApplyHeadTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.head
@@ -174,7 +172,7 @@ end
 --- Apply neck tattoo to player ped
 ---@param data table Contains tattooIndex number
 ---@return nil
-local function ApplyNeckTattoo(data)
+function ApplyNeckTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.head
@@ -197,7 +195,7 @@ end
 --- Apply torso tattoo to player ped
 ---@param data table Contains tattooIndex number
 ---@return nil
-local function ApplyTorsoTattoo(data)
+function ApplyTorsoTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.torso
@@ -220,7 +218,7 @@ end
 --- Apply back tattoo to player ped
 ---@param data table Contains tattooIndex number
 ---@return nil
-local function ApplyBackTattoo(data)
+function ApplyBackTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.back
@@ -243,7 +241,7 @@ end
 --- Apply left arm tattoo to player ped
 ---@param data table Contains tattooIndex number
 ---@return nil
-local function ApplyLeftArmTattoo(data)
+function ApplyLeftArmTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.leftArm
@@ -266,7 +264,7 @@ end
 --- Apply right arm tattoo to player ped
 ---@param data table Contains tattooIndex number
 ---@return nil
-local function ApplyRightArmTattoo(data)
+function ApplyRightArmTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.rightArm
@@ -289,7 +287,7 @@ end
 --- Apply left leg tattoo to player ped
 ---@param data table Contains tattooIndex number
 ---@return nil
-local function ApplyLeftLegTattoo(data)
+function ApplyLeftLegTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.leftLeg
@@ -312,7 +310,7 @@ end
 --- Apply right leg tattoo to player ped
 ---@param data table Contains tattooIndex number
 ---@return nil
-local function ApplyRightLegTattoo(data)
+function ApplyRightLegTattoo(data)
   local ped = PlayerPedId()
   local tattooIndex = data.tattooIndex or 0
   local zoneTattoos = tattoosByZone.rightLeg
@@ -331,16 +329,3 @@ local function ApplyRightLegTattoo(data)
   ClearPedDecorations(ped)
   ReapplyAllTattoos()
 end
-
-return {
-  ApplyHeadTattoo = ApplyHeadTattoo,
-  ApplyNeckTattoo = ApplyNeckTattoo,
-  ApplyTorsoTattoo = ApplyTorsoTattoo,
-  ApplyBackTattoo = ApplyBackTattoo,
-  ApplyLeftArmTattoo = ApplyLeftArmTattoo,
-  ApplyRightArmTattoo = ApplyRightArmTattoo,
-  ApplyLeftLegTattoo = ApplyLeftLegTattoo,
-  ApplyRightLegTattoo = ApplyRightLegTattoo,
-  GetTattoosLimits = GetTattoosLimits,
-  ClearAllTattoos = ClearAllTattoos,
-}

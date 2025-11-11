@@ -1,14 +1,9 @@
-local identifiers = require('Ambitions.server.lib.player.identifiers')
-local random = require('Ambitions.shared.lib.math.random')
-local spawnConfig = require('config.spawn')
-local callback = require('Ambitions.server.lib.callback')
-
 print('[Ambitions-Multicharacter] spawn.lua server loaded!')
 
 --- Setup character selection by retrieving all characters for a user
 ---@param sessionId number The session id of the player
 local function SetupCharacter(sessionId)
-  local PLAYER_IDENTIFIERS <const> = identifiers.get(sessionId)
+  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(sessionId)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 
   if not PLAYER_LICENSE then
@@ -76,7 +71,7 @@ local function SetupCharacter(sessionId)
 end
 
 print('[Ambitions-Multicharacter] Registering callback multichar:getCharacters...')
-local success = callback.register('multichar:getCharacters', function(source)
+local success = amb.registerServerCallback('multichar:getCharacters', function(source)
   print('[Ambitions-Multicharacter] Callback multichar:getCharacters called by source', source)
   local characters = SetupCharacter(source)
   return characters
@@ -146,7 +141,7 @@ end
 local function CheckPlayerData()
   local SESSION_ID <const> = source
 
-  local PLAYER_IDENTIFIERS <const> = identifiers.get(SESSION_ID)
+  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(SESSION_ID)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 
   if not PLAYER_LICENSE then
@@ -183,7 +178,7 @@ local function GetValidUniqueId(sessionId)
   local maxAttempts = 10
 
   for _ = 1, maxAttempts do
-    uniqueId = random.alphanumeric(6)
+    uniqueId = amb.math.randomAlphanumeric(6)
     if not isUniqueIdInUse(uniqueId) then
       return uniqueId
     end
@@ -196,7 +191,7 @@ end
 ---@param sessionId number The session id of the player
 ---@param data table The character data containing identity, appearance and slot
 local function CreateCharacter(sessionId, data)
-  local PLAYER_IDENTIFIERS <const> = identifiers.get(sessionId)
+  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(sessionId)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 
   if not PLAYER_LICENSE then

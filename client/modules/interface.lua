@@ -1,19 +1,11 @@
-local spawnConfig = require('config.spawn')
-local pedsModule = require('client.modules.peds')
-local appearanceCallbacks = require('client.modules.appearance.callbacks')
-local clothingCallbacks = require('client.modules.clothing.callbacks')
-local accessoriesCallbacks = require('client.modules.accessories.callbacks')
-local tattoosCallbacks = require('client.modules.tattoos.callbacks')
-local cameraModule = require('client.modules.camera')
-
-appearanceCallbacks.RegisterAppearanceCallbacks()
-clothingCallbacks.RegisterClothingCallbacks()
-accessoriesCallbacks.RegisterAccessoriesCallbacks()
-tattoosCallbacks.RegisterTattoosCallbacks()
+RegisterAppearanceCallbacks()
+RegisterClothingCallbacks()
+RegisterAccessoriesCallbacks()
+RegisterTattoosCallbacks()
 
 --- Open the character selection interface
 ---@param data table The data containing characters and configuration
-local function OpenInterface(data)
+function OpenInterface(data)
   SetNuiFocus(true, true)
 
   local nuiData = {
@@ -46,8 +38,8 @@ end)
 ---@param data table Empty table
 ---@param cb function Callback function to acknowledge the request
 RegisterNUICallback('requestPedsConfig', function(data, cb)
-  pedsModule.SendPedsConfigToNUI()
-  pedsModule.SendHeritageConfigToNUI()
+  SendPedsConfigToNUI()
+  SendHeritageConfigToNUI()
   cb('ok')
 end)
 
@@ -191,7 +183,7 @@ RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', func
       action = 'hideCharacterCreator'
     })
 
-    cameraModule.DestroyActiveCamera(500)
+    DestroyActiveCamera(500)
 
     DoScreenFadeOut(500)
 
@@ -232,7 +224,3 @@ RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', func
     })
   end
 end)
-
-return {
-  OpenInterface = OpenInterface,
-}

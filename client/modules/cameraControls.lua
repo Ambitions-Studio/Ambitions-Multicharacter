@@ -1,5 +1,3 @@
-local cameraModule = require('client.modules.camera')
-
 local isPanning = false
 local isRotating = false
 local lastMouseX = 0
@@ -8,7 +6,7 @@ local armsUpActive = false
 
 --- Start camera control
 ---@param controlType string Type of control: 'pan' or 'rotate'
-local function StartCameraControl(controlType)
+function StartCameraControl(controlType)
   if controlType == 'pan' then
     isPanning = true
   elseif controlType == 'rotate' then
@@ -18,7 +16,7 @@ end
 
 --- Stop camera control
 ---@param controlType string Type of control: 'pan' or 'rotate'
-local function StopCameraControl(controlType)
+function StopCameraControl(controlType)
   if controlType == 'pan' then
     isPanning = false
   elseif controlType == 'rotate' then
@@ -30,8 +28,8 @@ end
 ---@param controlType string Type of control: 'pan' or 'rotate'
 ---@param movementX number Mouse movement on X axis
 ---@param movementY number Mouse movement on Y axis
-local function HandleCameraMove(controlType, movementX, movementY)
-  local activeCam = cameraModule.GetActiveCamera()
+function HandleCameraMove(controlType, movementX, movementY)
+  local activeCam = GetActiveCamera()
   if not activeCam then
     return
   end
@@ -77,7 +75,7 @@ RegisterNetEvent('ambitions-multicharacter:client:cameraControlMove', function(c
 end)
 
 --- Toggle arms up animation
-local function ToggleArmsUp()
+function ToggleArmsUp()
   local ped = PlayerPedId()
 
   if not armsUpActive then
@@ -102,8 +100,8 @@ end)
 ---@param zoomIn boolean True to zoom in, false to zoom out
 ---@param mouseX number Normalized mouse X position (0-1)
 ---@param mouseY number Normalized mouse Y position (0-1)
-local function HandleCameraZoom(zoomIn, mouseX, mouseY)
-  local activeCam = cameraModule.GetActiveCamera()
+function HandleCameraZoom(zoomIn, mouseX, mouseY)
+  local activeCam = GetActiveCamera()
   if not activeCam then
     return
   end
@@ -130,11 +128,3 @@ end
 RegisterNetEvent('ambitions-multicharacter:client:cameraZoom', function(zoomIn, mouseX, mouseY)
   HandleCameraZoom(zoomIn, mouseX, mouseY)
 end)
-
-return {
-  StartCameraControl = StartCameraControl,
-  StopCameraControl = StopCameraControl,
-  HandleCameraMove = HandleCameraMove,
-  ToggleArmsUp = ToggleArmsUp,
-  HandleCameraZoom = HandleCameraZoom,
-}
