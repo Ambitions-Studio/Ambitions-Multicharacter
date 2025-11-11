@@ -3,6 +3,8 @@ local random = require('Ambitions.shared.lib.math.random')
 local spawnConfig = require('config.spawn')
 local callback = require('Ambitions.server.lib.callback')
 
+print('[Ambitions-Multicharacter] spawn.lua server loaded!')
+
 --- Setup character selection by retrieving all characters for a user
 ---@param sessionId number The session id of the player
 local function SetupCharacter(sessionId)
@@ -73,10 +75,13 @@ local function SetupCharacter(sessionId)
   return characterData
 end
 
-callback.register('multichar:getCharacters', function(source)
+print('[Ambitions-Multicharacter] Registering callback multichar:getCharacters...')
+local success = callback.register('multichar:getCharacters', function(source)
+  print('[Ambitions-Multicharacter] Callback multichar:getCharacters called by source', source)
   local characters = SetupCharacter(source)
   return characters
 end)
+print('[Ambitions-Multicharacter] Callback registration result:', success)
 
 --- Delete a character by unique ID
 ---@param sessionId number The session id of the player
