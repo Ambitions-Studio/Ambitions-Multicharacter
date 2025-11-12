@@ -74,7 +74,11 @@ amb.callback.register('ambitions-multicharacter:getCharacters', function(source)
   return characterData
 end)
 
-amb.registerServerCallback('ambitions-multicharacter:server:deleteCharacter', function(source, uniqueId)
+--- Callback to delete a character by unique ID
+---@param source number Player server ID
+---@param uniqueId string The unique ID of the character to delete
+---@return table result Deletion result with success status
+amb.callback.register('ambitions-multicharacter:deleteCharacter', function(source, uniqueId)
   if not uniqueId or uniqueId == '' then
     return {
       success = false,
@@ -172,7 +176,11 @@ local function GetValidUniqueId(sessionId)
   return nil
 end
 
-amb.registerServerCallback('ambitions-multicharacter:server:createCharacter', function(source, data)
+--- Callback to create a new character for the player
+---@param source number Player server ID
+---@param data table Character creation data containing identity and appearance
+---@return table result Creation result with success status
+amb.callback.register('ambitions-multicharacter:createCharacter', function(source, data)
   local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(source)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 

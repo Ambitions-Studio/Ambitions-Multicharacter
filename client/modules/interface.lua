@@ -138,59 +138,59 @@ RegisterNUICallback('createCharacter', function(data, cb)
 
   cb({ success = true })
 
-  amb.triggerServerCallback('ambitions-multicharacter:server:createCharacter', false, function(result)
-    if result and result.success then
-      SetNuiFocus(false, false)
-
-      SendNUIMessage({
-        action = 'hideCharacterCreator'
-      })
-
-      DestroyActiveCamera(500)
-
-      DoScreenFadeOut(500)
-
-      Wait(500)
-
-      local playerSpawn = spawnConfig.playerSpawn
-      local playerPed = PlayerPedId()
-
-      SetEntityCoords(playerPed, playerSpawn.x, playerSpawn.y, playerSpawn.z, false, false, false, true)
-      SetEntityHeading(playerPed, playerSpawn.w)
-
-      SetEntityAlpha(playerPed, 255, false)
-      SetPedAoBlobRendering(playerPed, true)
-
-      FreezeEntityPosition(playerPed, false)
-
-      SetEntityVisible(playerPed, true, false)
-
-      SetEntityInvincible(playerPed, false)
-
-      SetEntityCollision(playerPed, true, true)
-
-      NetworkSetEntityInvisibleToNetwork(playerPed, false)
-
-      SetEveryoneIgnorePlayer(PlayerId(), false)
-
-      SetPoliceIgnorePlayer(PlayerId(), false)
-
-      SetPlayerControl(PlayerId(), true, 0)
-
-      DisplayRadar(true)
-
-      DoScreenFadeIn(500)
-    else
-      SendNUIMessage({
-        action = 'characterCreationFailed',
-        error = result and result.error or 'No response from server'
-      })
-    end
-  end, {
+  local result = amb.callback.await('ambitions-multicharacter:createCharacter', false, {
     slot = data.slot,
     identity = data.identity,
     appearance = data.appearance
   })
+
+  if result and result.success then
+    SetNuiFocus(false, false)
+
+    SendNUIMessage({
+      action = 'hideCharacterCreator'
+    })
+
+    DestroyActiveCamera(500)
+
+    DoScreenFadeOut(500)
+
+    Wait(500)
+
+    local playerSpawn = spawnConfig.playerSpawn
+    local playerPed = PlayerPedId()
+
+    SetEntityCoords(playerPed, playerSpawn.x, playerSpawn.y, playerSpawn.z, false, false, false, true)
+    SetEntityHeading(playerPed, playerSpawn.w)
+
+    SetEntityAlpha(playerPed, 255, false)
+    SetPedAoBlobRendering(playerPed, true)
+
+    FreezeEntityPosition(playerPed, false)
+
+    SetEntityVisible(playerPed, true, false)
+
+    SetEntityInvincible(playerPed, false)
+
+    SetEntityCollision(playerPed, true, true)
+
+    NetworkSetEntityInvisibleToNetwork(playerPed, false)
+
+    SetEveryoneIgnorePlayer(PlayerId(), false)
+
+    SetPoliceIgnorePlayer(PlayerId(), false)
+
+    SetPlayerControl(PlayerId(), true, 0)
+
+    DisplayRadar(true)
+
+    DoScreenFadeIn(500)
+  else
+    SendNUIMessage({
+      action = 'characterCreationFailed',
+      error = result and result.error or 'No response from server'
+    })
+  end
 end)
 
 --- NUI callback to log character creation errors from the UI
@@ -211,13 +211,13 @@ RegisterNUICallback('deleteCharacter', function(data, cb)
 
   cb({ success = true })
 
-  amb.triggerServerCallback('ambitions-multicharacter:server:deleteCharacter', false, function(result)
-    if not result or not result.success then
-      SendNUIMessage({
-        action = 'characterDeleteFailed',
-        error = result and result.error or 'Failed to delete character'
-      })
-    end
-  end, data.uniqueId)
+  local result = amb.callback.await('ambitions-multicharacter:deleteCharacter', false, data.uniqueId)
+
+  if not result or not result.success then
+    SendNUIMessage({
+      action = 'characterDeleteFailed',
+      error = result and result.error or 'Failed to delete character'
+    })
+  end
 end)
 
