@@ -62,7 +62,7 @@ local function PrepareCharacterSelection()
     Wait(100)
   end
 
-  amb.triggerServerCallback('ambitions:multicharacter:server:getCharacters', false, function(characters)
+  amb.triggerServerCallback('ambitions-multicharacter:server:getCharacters', false, function(characters)
     if characters then
       OpenInterface({
         characters = characters
