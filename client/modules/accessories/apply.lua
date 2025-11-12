@@ -1,6 +1,6 @@
 --- Get available accessory variations for current ped
 ---@return table Table containing max values for hats, glasses, earrings, watches, bracelets, neckAccessories
-local function GetAccessoriesLimits()
+function GetAccessoriesLimits()
   local ped = PlayerPedId()
 
   return {
@@ -17,7 +17,7 @@ end
 ---@param prop number The prop index
 ---@param drawable number The drawable index
 ---@return number The maximum texture variation index
-local function GetAccessoryTextureLimit(prop, drawable)
+function GetAccessoryTextureLimit(prop, drawable)
   local ped = PlayerPedId()
   return GetNumberOfPedPropTextureVariations(ped, prop, drawable) - 1
 end
@@ -25,7 +25,7 @@ end
 --- Apply hat customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyHatCustomization(data)
+function ApplyHatCustomization(data)
   local ped = PlayerPedId()
 
   if data.type == -1 or data.type == 0 then
@@ -38,7 +38,7 @@ end
 --- Apply glasses customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyGlassesCustomization(data)
+function ApplyGlassesCustomization(data)
   local ped = PlayerPedId()
 
   if data.type == -1 or data.type == 0 then
@@ -51,7 +51,7 @@ end
 --- Apply earrings customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyEarringsCustomization(data)
+function ApplyEarringsCustomization(data)
   local ped = PlayerPedId()
 
   if data.type == -1 or data.type == 0 then
@@ -64,7 +64,7 @@ end
 --- Apply watch customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyWatchCustomization(data)
+function ApplyWatchCustomization(data)
   local ped = PlayerPedId()
 
   if data.type == -1 or data.type == 0 then
@@ -77,7 +77,7 @@ end
 --- Apply bracelet customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyBraceletCustomization(data)
+function ApplyBraceletCustomization(data)
   local ped = PlayerPedId()
 
   if data.type == -1 or data.type == 0 then
@@ -90,19 +90,8 @@ end
 --- Apply neck accessory customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyNeckAccessoryCustomization(data)
+function ApplyNeckAccessoryCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 7, data.type, data.variant, 0)
 end
-
-return {
-  ApplyHatCustomization = ApplyHatCustomization,
-  ApplyGlassesCustomization = ApplyGlassesCustomization,
-  ApplyEarringsCustomization = ApplyEarringsCustomization,
-  ApplyWatchCustomization = ApplyWatchCustomization,
-  ApplyBraceletCustomization = ApplyBraceletCustomization,
-  ApplyNeckAccessoryCustomization = ApplyNeckAccessoryCustomization,
-  GetAccessoriesLimits = GetAccessoriesLimits,
-  GetAccessoryTextureLimit = GetAccessoryTextureLimit,
-}

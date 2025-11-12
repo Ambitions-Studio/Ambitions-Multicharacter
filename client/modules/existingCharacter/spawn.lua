@@ -1,14 +1,10 @@
-local spawnConfig = require('config.spawn')
-local cameraModule = require('client.modules.camera')
-local loadAppearance = require('client.modules.existingCharacter.loadAppearance')
-
 ---@type number|nil
 local existingCharacterPed = nil
 
 --- Spawn an existing character with full appearance customization
 ---@param characterData table Complete character data including appearance, identity, etc.
 ---@return nil
-local function SpawnExistingCharacter(characterData)
+function SpawnExistingCharacter(characterData)
   if not characterData then
     return
   end
@@ -40,10 +36,10 @@ local function SpawnExistingCharacter(characterData)
   SetEntityCollision(existingCharacterPed, false, false)
 
   if characterData.appearance then
-    loadAppearance.LoadFullAppearance(existingCharacterPed, characterData.appearance)
+    LoadFullAppearance(existingCharacterPed, characterData.appearance)
   end
 
-  local activeCam = cameraModule.GetActiveCamera()
+  local activeCam = GetActiveCamera()
   if activeCam then
     PointCamAtEntity(activeCam, existingCharacterPed, 0.0, 0.0, 0.0, true)
   end
@@ -51,7 +47,7 @@ end
 
 --- Hide and delete the existing character ped
 ---@return nil
-local function HideExistingCharacter()
+function HideExistingCharacter()
   if existingCharacterPed and DoesEntityExist(existingCharacterPed) then
     DeleteEntity(existingCharacterPed)
     existingCharacterPed = nil
@@ -60,7 +56,7 @@ end
 
 --- Get the current existing character ped entity
 ---@return number|nil The ped entity or nil if not spawned
-local function GetExistingCharacterPed()
+function GetExistingCharacterPed()
   return existingCharacterPed
 end
 
@@ -71,9 +67,3 @@ end)
 RegisterNetEvent('ambitions-multicharacter:client:hideExistingCharacter', function()
   HideExistingCharacter()
 end)
-
-return {
-  SpawnExistingCharacter = SpawnExistingCharacter,
-  HideExistingCharacter = HideExistingCharacter,
-  GetExistingCharacterPed = GetExistingCharacterPed,
-}

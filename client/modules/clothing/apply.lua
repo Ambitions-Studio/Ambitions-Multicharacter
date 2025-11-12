@@ -1,6 +1,6 @@
 --- Get available clothing variations for current ped
 ---@return table Table containing max values for all clothing components
-local function GetClothingLimits()
+function GetClothingLimits()
   local ped = PlayerPedId()
 
   return {
@@ -21,7 +21,7 @@ end
 ---@param component number The component index
 ---@param drawable number The drawable index
 ---@return number The maximum texture variation index
-local function GetClothingTextureLimit(component, drawable)
+function GetClothingTextureLimit(component, drawable)
   local ped = PlayerPedId()
   return GetNumberOfPedTextureVariations(ped, component, drawable) - 1
 end
@@ -29,7 +29,7 @@ end
 --- Apply mask customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyMaskCustomization(data)
+function ApplyMaskCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 1, data.type, data.variant, 0)
@@ -38,7 +38,7 @@ end
 --- Apply torso customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyTorsoCustomization(data)
+function ApplyTorsoCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 11, data.type, data.variant, 0)
@@ -47,7 +47,7 @@ end
 --- Apply legs customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyLegsCustomization(data)
+function ApplyLegsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 4, data.type, data.variant, 0)
@@ -56,7 +56,7 @@ end
 --- Apply bags customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyBagsCustomization(data)
+function ApplyBagsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 5, data.type, data.variant, 0)
@@ -65,7 +65,7 @@ end
 --- Apply shoes customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyShoesCustomization(data)
+function ApplyShoesCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 6, data.type, data.variant, 0)
@@ -74,7 +74,7 @@ end
 --- Apply accessories customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyAccessoriesCustomization(data)
+function ApplyAccessoriesCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 7, data.type, data.variant, 0)
@@ -83,7 +83,7 @@ end
 --- Apply undershirts customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyUndershirtsCustomization(data)
+function ApplyUndershirtsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 8, data.type, data.variant, 0)
@@ -92,7 +92,7 @@ end
 --- Apply armor customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyArmorCustomization(data)
+function ApplyArmorCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 9, data.type, data.variant, 0)
@@ -101,7 +101,7 @@ end
 --- Apply decals customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyDecalsCustomization(data)
+function ApplyDecalsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 10, data.type, data.variant, 0)
@@ -110,23 +110,8 @@ end
 --- Apply tops customization to player ped
 ---@param data table Contains type number and variant number
 ---@return nil
-local function ApplyTopsCustomization(data)
+function ApplyTopsCustomization(data)
   local ped = PlayerPedId()
 
   SetPedComponentVariation(ped, 3, data.type, data.variant, 0)
 end
-
-return {
-  ApplyMaskCustomization = ApplyMaskCustomization,
-  ApplyTorsoCustomization = ApplyTorsoCustomization,
-  ApplyLegsCustomization = ApplyLegsCustomization,
-  ApplyBagsCustomization = ApplyBagsCustomization,
-  ApplyShoesCustomization = ApplyShoesCustomization,
-  ApplyAccessoriesCustomization = ApplyAccessoriesCustomization,
-  ApplyUndershirtsCustomization = ApplyUndershirtsCustomization,
-  ApplyArmorCustomization = ApplyArmorCustomization,
-  ApplyDecalsCustomization = ApplyDecalsCustomization,
-  ApplyTopsCustomization = ApplyTopsCustomization,
-  GetClothingLimits = GetClothingLimits,
-  GetClothingTextureLimit = GetClothingTextureLimit,
-}

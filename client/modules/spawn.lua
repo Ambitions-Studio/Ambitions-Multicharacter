@@ -1,6 +1,3 @@
-local spawnConfig = require('config.spawn')
-local cameraModule = require('client.modules.camera')
-
 --- Set the default clothes for the player
 ---@param ped number The ped of the player
 local function SetDefaultClothes(ped)
@@ -54,7 +51,7 @@ local function PrepareCharacterSelection()
 
   Wait(500)
 
-  cameraModule.CreateCharacterSelectionCamera(playerPed, -0.35, 1.4, 0.45, 1000)
+  CreateCharacterSelectionCamera(playerPed, -0.35, 1.4, 0.45, 1000)
 
   ShutdownLoadingScreen()
   ShutdownLoadingScreenNui()
@@ -65,7 +62,11 @@ local function PrepareCharacterSelection()
     Wait(100)
   end
 
-  TriggerServerEvent('ambitions-multicharacter:server:setupCharacter')
+  local characters = amb.callback.await('ambitions-multicharacter:getCharacters', false)
+
+  OpenInterface({
+    characters = characters or {}
+  })
 end
 
 RegisterNetEvent('ambitions-multicharacter:client:prepareCharacterSelection', function()

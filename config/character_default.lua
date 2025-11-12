@@ -1,4 +1,4 @@
-return {
+characterDefaultsConfig = {
   defaultCharacter = {
     ["m"] = {
       mom = 21,

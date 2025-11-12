@@ -1,19 +1,11 @@
-local spawnConfig = require('config.spawn')
-local pedsModule = require('client.modules.peds')
-local appearanceCallbacks = require('client.modules.appearance.callbacks')
-local clothingCallbacks = require('client.modules.clothing.callbacks')
-local accessoriesCallbacks = require('client.modules.accessories.callbacks')
-local tattoosCallbacks = require('client.modules.tattoos.callbacks')
-local cameraModule = require('client.modules.camera')
-
-appearanceCallbacks.RegisterAppearanceCallbacks()
-clothingCallbacks.RegisterClothingCallbacks()
-accessoriesCallbacks.RegisterAccessoriesCallbacks()
-tattoosCallbacks.RegisterTattoosCallbacks()
+RegisterAppearanceCallbacks()
+RegisterClothingCallbacks()
+RegisterAccessoriesCallbacks()
+RegisterTattoosCallbacks()
 
 --- Open the character selection interface
 ---@param data table The data containing characters and configuration
-local function OpenInterface(data)
+function OpenInterface(data)
   SetNuiFocus(true, true)
 
   local nuiData = {
@@ -25,10 +17,6 @@ local function OpenInterface(data)
 
   SendNUIMessage(nuiData)
 end
-
-RegisterNetEvent('ambitions-multicharacter:client:openInterface', function(data)
-  OpenInterface(data)
-end)
 
 --- NUI callback when player selects an empty character slot
 ---@param data table Contains slotIndex number
@@ -50,8 +38,8 @@ end)
 ---@param data table Empty table
 ---@param cb function Callback function to acknowledge the request
 RegisterNUICallback('requestPedsConfig', function(data, cb)
-  pedsModule.SendPedsConfigToNUI()
-  pedsModule.SendHeritageConfigToNUI()
+  SendPedsConfigToNUI()
+  SendHeritageConfigToNUI()
   cb('ok')
 end)
 
@@ -148,54 +136,22 @@ RegisterNUICallback('createCharacter', function(data, cb)
     return
   end
 
-  TriggerServerEvent('ambitions-multicharacter:server:createCharacter', {
+  cb({ success = true })
+
+  local result = amb.callback.await('ambitions-multicharacter:createCharacter', false, {
     slot = data.slot,
     identity = data.identity,
     appearance = data.appearance
   })
 
-  cb({ success = true })
-end)
-
---- NUI callback to log character creation errors from the UI
----@param data table Contains error string and message string
----@param cb function Callback function to acknowledge the request
-RegisterNUICallback('characterCreationError', function(data, cb)
-  cb('ok')
-end)
-
---- NUI callback to delete an existing character
----@param data table Contains uniqueId string of the character to delete
----@param cb function Callback function to acknowledge the request
-RegisterNUICallback('deleteCharacter', function(data, cb)
-  if not data.uniqueId then
-    cb({ success = false, error = 'No uniqueId provided' })
-    return
-  end
-
-  TriggerServerEvent('ambitions-multicharacter:server:deleteCharacter', data.uniqueId)
-
-  cb({ success = true })
-end)
-
-RegisterNetEvent('ambitions-multicharacter:client:characterDeleteResult', function(result)
-  if not result.success then
-    SendNUIMessage({
-      action = 'characterDeleteFailed',
-      error = result.error or 'Failed to delete character'
-    })
-  end
-end)
-
-RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', function(result)
-  if result.success then
+  if result and result.success then
     SetNuiFocus(false, false)
 
     SendNUIMessage({
       action = 'hideCharacterCreator'
     })
 
-    cameraModule.DestroyActiveCamera(500)
+    DestroyActiveCamera(500)
 
     DoScreenFadeOut(500)
 
@@ -232,11 +188,36 @@ RegisterNetEvent('ambitions-multicharacter:client:characterCreationResult', func
   else
     SendNUIMessage({
       action = 'characterCreationFailed',
-      error = result.error
+      error = result and result.error or 'No response from server'
     })
   end
 end)
 
-return {
-  OpenInterface = OpenInterface,
-}
+--- NUI callback to log character creation errors from the UI
+---@param data table Contains error string and message string
+---@param cb function Callback function to acknowledge the request
+RegisterNUICallback('characterCreationError', function(data, cb)
+  cb('ok')
+end)
+
+--- NUI callback to delete an existing character
+---@param data table Contains uniqueId string of the character to delete
+---@param cb function Callback function to acknowledge the request
+RegisterNUICallback('deleteCharacter', function(data, cb)
+  if not data.uniqueId then
+    cb({ success = false, error = 'No uniqueId provided' })
+    return
+  end
+
+  cb({ success = true })
+
+  local result = amb.callback.await('ambitions-multicharacter:deleteCharacter', false, data.uniqueId)
+
+  if not result or not result.success then
+    SendNUIMessage({
+      action = 'characterDeleteFailed',
+      error = result and result.error or 'Failed to delete character'
+    })
+  end
+end)
+

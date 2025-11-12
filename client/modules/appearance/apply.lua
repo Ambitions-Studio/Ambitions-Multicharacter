@@ -1,11 +1,9 @@
-local characterDefaults = require('config.character_default')
-
 local currentPed = nil
 local currentGender = 'm'
 
 --- Get available customization limits for current ped
 ---@return table Limits with max values for each customization option
-local function GetCustomizationLimits()
+function GetCustomizationLimits()
   local ped = currentPed or PlayerPedId()
 
   return {
@@ -27,7 +25,7 @@ end
 
 --- Apply ped model in real-time
 ---@param pedModel string The ped model to apply
-local function ApplyPedModel(pedModel)
+function ApplyPedModel(pedModel)
   if pedModel == 'mp_m_freemode_01' or pedModel == 'mp_f_freemode_01' then
     currentGender = pedModel == 'mp_m_freemode_01' and 'm' or 'f'
 
@@ -63,7 +61,7 @@ end
 ---@param ped number The ped of the player
 ---@param gender string 'm' for male, 'f' for female
 function ApplyDefaultAppearance(ped, gender)
-  local defaults = characterDefaults.defaultCharacter[gender]
+  local defaults = characterDefaultsConfig.defaultCharacter[gender]
 
   if not defaults then
     return
@@ -156,7 +154,7 @@ end
 
 --- Apply heritage in real-time
 ---@param data table Heritage data with father, mother, faceResemblance, skinResemblance
-local function ApplyHeritage(data)
+function ApplyHeritage(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadBlendData(
@@ -176,7 +174,7 @@ end
 
 --- Apply hair style in real-time
 ---@param data table Hair data with style, color, highlight
-local function ApplyHairStyle(data)
+function ApplyHairStyle(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedComponentVariation(ped, 2, data.style, 0, 0)
@@ -187,14 +185,14 @@ end
 --- Apply face feature in real-time
 ---@param index number Face feature index (0-19)
 ---@param value number Value for the feature (-1.0 to 1.0)
-local function ApplyFaceFeature(index, value)
+function ApplyFaceFeature(index, value)
   local ped = currentPed or PlayerPedId()
   SetPedFaceFeature(ped, index, value)
 end
 
 --- Apply eyes customization in real-time (opening + color)
 ---@param data table Eyes data with opening and color
-local function ApplyEyesCustomization(data)
+function ApplyEyesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   local invertedOpening = -data.opening
@@ -205,7 +203,7 @@ end
 
 --- Apply eyebrows customization in real-time (height, depth, style, color, opacity)
 ---@param data table Eyebrows data with height, depth, style, color, opacity
-local function ApplyEyebrowsCustomization(data)
+function ApplyEyebrowsCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   local invertedHeight = -data.height
@@ -220,7 +218,7 @@ end
 
 --- Apply nose customization in real-time (width, height, length, bridge, bridgeTwist, tipHeight)
 ---@param data table Nose data with width, height, length, bridge, bridgeTwist, tipHeight
-local function ApplyNoseCustomization(data)
+function ApplyNoseCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedFaceFeature(ped, 0, data.width)
@@ -241,7 +239,7 @@ end
 
 --- Apply cheeks customization in real-time (boneHeight, boneWidth, width)
 ---@param data table Cheeks data with boneHeight, boneWidth, width
-local function ApplyCheeksCustomization(data)
+function ApplyCheeksCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   local invertedBoneHeight = -data.boneHeight
@@ -255,7 +253,7 @@ end
 
 --- Apply beard customization in real-time (style, color, opacity)
 ---@param data table Beard data with style, color, opacity
-local function ApplyBeardCustomization(data)
+function ApplyBeardCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 1, data.style, data.opacity)
@@ -265,7 +263,7 @@ end
 
 --- Apply jaw customization in real-time (width, height)
 ---@param data table Jaw data with width, height
-local function ApplyJawCustomization(data)
+function ApplyJawCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedFaceFeature(ped, 13, data.width)
@@ -275,7 +273,7 @@ end
 
 --- Apply lips customization in real-time (thickness + lipstick style, color, opacity)
 ---@param data table Lips data with thickness, style, color, opacity
-local function ApplyLipsCustomization(data)
+function ApplyLipsCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   local invertedThickness = -data.thickness
@@ -288,7 +286,7 @@ end
 
 --- Apply chin customization in real-time (lowering, length, width, cleft)
 ---@param data table Chin data with lowering, length, width, cleft
-local function ApplyChinCustomization(data)
+function ApplyChinCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   local invertedLowering = -data.lowering
@@ -303,7 +301,7 @@ end
 
 --- Apply neck customization in real-time (thickness)
 ---@param data table Neck data with thickness
-local function ApplyNeckCustomization(data)
+function ApplyNeckCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedFaceFeature(ped, 19, data.thickness)
@@ -311,7 +309,7 @@ end
 
 --- Apply ageing customization in real-time (style, opacity)
 ---@param data table Ageing data with style, opacity
-local function ApplyAgeingCustomization(data)
+function ApplyAgeingCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 3, data.style, data.opacity)
@@ -319,7 +317,7 @@ end
 
 --- Apply makeup customization in real-time (style, primary color, secondary color, opacity)
 ---@param data table Makeup data with style, primaryColor, secondaryColor, opacity
-local function ApplyMakeupCustomization(data)
+function ApplyMakeupCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 4, data.style, data.opacity)
@@ -329,7 +327,7 @@ end
 
 --- Apply blush customization in real-time (style, color, opacity)
 ---@param data table Blush data with style, color, opacity
-local function ApplyBlushCustomization(data)
+function ApplyBlushCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 5, data.style, data.opacity)
@@ -339,7 +337,7 @@ end
 
 --- Apply complexion customization in real-time (style, opacity)
 ---@param data table Complexion data with style, opacity
-local function ApplyComplexionCustomization(data)
+function ApplyComplexionCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 6, data.style, data.opacity)
@@ -347,7 +345,7 @@ end
 
 --- Apply sun damage customization in real-time (style, opacity)
 ---@param data table Sun damage data with style, opacity
-local function ApplySunDamageCustomization(data)
+function ApplySunDamageCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 7, data.style, data.opacity)
@@ -355,7 +353,7 @@ end
 
 --- Apply moles/freckles customization in real-time (style, opacity)
 ---@param data table Moles/freckles data with style, opacity
-local function ApplyMolesFrecklesCustomization(data)
+function ApplyMolesFrecklesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 9, data.style, data.opacity)
@@ -363,7 +361,7 @@ end
 
 --- Apply chest hair customization in real-time (style, color, opacity)
 ---@param data table Chest hair data with style, color, opacity
-local function ApplyChestHairCustomization(data)
+function ApplyChestHairCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 10, data.style, data.opacity)
@@ -373,7 +371,7 @@ end
 
 --- Apply body blemishes customization in real-time (style, opacity)
 ---@param data table Body blemishes data with style, opacity
-local function ApplyBodyBlemishesCustomization(data)
+function ApplyBodyBlemishesCustomization(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, 11, data.style, data.opacity)
@@ -381,7 +379,7 @@ end
 
 --- Apply head overlay (beard, makeup, etc) in real-time
 ---@param data table Overlay data with index, style, opacity, color1, color2
-local function ApplyHeadOverlay(data)
+function ApplyHeadOverlay(data)
   local ped = currentPed or PlayerPedId()
 
   SetPedHeadOverlay(ped, data.index, data.style, data.opacity)
@@ -393,14 +391,14 @@ end
 
 --- Apply clothing component in real-time
 ---@param data table Clothing data with component, drawable, texture
-local function ApplyClothing(data)
+function ApplyClothing(data)
   local ped = currentPed or PlayerPedId()
   SetPedComponentVariation(ped, data.component, data.drawable, data.texture, 0)
 end
 
 --- Apply prop (accessory) in real-time
 ---@param data table Prop data with component, drawable, texture
-local function ApplyProp(data)
+function ApplyProp(data)
   local ped = currentPed or PlayerPedId()
 
   if data.drawable == -1 then
@@ -409,32 +407,3 @@ local function ApplyProp(data)
     SetPedPropIndex(ped, data.component, data.drawable, data.texture, true)
   end
 end
-
-return {
-  ApplyPedModel = ApplyPedModel,
-  ApplyDefaultAppearance = ApplyDefaultAppearance,
-  ApplyHeritage = ApplyHeritage,
-  ApplyHairStyle = ApplyHairStyle,
-  ApplyFaceFeature = ApplyFaceFeature,
-  ApplyEyesCustomization = ApplyEyesCustomization,
-  ApplyEyebrowsCustomization = ApplyEyebrowsCustomization,
-  ApplyNoseCustomization = ApplyNoseCustomization,
-  ApplyCheeksCustomization = ApplyCheeksCustomization,
-  ApplyBeardCustomization = ApplyBeardCustomization,
-  ApplyJawCustomization = ApplyJawCustomization,
-  ApplyLipsCustomization = ApplyLipsCustomization,
-  ApplyChinCustomization = ApplyChinCustomization,
-  ApplyNeckCustomization = ApplyNeckCustomization,
-  ApplyAgeingCustomization = ApplyAgeingCustomization,
-  ApplyMakeupCustomization = ApplyMakeupCustomization,
-  ApplyBlushCustomization = ApplyBlushCustomization,
-  ApplyComplexionCustomization = ApplyComplexionCustomization,
-  ApplySunDamageCustomization = ApplySunDamageCustomization,
-  ApplyMolesFrecklesCustomization = ApplyMolesFrecklesCustomization,
-  ApplyChestHairCustomization = ApplyChestHairCustomization,
-  ApplyBodyBlemishesCustomization = ApplyBodyBlemishesCustomization,
-  ApplyHeadOverlay = ApplyHeadOverlay,
-  ApplyClothing = ApplyClothing,
-  ApplyProp = ApplyProp,
-  GetCustomizationLimits = GetCustomizationLimits,
-}

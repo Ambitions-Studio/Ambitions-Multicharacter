@@ -2,7 +2,7 @@
 ---@param ped number The ped entity to apply appearance to
 ---@param appearanceData table Complete appearance data from database
 ---@return nil
-local function LoadFullAppearance(ped, appearanceData)
+function LoadFullAppearance(ped, appearanceData)
   if not ped or not DoesEntityExist(ped) then
     return
   end
@@ -155,7 +155,3 @@ local function LoadFullAppearance(ped, appearanceData)
 
   ClearPedDecorations(ped)
 end
-
-return {
-  LoadFullAppearance = LoadFullAppearance,
-}
