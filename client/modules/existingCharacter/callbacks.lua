@@ -20,5 +20,3 @@ RegisterNUICallback('deselectExistingCharacter', function(data, cb)
 
   cb({ success = true })
 end)
-
-return {}

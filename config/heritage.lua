@@ -1,4 +1,4 @@
-return {
+heritageConfig = {
   fathers = {
     { id = 0,  name = "Benjamin" },
     { id = 1,  name = "Daniel" },
