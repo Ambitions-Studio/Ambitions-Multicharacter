@@ -74,40 +74,29 @@ amb.callback.register('ambitions-multicharacter:getCharacters', function(source)
   return characterData
 end)
 
---- Delete a character by unique ID
----@param sessionId number The session id of the player
----@param uniqueId string The unique ID of the character to delete
----@return nil
-local function DeleteCharacter(sessionId, uniqueId)
+amb.registerServerCallback('ambitions-multicharacter:server:deleteCharacter', function(source, uniqueId)
   if not uniqueId or uniqueId == '' then
-    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
+    return {
       success = false,
       error = 'Invalid unique ID'
-    })
-    return
+    }
   end
 
   local result = MySQL.query.await('DELETE FROM characters WHERE unique_id = ?', { uniqueId })
 
   if result and result.affectedRows and result.affectedRows > 0 then
-    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
-      success = true
-    })
-
     Wait(500)
+    SetupCharacter(source)
 
-    SetupCharacter(sessionId)
+    return {
+      success = true
+    }
   else
-    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
+    return {
       success = false,
       error = 'Character not found or already deleted'
-    })
+    }
   end
-end
-
-RegisterNetEvent('ambitions-multicharacter:server:deleteCharacter', function(uniqueId)
-  local sessionId <const> = source
-  DeleteCharacter(sessionId, uniqueId)
 end)
 
 --- Create a new user in the database
@@ -183,49 +172,42 @@ local function GetValidUniqueId(sessionId)
   return nil
 end
 
---- Create a new character in the database
----@param sessionId number The session id of the player
----@param data table The character data containing identity, appearance and slot
-local function CreateCharacter(sessionId, data)
-  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(sessionId)
+amb.registerServerCallback('ambitions-multicharacter:server:createCharacter', function(source, data)
+  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(source)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 
   if not PLAYER_LICENSE then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'Failed to retrieve player identifiers'
-    })
-    return
+    }
   end
 
   local userId = MySQL.scalar.await('SELECT id FROM users WHERE license = ?', { PLAYER_LICENSE })
 
   if not userId then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'User not found in database'
-    })
-    return
+    }
   end
 
   local characterCount = MySQL.scalar.await('SELECT COUNT(*) FROM characters WHERE user_id = ?', { userId })
 
   if characterCount >= spawnConfig.characterSlots then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'Character slot limit reached'
-    })
-    return
+    }
   end
 
-  local uniqueId = GetValidUniqueId(sessionId)
+  local uniqueId = GetValidUniqueId(source)
 
   if not uniqueId then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'Failed to generate unique character ID'
-    })
-    return
+    }
   end
 
   local identity = data.identity
@@ -265,21 +247,15 @@ local function CreateCharacter(sessionId, data)
   })
 
   if not insertId then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'Database insertion failed'
-    })
-    return
+    }
   end
 
-  TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+  return {
     success = true,
     characterId = insertId,
     uniqueId = uniqueId
-  })
-end
-
-RegisterNetEvent('ambitions-multicharacter:server:createCharacter', function(data)
-  local SESSION_ID <const> = source
-  CreateCharacter(SESSION_ID, data)
+  }
 end)
