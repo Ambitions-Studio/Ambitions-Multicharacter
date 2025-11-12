@@ -1,118 +1,103 @@
-local identifiers = require('Ambitions.server.lib.player.identifiers')
-local random = require('Ambitions.shared.lib.math.random')
-local spawnConfig = require('config.spawn')
 
---- Setup character selection by retrieving all characters for a user
----@param sessionId number The session id of the player
-local function SetupCharacter(sessionId)
-  local PLAYER_IDENTIFIERS <const> = identifiers.get(sessionId)
+--- Callback to get all characters for the connected player
+---@param source number Player server ID
+---@return table characters Array of character data
+amb.callback.register('ambitions-multicharacter:getCharacters', function(source)
+  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(source)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 
   if not PLAYER_LICENSE then
-    return
+    return {}
   end
 
   if spawnConfig.instanceSpawning then
-    SetPlayerRoutingBucket(sessionId, sessionId)
+    SetPlayerRoutingBucket(source, source)
   end
 
   local userId = MySQL.scalar.await('SELECT id FROM users WHERE license = ?', { PLAYER_LICENSE })
 
   if not userId then
-    return
+    return {}
   end
 
   local characters = MySQL.query.await('SELECT * FROM characters WHERE user_id = ? ORDER BY created_at ASC', { userId })
-  local characterData = {}
 
-  if characters and #characters > 0 then
-    for i = 1, #characters do
-      local char = characters[i]
-      local appearanceData = nil
-      if char.appearance and char.appearance ~= '' then
-        local success, decoded = pcall(json.decode, char.appearance)
-        if success then
-          appearanceData = decoded
-        end
-      end
-
-      characterData[#characterData + 1] = {
-        id = char.id,
-        uniqueId = char.unique_id,
-        firstName = char.firstname,
-        lastName = char.lastname,
-        dateOfBirth = char.dateofbirth,
-        gender = char.sex,
-        nationality = char.nationality,
-        height = char.height,
-        appearance = appearanceData,
-        job = nil,
-        jobGrade = nil,
-        crew = nil,
-        crewGrade = nil,
-        cash = 0,
-        bank = 0,
-        dirtyMoney = 0,
-        licenses = {},
-        totalPlaytime = '0h 0m',
-        lastPlayed = nil,
-        pedModel = char.ped_model,
-        position = {
-          x = char.position_x,
-          y = char.position_y,
-          z = char.position_z,
-          heading = char.heading
-        },
-        playtime = char.playtime or 0,
-        createdAt = char.created_at
-      }
-    end
+  if not characters or #characters == 0 then
+    return {}
   end
 
-  TriggerClientEvent('ambitions-multicharacter:client:openInterface', sessionId, {
-    characters = characterData
-  })
-end
+  local characterData = {}
 
-RegisterNetEvent('ambitions-multicharacter:server:setupCharacter', function()
-  local SESSION_ID <const> = source
-  SetupCharacter(SESSION_ID)
+  for i = 1, #characters do
+    local char = characters[i]
+    local appearanceData = nil
+
+    if char.appearance and char.appearance ~= '' then
+      local success, decoded = pcall(json.decode, char.appearance)
+      if success then
+        appearanceData = decoded
+      end
+    end
+
+    characterData[#characterData + 1] = {
+      id = char.id,
+      uniqueId = char.unique_id,
+      firstName = char.firstname,
+      lastName = char.lastname,
+      dateOfBirth = char.dateofbirth,
+      gender = char.sex,
+      nationality = char.nationality,
+      height = char.height,
+      appearance = appearanceData,
+      job = nil,
+      jobGrade = nil,
+      crew = nil,
+      crewGrade = nil,
+      cash = 0,
+      bank = 0,
+      dirtyMoney = 0,
+      licenses = {},
+      totalPlaytime = '0h 0m',
+      lastPlayed = nil,
+      pedModel = char.ped_model,
+      position = {
+        x = char.position_x,
+        y = char.position_y,
+        z = char.position_z,
+        heading = char.heading
+      },
+      playtime = char.playtime or 0,
+      createdAt = char.created_at
+    }
+  end
+
+  return characterData
 end)
 
---- Delete a character by unique ID
----@param sessionId number The session id of the player
+--- Callback to delete a character by unique ID
+---@param source number Player server ID
 ---@param uniqueId string The unique ID of the character to delete
----@return nil
-local function DeleteCharacter(sessionId, uniqueId)
+---@return table result Deletion result with success status
+amb.callback.register('ambitions-multicharacter:deleteCharacter', function(source, uniqueId)
   if not uniqueId or uniqueId == '' then
-    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
+    return {
       success = false,
       error = 'Invalid unique ID'
-    })
-    return
+    }
   end
 
   local result = MySQL.query.await('DELETE FROM characters WHERE unique_id = ?', { uniqueId })
 
   if result and result.affectedRows and result.affectedRows > 0 then
-    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
+    return {
       success = true
-    })
-
-    Wait(500)
-
-    SetupCharacter(sessionId)
+    }
   else
-    TriggerClientEvent('ambitions-multicharacter:client:characterDeleteResult', sessionId, {
+    return {
       success = false,
       error = 'Character not found or already deleted'
-    })
+    }
   end
-end
-
-RegisterNetEvent('ambitions-multicharacter:server:deleteCharacter', function(uniqueId)
-  local sessionId <const> = source
-  DeleteCharacter(sessionId, uniqueId)
 end)
 
 --- Create a new user in the database
@@ -142,7 +127,7 @@ end
 local function CheckPlayerData()
   local SESSION_ID <const> = source
 
-  local PLAYER_IDENTIFIERS <const> = identifiers.get(SESSION_ID)
+  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(SESSION_ID)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 
   if not PLAYER_LICENSE then
@@ -179,7 +164,7 @@ local function GetValidUniqueId(sessionId)
   local maxAttempts = 10
 
   for _ = 1, maxAttempts do
-    uniqueId = random.alphanumeric(6)
+    uniqueId = amb.math.randomAlphanumeric(6)
     if not isUniqueIdInUse(uniqueId) then
       return uniqueId
     end
@@ -188,49 +173,46 @@ local function GetValidUniqueId(sessionId)
   return nil
 end
 
---- Create a new character in the database
----@param sessionId number The session id of the player
----@param data table The character data containing identity, appearance and slot
-local function CreateCharacter(sessionId, data)
-  local PLAYER_IDENTIFIERS <const> = identifiers.get(sessionId)
+--- Callback to create a new character for the player
+---@param source number Player server ID
+---@param data table Character creation data containing identity and appearance
+---@return table result Creation result with success status
+amb.callback.register('ambitions-multicharacter:createCharacter', function(source, data)
+  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(source)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 
   if not PLAYER_LICENSE then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'Failed to retrieve player identifiers'
-    })
-    return
+    }
   end
 
   local userId = MySQL.scalar.await('SELECT id FROM users WHERE license = ?', { PLAYER_LICENSE })
 
   if not userId then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'User not found in database'
-    })
-    return
+    }
   end
 
   local characterCount = MySQL.scalar.await('SELECT COUNT(*) FROM characters WHERE user_id = ?', { userId })
 
   if characterCount >= spawnConfig.characterSlots then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'Character slot limit reached'
-    })
-    return
+    }
   end
 
-  local uniqueId = GetValidUniqueId(sessionId)
+  local uniqueId = GetValidUniqueId(source)
 
   if not uniqueId then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'Failed to generate unique character ID'
-    })
-    return
+    }
   end
 
   local identity = data.identity
@@ -270,21 +252,15 @@ local function CreateCharacter(sessionId, data)
   })
 
   if not insertId then
-    TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+    return {
       success = false,
       error = 'Database insertion failed'
-    })
-    return
+    }
   end
 
-  TriggerClientEvent('ambitions-multicharacter:client:characterCreationResult', sessionId, {
+  return {
     success = true,
     characterId = insertId,
     uniqueId = uniqueId
-  })
-end
-
-RegisterNetEvent('ambitions-multicharacter:server:createCharacter', function(data)
-  local SESSION_ID <const> = source
-  CreateCharacter(SESSION_ID, data)
+  }
 end)

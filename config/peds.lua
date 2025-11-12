@@ -1,4 +1,4 @@
-return {
+pedsConfig = {
   authorizePedwhileInCreator = true, -- Set to true to authorize the player to create a character ped while in the character creator
 
   pedList = {

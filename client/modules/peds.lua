@@ -1,9 +1,6 @@
-local pedsConfig = require('config.peds')
-local heritageConfig = require('config.heritage')
-
 --- Format ped list for NUI
 ---@return table Formatted ped models with title, value and category
-local function FormatPedsForNUI()
+function FormatPedsForNUI()
   local formattedPeds = {}
 
   for _, pedValue in ipairs(pedsConfig.pedList.basics) do
@@ -29,7 +26,7 @@ end
 
 --- Get peds configuration for NUI
 ---@return table Configuration object with authorizePedwhileInCreator and pedModels
-local function GetPedsConfig()
+function GetPedsConfig()
   return {
     authorizePedwhileInCreator = pedsConfig.authorizePedwhileInCreator,
     pedModels = FormatPedsForNUI()
@@ -37,7 +34,7 @@ local function GetPedsConfig()
 end
 
 --- Send peds configuration to NUI
-local function SendPedsConfigToNUI()
+function SendPedsConfigToNUI()
   local config = GetPedsConfig()
 
   SendNUIMessage({
@@ -50,7 +47,7 @@ end
 ---@param id number The heritage ID
 ---@param isFemale boolean True for mothers, false for fathers
 ---@return string textureName The texture filename
-local function GetHeritageTexture(id, isFemale)
+function GetHeritageTexture(id, isFemale)
   if isFemale then
     if id == 45 then
       return 'special_female_0'
@@ -68,7 +65,7 @@ end
 
 --- Format heritage config for NUI with photo paths
 ---@return table Heritage configuration with fathers and mothers
-local function GetHeritageConfig()
+function GetHeritageConfig()
   local fathers = {}
   local mothers = {}
 
@@ -95,7 +92,7 @@ local function GetHeritageConfig()
 end
 
 --- Send heritage configuration to NUI
-local function SendHeritageConfigToNUI()
+function SendHeritageConfigToNUI()
   local config = GetHeritageConfig()
 
   SendNUIMessage({
@@ -103,12 +100,3 @@ local function SendHeritageConfigToNUI()
     config = config
   })
 end
-
-return {
-  GetPedsConfig = GetPedsConfig,
-  SendPedsConfigToNUI = SendPedsConfigToNUI,
-  FormatPedsForNUI = FormatPedsForNUI,
-  GetHeritageConfig = GetHeritageConfig,
-  SendHeritageConfigToNUI = SendHeritageConfigToNUI,
-  GetHeritageTexture = GetHeritageTexture
-}

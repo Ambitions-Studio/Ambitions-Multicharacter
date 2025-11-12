@@ -1,5 +1,5 @@
 
-return {
+tattooConfig = {
     ZONE_TORSO = {
         {
             name = "TAT_AR_000",

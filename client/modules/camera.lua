@@ -7,7 +7,7 @@ local activeCam = nil
 ---@param offsetZ number Camera offset on Z axis
 ---@param transitionTime number Transition time in milliseconds
 ---@return number cam The created camera handle
-local function CreateCharacterSelectionCamera(ped, offsetX, offsetY, offsetZ, transitionTime)
+function CreateCharacterSelectionCamera(ped, offsetX, offsetY, offsetZ, transitionTime)
   if activeCam then
     DestroyCam(activeCam, false)
   end
@@ -31,7 +31,7 @@ end
 
 --- Destroy the active camera and return to gameplay camera
 ---@param transitionTime number Transition time in milliseconds
-local function DestroyActiveCamera(transitionTime)
+function DestroyActiveCamera(transitionTime)
   if activeCam then
     RenderScriptCams(false, true, transitionTime, true, false)
     DestroyCam(activeCam, false)
@@ -41,12 +41,6 @@ end
 
 --- Get the current active camera handle
 ---@return number|nil cam The active camera handle or nil
-local function GetActiveCamera()
+function GetActiveCamera()
   return activeCam
 end
-
-return {
-  CreateCharacterSelectionCamera = CreateCharacterSelectionCamera,
-  DestroyActiveCamera = DestroyActiveCamera,
-  GetActiveCamera = GetActiveCamera,
-}
