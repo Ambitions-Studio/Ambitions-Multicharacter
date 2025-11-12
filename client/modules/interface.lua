@@ -213,7 +213,14 @@ RegisterNUICallback('deleteCharacter', function(data, cb)
 
   local result = amb.callback.await('ambitions-multicharacter:deleteCharacter', false, data.uniqueId)
 
-  if not result or not result.success then
+  if result and result.success then
+    local characters = amb.callback.await('ambitions-multicharacter:getCharacters', false)
+
+    SendNUIMessage({
+      action = 'characterDeleteSuccess',
+      characters = characters or {}
+    })
+  else
     SendNUIMessage({
       action = 'characterDeleteFailed',
       error = result and result.error or 'Failed to delete character'

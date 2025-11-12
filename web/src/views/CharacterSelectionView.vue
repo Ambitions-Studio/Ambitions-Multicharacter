@@ -183,6 +183,26 @@ onMounted(() => {
       }
     } else if (event.data.action === 'hideCharacterSelection') {
       isVisible.value = false
+    } else if (event.data.action === 'characterDeleteSuccess') {
+      if (event.data.characters !== undefined && Array.isArray(event.data.characters)) {
+        const receivedCharacters: Record<number, Character> = {}
+        const maxCharsToDisplay = Math.min(event.data.characters.length, characterSlots.value)
+
+        for (let i = 0; i < maxCharsToDisplay; i++) {
+          const char = event.data.characters[i]
+          receivedCharacters[i + 1] = {
+            ...char,
+            firstName: char.firstName || '',
+            lastName: char.lastName || '',
+            totalPlaytime: formatPlaytime(char.playtime || 0),
+            lastPlayed: formatLastPlayed(char.lastPlayed || char.createdAt),
+          }
+        }
+        characterData.value = receivedCharacters
+        selectedSlot.value = null
+      }
+    } else if (event.data.action === 'characterDeleteFailed') {
+      console.error('Failed to delete character:', event.data.error)
     }
   })
 
