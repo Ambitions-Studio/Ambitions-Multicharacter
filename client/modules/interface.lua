@@ -136,6 +136,8 @@ RegisterNUICallback('createCharacter', function(data, cb)
     return
   end
 
+  cb({ success = true })
+
   amb.triggerServerCallback('ambitions-multicharacter:server:createCharacter', false, function(result)
     if result and result.success then
       SetNuiFocus(false, false)
@@ -184,8 +186,6 @@ RegisterNUICallback('createCharacter', function(data, cb)
         error = result and result.error or 'No response from server'
       })
     end
-
-    cb(result or { success = false, error = 'No response from server' })
   end, {
     slot = data.slot,
     identity = data.identity,
@@ -209,6 +209,8 @@ RegisterNUICallback('deleteCharacter', function(data, cb)
     return
   end
 
+  cb({ success = true })
+
   amb.triggerServerCallback('ambitions-multicharacter:server:deleteCharacter', false, function(result)
     if not result or not result.success then
       SendNUIMessage({
@@ -216,8 +218,6 @@ RegisterNUICallback('deleteCharacter', function(data, cb)
         error = result and result.error or 'Failed to delete character'
       })
     end
-
-    cb(result or { success = false, error = 'No response from server' })
   end, data.uniqueId)
 end)
 
