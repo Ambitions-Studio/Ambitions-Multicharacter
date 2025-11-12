@@ -62,15 +62,11 @@ local function PrepareCharacterSelection()
     Wait(100)
   end
 
-  amb.triggerServerCallback('ambitions:multicharacter:server:getCharacters', false, function(characters)
-    if characters then
-      OpenInterface({
-        characters = characters
-      })
-    else
-      return
-    end
-  end)
+  local characters = amb.callback.await('ambitions-multicharacter:getCharacters', false)
+
+  OpenInterface({
+    characters = characters or {}
+  })
 end
 
 RegisterNetEvent('ambitions-multicharacter:client:prepareCharacterSelection', function()

@@ -1,76 +1,77 @@
---- Setup character selection by retrieving all characters for a user
----@param sessionId number The session id of the player
-local function SetupCharacter(sessionId)
-  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(sessionId)
+
+--- Callback to get all characters for the connected player
+---@param source number Player server ID
+---@return table characters Array of character data
+amb.callback.register('ambitions-multicharacter:getCharacters', function(source)
+  local PLAYER_IDENTIFIERS <const> = amb.getPlayerIdentifers(source)
   local PLAYER_LICENSE <const> = PLAYER_IDENTIFIERS.license
 
   if not PLAYER_LICENSE then
-    return
+    return {}
   end
 
   if spawnConfig.instanceSpawning then
-    SetPlayerRoutingBucket(sessionId, sessionId)
+    SetPlayerRoutingBucket(source, source)
   end
 
   local userId = MySQL.scalar.await('SELECT id FROM users WHERE license = ?', { PLAYER_LICENSE })
 
   if not userId then
-    return
+    return {}
   end
 
   local characters = MySQL.query.await('SELECT * FROM characters WHERE user_id = ? ORDER BY created_at ASC', { userId })
+
+  if not characters or #characters == 0 then
+    return {}
+  end
+
   local characterData = {}
 
-  if characters and #characters > 0 then
-    for i = 1, #characters do
-      local char = characters[i]
-      local appearanceData = nil
-      if char.appearance and char.appearance ~= '' then
-        local success, decoded = pcall(json.decode, char.appearance)
-        if success then
-          appearanceData = decoded
-        end
-      end
+  for i = 1, #characters do
+    local char = characters[i]
+    local appearanceData = nil
 
-      characterData[#characterData + 1] = {
-        id = char.id,
-        uniqueId = char.unique_id,
-        firstName = char.firstname,
-        lastName = char.lastname,
-        dateOfBirth = char.dateofbirth,
-        gender = char.sex,
-        nationality = char.nationality,
-        height = char.height,
-        appearance = appearanceData,
-        job = nil,
-        jobGrade = nil,
-        crew = nil,
-        crewGrade = nil,
-        cash = 0,
-        bank = 0,
-        dirtyMoney = 0,
-        licenses = {},
-        totalPlaytime = '0h 0m',
-        lastPlayed = nil,
-        pedModel = char.ped_model,
-        position = {
-          x = char.position_x,
-          y = char.position_y,
-          z = char.position_z,
-          heading = char.heading
-        },
-        playtime = char.playtime or 0,
-        createdAt = char.created_at
-      }
+    if char.appearance and char.appearance ~= '' then
+      local success, decoded = pcall(json.decode, char.appearance)
+      if success then
+        appearanceData = decoded
+      end
     end
+
+    characterData[#characterData + 1] = {
+      id = char.id,
+      uniqueId = char.unique_id,
+      firstName = char.firstname,
+      lastName = char.lastname,
+      dateOfBirth = char.dateofbirth,
+      gender = char.sex,
+      nationality = char.nationality,
+      height = char.height,
+      appearance = appearanceData,
+      job = nil,
+      jobGrade = nil,
+      crew = nil,
+      crewGrade = nil,
+      cash = 0,
+      bank = 0,
+      dirtyMoney = 0,
+      licenses = {},
+      totalPlaytime = '0h 0m',
+      lastPlayed = nil,
+      pedModel = char.ped_model,
+      position = {
+        x = char.position_x,
+        y = char.position_y,
+        z = char.position_z,
+        heading = char.heading
+      },
+      playtime = char.playtime or 0,
+      createdAt = char.created_at
+    }
   end
 
   return characterData
-end
-
-amb.registerServerCallback('ambitions:multicharacter:server:getCharacters', function(source)
-  local characters = SetupCharacter(source)
-  return characters
 end)
 
 --- Delete a character by unique ID
