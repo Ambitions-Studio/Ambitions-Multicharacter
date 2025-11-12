@@ -89,9 +89,6 @@ amb.callback.register('ambitions-multicharacter:deleteCharacter', function(sourc
   local result = MySQL.query.await('DELETE FROM characters WHERE unique_id = ?', { uniqueId })
 
   if result and result.affectedRows and result.affectedRows > 0 then
-    Wait(500)
-    SetupCharacter(source)
-
     return {
       success = true
     }
