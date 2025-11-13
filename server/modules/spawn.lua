@@ -320,16 +320,18 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
     }
   end
 
-  amb.print.info('[playCharacter] User found, character count:', userObject:getCharacterCount())
+  amb.print.info('[playCharacter] userObject address:', userObject)
+  amb.print.info('[playCharacter] User found, character count:', userObject.getCharacterCount())
+  amb.print.info('[playCharacter] userObject.characters table address:', userObject.characters)
 
   -- Debug: print all characters BEFORE getting
   amb.print.info('[playCharacter] All characters in cache:')
-  for uid, charObj in pairs(userObject:getAllCharacters()) do
+  for uid, charObj in pairs(userObject.getAllCharacters()) do
     amb.print.info('  ->', uid, '=', charObj)
   end
 
   -- Get character from user's characters
-  local characterObject = userObject:getCharacter(uniqueId)
+  local characterObject = userObject.getCharacter(uniqueId)
 
   amb.print.info('[playCharacter] Got character via getCharacter:', characterObject)
   amb.print.info('[playCharacter] Got character via direct access:', userObject.characters[uniqueId])
@@ -337,7 +339,7 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
   if not characterObject then
     amb.print.error('[playCharacter] Character not found: ' .. uniqueId)
     amb.print.info('[playCharacter] Available characters:')
-    for uid, _ in pairs(userObject:getAllCharacters()) do
+    for uid, _ in pairs(userObject.getAllCharacters()) do
       amb.print.info('  -> ' .. uid)
     end
     return {
@@ -347,31 +349,31 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
   end
 
   amb.print.info('[playCharacter] Setting character ' .. uniqueId .. ' as current')
-  amb.print.info('[playCharacter] Character exists in userObject.characters: ' .. tostring(userObject:getCharacter(uniqueId) ~= nil))
+  amb.print.info('[playCharacter] Character exists in userObject.characters: ' .. tostring(userObject.getCharacter(uniqueId) ~= nil))
   amb.print.info('[playCharacter] CharacterObject address: ' .. tostring(characterObject))
   amb.print.info('[playCharacter] userObject.characters[uniqueId] address: ' .. tostring(userObject.characters[uniqueId]))
 
   -- Set as current character and active
-  userObject:setCurrentCharacter(uniqueId)
-  characterObject:setActive(true)
+  userObject.setCurrentCharacter(uniqueId)
+  characterObject.setActive(true)
 
-  local currentChar = userObject:getCurrentCharacter()
-  amb.print.info('[playCharacter] Current character after set: ' .. (currentChar and currentChar:getUniqueId() or 'NIL'))
-  amb.print.info('[playCharacter] Character is active: ' .. tostring(characterObject:isCharacterActive()))
+  local currentChar = userObject.getCurrentCharacter()
+  amb.print.info('[playCharacter] Current character after set: ' .. (currentChar and currentChar.getUniqueId() or 'NIL'))
+  amb.print.info('[playCharacter] Character is active: ' .. tostring(characterObject.isCharacterActive()))
 
   -- Prepare character data to send to client
   local characterData = {
-    uniqueId = characterObject:getUniqueId(),
-    firstname = characterObject:getFirstname(),
-    lastname = characterObject:getLastname(),
-    dateofbirth = characterObject:getDateOfBirth(),
-    sex = characterObject:getSex(),
-    nationality = characterObject:getNationality(),
-    height = characterObject:getHeight(),
-    appearance = characterObject:getAppearance(),
-    pedModel = characterObject:getPedModel(),
+    uniqueId = characterObject.getUniqueId(),
+    firstname = characterObject.getFirstname(),
+    lastname = characterObject.getLastname(),
+    dateofbirth = characterObject.getDateOfBirth(),
+    sex = characterObject.getSex(),
+    nationality = characterObject.getNationality(),
+    height = characterObject.getHeight(),
+    appearance = characterObject.getAppearance(),
+    pedModel = characterObject.getPedModel(),
     position = characterObject.position,
-    group = characterObject:getGroup()
+    group = characterObject.getGroup()
   }
 
   -- Return player to main instance
