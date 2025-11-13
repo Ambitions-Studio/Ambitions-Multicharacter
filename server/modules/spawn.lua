@@ -284,6 +284,11 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
 
   TriggerEvent('ambitions:server:insertCharacterIntoCache', source, uniqueId, characterData)
 
+  -- Return player to main instance
+  if spawnConfig.instanceSpawning then
+    SetPlayerRoutingBucket(source, 0)
+  end
+
   return {
     success = true,
     characterId = insertId,
@@ -342,6 +347,11 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
     position = characterObject.position,
     group = characterObject:getGroup()
   }
+
+  -- Return player to main instance
+  if spawnConfig.instanceSpawning then
+    SetPlayerRoutingBucket(source, 0)
+  end
 
   return {
     success = true,
