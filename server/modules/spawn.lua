@@ -92,6 +92,19 @@ amb.callback.register('ambitions-multicharacter:deleteCharacter', function(sourc
   local result = MySQL.query.await('DELETE FROM characters WHERE unique_id = ?', { uniqueId })
 
   if result and result.affectedRows and result.affectedRows > 0 then
+    -- Remove character from cache
+    local userObject = amb.cache.getPlayer(source)
+
+    if userObject then
+      local success = userObject.removeCharacter(uniqueId)
+
+      if not success then
+        amb.print.warning('Failed to remove character ' .. uniqueId .. ' from cache for session ' .. source)
+      end
+    else
+      amb.print.warning('User not found in cache for session ' .. source .. ' when deleting character')
+    end
+
     return {
       success = true
     }
