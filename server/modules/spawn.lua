@@ -313,25 +313,39 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
   local userObject = amb.cache.getPlayer(sessionId)
 
   if not userObject then
+    amb.print.error('[playCharacter] User not found in cache for session: ' .. sessionId)
     return {
       success = false,
       error = 'User not found in cache'
     }
   end
 
+  amb.print.info('[playCharacter] User found, character count: ' .. userObject:getCharacterCount())
+
   -- Get character from user's characters
   local characterObject = userObject:getCharacter(uniqueId)
 
   if not characterObject then
+    amb.print.error('[playCharacter] Character not found: ' .. uniqueId)
+    amb.print.info('[playCharacter] Available characters:')
+    for uid, _ in pairs(userObject:getAllCharacters()) do
+      amb.print.info('  -> ' .. uid)
+    end
     return {
       success = false,
       error = 'Character not found in cache'
     }
   end
 
+  amb.print.info('[playCharacter] Setting character ' .. uniqueId .. ' as current')
+
   -- Set as current character and active
   userObject:setCurrentCharacter(uniqueId)
   characterObject:setActive(true)
+
+  local currentChar = userObject:getCurrentCharacter()
+  amb.print.info('[playCharacter] Current character after set: ' .. (currentChar and currentChar:getUniqueId() or 'NIL'))
+  amb.print.info('[playCharacter] Character is active: ' .. tostring(characterObject:isCharacterActive()))
 
   -- Prepare character data to send to client
   local characterData = {
