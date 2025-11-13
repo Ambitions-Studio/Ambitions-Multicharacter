@@ -338,6 +338,9 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
   end
 
   amb.print.info('[playCharacter] Setting character ' .. uniqueId .. ' as current')
+  amb.print.info('[playCharacter] Character exists in userObject.characters: ' .. tostring(userObject:getCharacter(uniqueId) ~= nil))
+  amb.print.info('[playCharacter] CharacterObject address: ' .. tostring(characterObject))
+  amb.print.info('[playCharacter] userObject.characters[uniqueId] address: ' .. tostring(userObject.characters[uniqueId]))
 
   -- Set as current character and active
   userObject:setCurrentCharacter(uniqueId)
