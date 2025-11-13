@@ -320,10 +320,19 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
     }
   end
 
-  amb.print.info('[playCharacter] User found, character count: ' .. userObject:getCharacterCount())
+  amb.print.info('[playCharacter] User found, character count:', userObject:getCharacterCount())
+
+  -- Debug: print all characters BEFORE getting
+  amb.print.info('[playCharacter] All characters in cache:')
+  for uid, charObj in pairs(userObject:getAllCharacters()) do
+    amb.print.info('  ->', uid, '=', charObj)
+  end
 
   -- Get character from user's characters
   local characterObject = userObject:getCharacter(uniqueId)
+
+  amb.print.info('[playCharacter] Got character via getCharacter:', characterObject)
+  amb.print.info('[playCharacter] Got character via direct access:', userObject.characters[uniqueId])
 
   if not characterObject then
     amb.print.error('[playCharacter] Character not found: ' .. uniqueId)
