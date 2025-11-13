@@ -292,10 +292,11 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
 end)
 
 --- Callback to play with an existing character
----@param sessionId number Player session ID
+---@param source number Player session ID
 ---@param uniqueId string The unique ID of the character to play
 ---@return table result Result with success status and character data
-amb.callback.register('ambitions-multicharacter:playCharacter', function(sessionId, uniqueId)
+amb.callback.register('ambitions-multicharacter:playCharacter', function(source, uniqueId)
+  local sessionId = source
   if not uniqueId or uniqueId == '' then
     return {
       success = false,
