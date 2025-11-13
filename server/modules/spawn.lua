@@ -26,6 +26,9 @@ amb.callback.register('ambitions-multicharacter:getCharacters', function(source)
     return {}
   end
 
+  -- Insert user and all characters into Ambitions cache
+  TriggerEvent('ambitions:server:insertRetrievedIntoCache', source, PLAYER_LICENSE, characters)
+
   local characterData = {}
 
   for i = 1, #characters do
