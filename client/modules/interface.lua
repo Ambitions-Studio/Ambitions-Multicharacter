@@ -200,6 +200,29 @@ RegisterNUICallback('characterCreationError', function(data, cb)
   cb('ok')
 end)
 
+--- NUI callback to play with an existing character
+---@param data table Contains uniqueId string of the character to play
+---@param cb function Callback function to acknowledge the request
+RegisterNUICallback('playCharacter', function(data, cb)
+  if not data.uniqueId then
+    cb({ success = false, error = 'No uniqueId provided' })
+    return
+  end
+
+  cb({ success = true })
+
+  local result = amb.callback.await('ambitions-multicharacter:playCharacter', false, data.uniqueId)
+
+  if result and result.success then
+    TriggerEvent('ambitions-multicharacter:client:spawnCharacter', result.character)
+  else
+    SendNUIMessage({
+      action = 'characterPlayFailed',
+      error = result and result.error or 'Failed to load character'
+    })
+  end
+end)
+
 --- NUI callback to delete an existing character
 ---@param data table Contains uniqueId string of the character to delete
 ---@param cb function Callback function to acknowledge the request
