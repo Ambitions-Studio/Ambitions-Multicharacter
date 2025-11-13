@@ -120,6 +120,8 @@ local function CreateUser(sessionId, identifiers)
     return
   end
 
+  TriggerEvent('ambitions:server:insertUserIntoCache', sessionId, PLAYER_LICENSE)
+
   TriggerClientEvent('ambitions-multicharacter:client:prepareCharacterSelection', sessionId)
 end
 
@@ -257,6 +259,27 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
       error = 'Database insertion failed'
     }
   end
+
+  -- Insert character into Ambitions cache
+  local characterData = {
+    firstname = identity.firstName,
+    lastname = identity.lastName,
+    dateofbirth = identity.dateOfBirth,
+    sex = gender,
+    nationality = identity.nationality,
+    height = identity.height,
+    appearance = appearanceJson,
+    pedModel = pedModel,
+    position = {
+      x = posX,
+      y = posY,
+      z = posZ,
+      heading = heading
+    },
+    group = 'user',
+  }
+
+  TriggerEvent('ambitions:server:insertCharacterIntoCache', source, uniqueId, characterData)
 
   return {
     success = true,
