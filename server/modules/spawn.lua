@@ -26,6 +26,9 @@ amb.callback.register('ambitions-multicharacter:getCharacters', function(source)
     return {}
   end
 
+  -- Insert user and all characters into Ambitions cache
+  TriggerEvent('ambitions:server:insertRetrievedIntoCache', source, PLAYER_LICENSE, characters)
+
   local characterData = {}
 
   for i = 1, #characters do
@@ -89,6 +92,19 @@ amb.callback.register('ambitions-multicharacter:deleteCharacter', function(sourc
   local result = MySQL.query.await('DELETE FROM characters WHERE unique_id = ?', { uniqueId })
 
   if result and result.affectedRows and result.affectedRows > 0 then
+    -- Remove character from cache
+    local userObject = amb.cache.getPlayer(source)
+
+    if userObject then
+      local success = userObject.removeCharacter(uniqueId)
+
+      if not success then
+        amb.print.warning('Failed to remove character ' .. uniqueId .. ' from cache for session ' .. source)
+      end
+    else
+      amb.print.warning('User not found in cache for session ' .. source .. ' when deleting character')
+    end
+
     return {
       success = true
     }
@@ -119,6 +135,8 @@ local function CreateUser(sessionId, identifiers)
     DropPlayer(sessionId, 'Failed to create your user, please contact an administrator.')
     return
   end
+
+  TriggerEvent('ambitions:server:insertUserIntoCache', sessionId, PLAYER_LICENSE)
 
   TriggerClientEvent('ambitions-multicharacter:client:prepareCharacterSelection', sessionId)
 end
@@ -258,9 +276,98 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
     }
   end
 
+  -- Insert character into Ambitions cache
+  local characterData = {
+    firstname = identity.firstName,
+    lastname = identity.lastName,
+    dateofbirth = identity.dateOfBirth,
+    sex = gender,
+    nationality = identity.nationality,
+    height = identity.height,
+    appearance = appearanceJson,
+    pedModel = pedModel,
+    position = {
+      x = posX,
+      y = posY,
+      z = posZ,
+      heading = heading
+    },
+    group = 'user',
+  }
+
+  TriggerEvent('ambitions:server:insertCharacterIntoCache', source, uniqueId, characterData)
+
+  -- Return player to main instance
+  if spawnConfig.instanceSpawning then
+    SetPlayerRoutingBucket(source, 0)
+  end
+
   return {
     success = true,
     characterId = insertId,
     uniqueId = uniqueId
+  }
+end)
+
+--- Callback to play with an existing character
+---@param source number Player session ID
+---@param uniqueId string The unique ID of the character to play
+---@return table result Result with success status and character data
+amb.callback.register('ambitions-multicharacter:playCharacter', function(source, uniqueId)
+  local sessionId = source
+  if not uniqueId or uniqueId == '' then
+    return {
+      success = false,
+      error = 'Invalid unique ID'
+    }
+  end
+
+  -- Get user object from cache
+  local userObject = amb.cache.getPlayer(sessionId)
+
+  if not userObject then
+    return {
+      success = false,
+      error = 'User not found in cache'
+    }
+  end
+
+  -- Get character from user's characters
+  local characterObject = userObject.getCharacter(uniqueId)
+
+  if not characterObject then
+    return {
+      success = false,
+      error = 'Character not found in cache'
+    }
+  end
+
+  -- Set as current character and active
+  userObject.setCurrentCharacter(uniqueId)
+  characterObject.setActive(true)
+
+  -- Prepare character data to send to client
+  local characterData = {
+    uniqueId = characterObject.getUniqueId(),
+    firstname = characterObject.getFirstname(),
+    lastname = characterObject.getLastname(),
+    dateofbirth = characterObject.getDateOfBirth(),
+    sex = characterObject.getSex(),
+    nationality = characterObject.getNationality(),
+    height = characterObject.getHeight(),
+    appearance = characterObject.getAppearance(),
+    pedModel = characterObject.getPedModel(),
+    position = characterObject.position,
+    group = characterObject.getGroup()
+  }
+
+  -- Return player to main instance
+  if spawnConfig.instanceSpawning then
+    SetPlayerRoutingBucket(source, 0)
+  end
+
+  return {
+    success = true,
+    character = characterData
   }
 end)
