@@ -290,3 +290,60 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
     uniqueId = uniqueId
   }
 end)
+
+--- Callback to play with an existing character
+---@param sessionId number Player session ID
+---@param uniqueId string The unique ID of the character to play
+---@return table result Result with success status and character data
+amb.callback.register('ambitions-multicharacter:playCharacter', function(sessionId, uniqueId)
+  if not uniqueId or uniqueId == '' then
+    return {
+      success = false,
+      error = 'Invalid unique ID'
+    }
+  end
+
+  -- Get user object from cache
+  local userObject = amb.cache.getPlayer(sessionId)
+
+  if not userObject then
+    return {
+      success = false,
+      error = 'User not found in cache'
+    }
+  end
+
+  -- Get character from user's characters
+  local characterObject = userObject:getCharacter(uniqueId)
+
+  if not characterObject then
+    return {
+      success = false,
+      error = 'Character not found in cache'
+    }
+  end
+
+  -- Set as current character and active
+  userObject:setCurrentCharacter(uniqueId)
+  characterObject:setActive(true)
+
+  -- Prepare character data to send to client
+  local characterData = {
+    uniqueId = characterObject:getUniqueId(),
+    firstname = characterObject:getFirstname(),
+    lastname = characterObject:getLastname(),
+    dateofbirth = characterObject:getDateOfBirth(),
+    sex = characterObject:getSex(),
+    nationality = characterObject:getNationality(),
+    height = characterObject:getHeight(),
+    appearance = characterObject:getAppearance(),
+    pedModel = characterObject:getPedModel(),
+    position = characterObject.position,
+    group = characterObject:getGroup()
+  }
+
+  return {
+    success = true,
+    character = characterData
+  }
+end)

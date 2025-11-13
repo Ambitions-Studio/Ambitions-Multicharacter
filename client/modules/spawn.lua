@@ -102,6 +102,86 @@ RegisterNetEvent('ambitions-multicharacter:client:hideDefaultPed', function()
   HideDefaultPed()
 end)
 
+--- Spawn character into the game world with full appearance and position
+---@param characterData table Complete character data from server
+local function SpawnCharacter(characterData)
+  if not characterData then
+    return
+  end
+
+  -- Close NUI
+  SetNuiFocus(false, false)
+
+  SendNUIMessage({
+    action = 'hideCharacterSelection'
+  })
+
+  -- Destroy camera
+  DestroyActiveCamera(500)
+
+  -- Fade out
+  DoScreenFadeOut(500)
+
+  Wait(500)
+
+  -- Load ped model
+  local pedModel = characterData.pedModel or 'mp_m_freemode_01'
+  local modelHash = GetHashKey(pedModel)
+
+  RequestModel(modelHash)
+  while not HasModelLoaded(modelHash) do
+    Wait(100)
+  end
+
+  -- Set player model
+  SetPlayerModel(PlayerId(), modelHash)
+  SetModelAsNoLongerNeeded(modelHash)
+
+  local playerPed = PlayerPedId()
+
+  -- Apply full appearance
+  if characterData.appearance then
+    local appearanceData = characterData.appearance
+    if type(appearanceData) == 'string' then
+      local success, decoded = pcall(json.decode, appearanceData)
+      if success then
+        appearanceData = decoded
+      end
+    end
+
+    LoadFullAppearance(playerPed, appearanceData)
+  end
+
+  -- Teleport to saved position
+  local position = characterData.position
+  if position then
+    SetEntityCoords(playerPed, position.x, position.y, position.z, false, false, false, true)
+    SetEntityHeading(playerPed, position.heading or 0.0)
+  end
+
+  -- Enable character
+  SetEntityAlpha(playerPed, 255, false)
+  SetPedAoBlobRendering(playerPed, true)
+  FreezeEntityPosition(playerPed, false)
+  SetEntityVisible(playerPed, true, false)
+  SetEntityInvincible(playerPed, false)
+  SetEntityCollision(playerPed, true, true)
+  NetworkSetEntityInvisibleToNetwork(playerPed, false)
+  SetEveryoneIgnorePlayer(PlayerId(), false)
+  SetPoliceIgnorePlayer(PlayerId(), false)
+  SetPlayerControl(PlayerId(), true, 0)
+
+  -- Show HUD
+  DisplayRadar(true)
+
+  -- Fade in
+  DoScreenFadeIn(500)
+end
+
+RegisterNetEvent('ambitions-multicharacter:client:spawnCharacter', function(characterData)
+  SpawnCharacter(characterData)
+end)
+
 CreateThread(function()
   while not NetworkIsPlayerActive(PlayerId()) do
     Wait(100)

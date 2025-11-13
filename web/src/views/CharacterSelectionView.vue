@@ -114,6 +114,14 @@ const createCharacter = () => {
 }
 
 const playCharacter = () => {
+  if (selectedSlot.value === null) return
+
+  const character = characterData.value[selectedSlot.value]
+  if (!character || !character.uniqueId) {
+    return
+  }
+
+  sendNuiEvent('playCharacter', { uniqueId: character.uniqueId })
 }
 
 const deleteCharacter = () => {
