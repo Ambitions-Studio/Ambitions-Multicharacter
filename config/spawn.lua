@@ -180,5 +180,5 @@ spawnConfig = {
   --- • Sandy Shores: Desert roleplay servers
   --- • Paleto Bay: Rural/small-town roleplay servers
   --- • Custom spawn building: Dedicated server orientation area
-  playerSpawn = vector4(0.0, 0.0, 70.0, 0.0),
+  playerSpawn = vector4(-3043.11, 26.9011, 10.1047, 325.984),
 }
