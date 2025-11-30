@@ -171,11 +171,8 @@ local function SpawnCharacter(characterData)
   SetPoliceIgnorePlayer(PlayerId(), false)
   SetPlayerControl(PlayerId(), true, 0)
 
-  print('isDead value:', characterData.isDead, 'type:', type(characterData.isDead))
-
   if characterData.isDead then
     SetEntityHealth(playerPed, 0)
-    FreezeEntityPosition(playerPed, true)
   else
     local health = characterData.health or 100
     local armor = characterData.armor or 0
