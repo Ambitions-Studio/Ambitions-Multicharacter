@@ -171,6 +171,17 @@ local function SpawnCharacter(characterData)
   SetPoliceIgnorePlayer(PlayerId(), false)
   SetPlayerControl(PlayerId(), true, 0)
 
+  if characterData.isDead then
+    SetEntityHealth(playerPed, 0)
+    SetPedArmour(playerPed, 0)
+  else
+    local health = characterData.health or 100
+    local armor = characterData.armor or 0
+    local newHealth = math.floor(health * 100 / 100) + 100
+    SetEntityHealth(playerPed, newHealth)
+    SetPedArmour(playerPed, armor)
+  end
+
   DisplayRadar(true)
 
   amb.ShowHud()

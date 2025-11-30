@@ -362,7 +362,10 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
     appearance = characterObject.getAppearance(),
     pedModel = characterObject.getPedModel(),
     position = characterObject.position,
-    group = characterObject.getGroup()
+    group = characterObject.getGroup(),
+    isDead = characterObject.getIsDead(),
+    health = characterObject.getHealth(),
+    armor = characterObject.getArmor()
   }
 
   -- Return player to main instance
