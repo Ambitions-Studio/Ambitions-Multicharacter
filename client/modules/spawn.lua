@@ -173,7 +173,7 @@ local function SpawnCharacter(characterData)
 
   if characterData.isDead then
     SetEntityHealth(playerPed, 0)
-    SetPedArmour(playerPed, 0)
+    FreezeEntityPosition(playerPed, true)
   else
     local health = characterData.health or 100
     local armor = characterData.armor or 0
