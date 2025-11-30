@@ -171,10 +171,10 @@ local function SpawnCharacter(characterData)
   SetPoliceIgnorePlayer(PlayerId(), false)
   SetPlayerControl(PlayerId(), true, 0)
 
-  -- Show HUD
   DisplayRadar(true)
 
-  -- Fade in
+  amb.ShowHud()
+
   DoScreenFadeIn(500)
 end
 
