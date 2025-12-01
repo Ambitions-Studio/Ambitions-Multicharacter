@@ -185,6 +185,15 @@ local function SpawnCharacter(characterData)
 
   amb.ShowHud()
 
+  if characterData.needs then
+    if characterData.needs.hunger then
+      TriggerEvent('ambitions:client:updateNeed', 'hunger', characterData.needs.hunger)
+    end
+    if characterData.needs.thirst then
+      TriggerEvent('ambitions:client:updateNeed', 'thirst', characterData.needs.thirst)
+    end
+  end
+
   DoScreenFadeIn(500)
 end
 
