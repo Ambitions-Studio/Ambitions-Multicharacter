@@ -247,10 +247,12 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
   local posZ = playerSpawn.z
   local heading = playerSpawn.w or 0.0
 
+  local defaultNeeds = json.encode({hunger = 100, thirst = 100})
+
   local insertId = MySQL.insert.await([[
     INSERT INTO characters
-    (user_id, unique_id, firstname, lastname, dateofbirth, sex, nationality, height, appearance, `group`, ped_model, position_x, position_y, position_z, heading)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (user_id, unique_id, firstname, lastname, dateofbirth, sex, nationality, height, appearance, `group`, ped_model, position_x, position_y, position_z, heading, needs)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   ]], {
     userId,
     uniqueId,
@@ -266,7 +268,8 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
     posX,
     posY,
     posZ,
-    heading
+    heading,
+    defaultNeeds
   })
 
   if not insertId then
@@ -293,6 +296,7 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
       heading = heading
     },
     group = 'user',
+    needs = nil
   }
 
   TriggerEvent('ambitions:server:insertCharacterIntoCache', source, uniqueId, characterData)
@@ -358,7 +362,11 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
     appearance = characterObject.getAppearance(),
     pedModel = characterObject.getPedModel(),
     position = characterObject.position,
-    group = characterObject.getGroup()
+    group = characterObject.getGroup(),
+    isDead = characterObject.getIsDead(),
+    health = characterObject.getHealth(),
+    armor = characterObject.getArmor(),
+    needs = characterObject.getNeeds()
   }
 
   -- Return player to main instance

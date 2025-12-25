@@ -171,10 +171,29 @@ local function SpawnCharacter(characterData)
   SetPoliceIgnorePlayer(PlayerId(), false)
   SetPlayerControl(PlayerId(), true, 0)
 
-  -- Show HUD
+  if characterData.isDead then
+    SetEntityHealth(playerPed, 0)
+  else
+    local health = characterData.health or 100
+    local armor = characterData.armor or 0
+    local newHealth = math.floor(health * 100 / 100) + 100
+    SetEntityHealth(playerPed, newHealth)
+    SetPedArmour(playerPed, armor)
+  end
+
   DisplayRadar(true)
 
-  -- Fade in
+  amb.ShowHud()
+
+  if characterData.needs then
+    if characterData.needs.hunger then
+      TriggerEvent('ambitions:client:updateNeed', 'hunger', characterData.needs.hunger)
+    end
+    if characterData.needs.thirst then
+      TriggerEvent('ambitions:client:updateNeed', 'thirst', characterData.needs.thirst)
+    end
+  end
+
   DoScreenFadeIn(500)
 end
 

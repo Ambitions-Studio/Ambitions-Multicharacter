@@ -184,6 +184,8 @@ RegisterNUICallback('createCharacter', function(data, cb)
 
     DisplayRadar(true)
 
+    amb.ShowHud()
+
     DoScreenFadeIn(500)
   else
     SendNUIMessage({
