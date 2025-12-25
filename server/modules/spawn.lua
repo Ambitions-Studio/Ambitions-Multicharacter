@@ -279,8 +279,29 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
     }
   end
 
-  -- Insert character into Ambitions cache
+  local inventoryId = nil
+  if settingsConfig.useAmbitionsInventory then
+    local defaultSlots = exports['Ambitions-Inventory']:GetDefaultMaxSlots()
+    local defaultWeight = exports['Ambitions-Inventory']:GetDefaultMaxWeight()
+
+    inventoryId = MySQL.insert.await([[
+      INSERT INTO inventories (type, owner_type, owner_id, max_slots, max_weight)
+      VALUES ('player', 'character', ?, ?, ?)
+    ]], { insertId, defaultSlots, defaultWeight })
+
+    if inventoryId then
+      MySQL.update.await('UPDATE characters SET inventory_id = ? WHERE id = ?', { inventoryId, insertId })
+
+      TriggerClientEvent('ambitions-inventory:loadInventory', source, {
+        maxSlots = defaultSlots,
+        maxWeight = defaultWeight,
+        items = {}
+      })
+    end
+  end
+
   local characterData = {
+    inventoryId = inventoryId,
     firstname = identity.firstName,
     lastname = identity.lastName,
     dateofbirth = identity.dateOfBirth,
@@ -346,11 +367,40 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
     }
   end
 
-  -- Set as current character and active
   userObject.setCurrentCharacter(uniqueId)
   characterObject.setActive(true)
 
-  -- Prepare character data to send to client
+  local inventoryManager = settingsConfig.useAmbitionsInventory and characterObject.getInventoryManager() or nil
+  local inventoryId = inventoryManager and inventoryManager.getInventoryId() or nil
+
+  if inventoryId then
+    local inventoryData = MySQL.single.await('SELECT max_slots, max_weight FROM inventories WHERE id = ?', { inventoryId })
+
+    if inventoryData then
+      inventoryManager.setMaxSlots(inventoryData.max_slots)
+      inventoryManager.setMaxWeight(inventoryData.max_weight)
+    end
+
+    local dbItems = MySQL.query.await('SELECT slot, item, count, meta FROM inventory_items WHERE inventory_id = ?', { inventoryId })
+    local items = inventoryManager.getItems()
+
+    for _, row in ipairs(dbItems or {}) do
+      local metadata = row.meta and json.decode(row.meta) or {}
+
+      items[row.slot] = {
+        name = row.item,
+        count = row.count,
+        metadata = metadata
+      }
+    end
+
+    TriggerClientEvent('ambitions-inventory:loadInventory', source, {
+      maxSlots = inventoryManager.getMaxSlots(),
+      maxWeight = inventoryManager.getMaxWeight(),
+      items = items
+    })
+  end
+
   local characterData = {
     uniqueId = characterObject.getUniqueId(),
     firstname = characterObject.getFirstname(),
