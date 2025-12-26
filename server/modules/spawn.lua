@@ -292,7 +292,7 @@ amb.callback.register('ambitions-multicharacter:createCharacter', function(sourc
     if inventoryId then
       MySQL.update.await('UPDATE characters SET inventory_id = ? WHERE id = ?', { inventoryId, insertId })
 
-      TriggerClientEvent('ambitions-inventory:loadInventory', source, {
+      TriggerClientEvent('ambitions-inventory:client:loadInventory', source, {
         maxSlots = defaultSlots,
         maxWeight = defaultWeight,
         items = {}
@@ -394,7 +394,7 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
       }
     end
 
-    TriggerClientEvent('ambitions-inventory:loadInventory', source, {
+    TriggerClientEvent('ambitions-inventory:client:loadInventory', source, {
       maxSlots = inventoryManager.getMaxSlots(),
       maxWeight = inventoryManager.getMaxWeight(),
       items = items

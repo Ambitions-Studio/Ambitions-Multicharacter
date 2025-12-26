@@ -187,10 +187,10 @@ local function SpawnCharacter(characterData)
 
   if characterData.needs then
     if characterData.needs.hunger then
-      TriggerEvent('ambitions:client:updateNeed', 'hunger', characterData.needs.hunger)
+      TriggerEvent('ambitions-hud:client:updateNeed', 'hunger', characterData.needs.hunger)
     end
     if characterData.needs.thirst then
-      TriggerEvent('ambitions:client:updateNeed', 'thirst', characterData.needs.thirst)
+      TriggerEvent('ambitions-hud:client:updateNeed', 'thirst', characterData.needs.thirst)
     end
   end
 
