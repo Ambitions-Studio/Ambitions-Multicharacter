@@ -371,33 +371,12 @@ amb.callback.register('ambitions-multicharacter:playCharacter', function(source,
   characterObject.setActive(true)
 
   local inventoryManager = settingsConfig.useAmbitionsInventory and characterObject.getInventoryManager() or nil
-  local inventoryId = inventoryManager and inventoryManager.getInventoryId() or nil
 
-  if inventoryId then
-    local inventoryData = MySQL.single.await('SELECT max_slots, max_weight FROM inventories WHERE id = ?', { inventoryId })
-
-    if inventoryData then
-      inventoryManager.setMaxSlots(inventoryData.max_slots)
-      inventoryManager.setMaxWeight(inventoryData.max_weight)
-    end
-
-    local dbItems = MySQL.query.await('SELECT slot, item, count, meta FROM inventory_items WHERE inventory_id = ?', { inventoryId })
-    local items = inventoryManager.getItems()
-
-    for _, row in ipairs(dbItems or {}) do
-      local metadata = row.meta and json.decode(row.meta) or {}
-
-      items[row.slot] = {
-        name = row.item,
-        count = row.count,
-        metadata = metadata
-      }
-    end
-
+  if inventoryManager then
     TriggerClientEvent('ambitions-inventory:client:loadInventory', source, {
       maxSlots = inventoryManager.getMaxSlots(),
       maxWeight = inventoryManager.getMaxWeight(),
-      items = items
+      items = inventoryManager.getItems()
     })
   end
 
